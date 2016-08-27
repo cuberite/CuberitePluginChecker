@@ -28,12 +28,12 @@ end
 -- a_Simulator is the simulator object that will be used to simulate the plugin.
 local function loadApi(a_Options, a_Simulator)
 	local api = loadApiDesc(a_Options)
-	
+
 	local sandbox = a_Simulator.sandbox
 	assert(type(sandbox) == "table")
-	
+
 	-- TODO: Inject the API into the sandbox
-	
+
 	return true
 end
 

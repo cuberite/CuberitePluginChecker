@@ -34,12 +34,12 @@ local optionProcessor =
 		end
 		return a_Idx + 2
 	end,
-	
+
 	-- "-c" specifies to clear API objects after each callback
 	["-c"] = function (a_Args, a_Idx, a_Options)
 		a_Options.shouldClearObjects = true
 	end,
-	
+
 	-- "-g" specified to GC API objects after each callback
 	["-g"] = function (a_Args, a_Idx, a_Options)
 		a_Options.shouldGCObjects = true
@@ -58,7 +58,7 @@ local optionProcessor =
 		if not(files[1]) then
 			error("Invalid plugin path \"" .. pluginPath .. "\", no files found.")
 		end
-		
+
 		-- Sort the files the same way as Cuberite:
 		table.sort(files)
 
@@ -68,7 +68,7 @@ local optionProcessor =
 		end
 		return a_Idx + 2
 	end,
-	
+
 }
 
 

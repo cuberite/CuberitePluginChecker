@@ -65,8 +65,8 @@ return
 			},
 		},  -- cRoot
 	},  -- Classes
-	
-	
+
+
 	Globals =
 	{
 	}
