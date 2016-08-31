@@ -7,9 +7,9 @@
 
 
 -- Load the libraries:
-local Options = require("Options")
-local ApiLoader = require("ApiLoader")
-local Simulator = require("Simulator")
+local Options = dofile("Options.lua")
+local ApiLoader = dofile("ApiLoader.lua")
+local Simulator = dofile("Simulator.lua")
 
 
 

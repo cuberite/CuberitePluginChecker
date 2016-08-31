@@ -5,7 +5,8 @@
 
 --[[
 The options object contains the following fields:
-	apiDescFileName - filename of the API description file, or nil to use the default ("ApiDesc.lua")
+	autoApiDescPath - path to the automatic API description files (by Cuberite's BindingsProcessor)
+	extraApiFiles - array-table of filenames to load as extra API descriptions (for manual API)
 	pluginFiles - array-table of all plugin files to check
 	shouldClearObjects - bool specifying whether API objects should be cleared after each callback (thus detecting potential use-after-callback)
 	shouldGCObjects - bool specifying whether API objects should be GC-ed after each callback (thus detecting storage-after-callback)
@@ -26,11 +27,11 @@ local lfs = require("lfs")
 -- The value returned by the processor is used as the next index; if nil, the next idx is used
 local optionProcessor =
 {
-	-- "-a <filename>" specifies the API description filename
+	-- "-a <path>" specifies the path to the automatic API description files (by Cuberite's BindingsProcessor)
 	["-a"] = function (a_Args, a_Idx, a_Options)
-		a_Options.apiDescFileName = a_Args[a_Idx + 1]
-		if (type(a_Options.apiDescFileName) ~= "string") then
-			error("Invalid API description filename parameter")
+		a_Options.autoApiDescPath = a_Args[a_Idx + 1]
+		if (type(a_Options.autoApiDescPath) ~= "string") then
+			error("Invalid API description path parameter (-a)")
 		end
 		return a_Idx + 2
 	end,
@@ -38,6 +39,16 @@ local optionProcessor =
 	-- "-c" specifies to clear API objects after each callback
 	["-c"] = function (a_Args, a_Idx, a_Options)
 		a_Options.shouldClearObjects = true
+	end,
+
+	-- "-e <filename>" specifies an extra file to load as API description (may be used multiple times)
+	["-e"] = function (a_Args, a_Idx, a_Options)
+		local fnam = a_Args[a_Idx + 1]
+		if (type(fnam) ~= "string") then
+			error("Invalid extra API filename parameter (-e)")
+		end
+		table.insert(a_Options.extraApiFiles, fnam)
+		return a_Idx + 2
 	end,
 
 	-- "-g" specified to GC API objects after each callback
@@ -77,6 +88,7 @@ local optionProcessor =
 
 local options =
 {
+	extraApiFiles = {},
 	pluginFiles = {},
 }
 

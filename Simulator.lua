@@ -13,6 +13,13 @@ Usage:
 
 
 
+--- Compatibility with both Lua 5.1 and LuaJit
+local unpack = unpack or table.unpack
+
+
+
+
+
 --- The class (metatable) to be used for all simulators
 local Simulator = {}
 Simulator["__index"] = Simulator
@@ -311,7 +318,7 @@ function Simulator:createClassFunction(a_FnDesc, a_FnName, a_ClassName)
 			return signature.Implementation(self, ...)
 		else
 			-- Provide a default implementation by default-constructing the return values:
-			return table.unpack(self:createInstances(signature.Returns))
+			return unpack(self:createInstances(signature.Returns))
 		end
 	end
 end
@@ -564,7 +571,7 @@ function Simulator:processCallbackRequest(a_Request)
 	self:callHooks(self.hooks.onBeforeCallCallback, a_Request, params)
 
 	-- Call the callback:
-	local returns = { a_Request.Function(table.unpack(params)) }
+	local returns = { a_Request.Function(unpack(params)) }
 
 	-- Process the returned values and finalize the params:
 	self:callHooks(self.hooks.onAfterCallCallback, a_Request, params, returns)
@@ -605,6 +612,7 @@ function Simulator:run(a_Options)
 	-- TODO: Add callback-requests for commands and web-tabs from a pre-configured test definition file (?)
 
 	-- As long as there are callback requests in the queue, dequeue and process them, in a LIFO manner:
+	print("Running the simulator")
 	while (self.callbackRequests.n > 0) do
 		local request = self.callbackRequests[self.callbackRequests.n]
 		self.callbackRequests.n = self.callbackRequests.n - 1
