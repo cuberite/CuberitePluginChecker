@@ -11,6 +11,14 @@ return
 {
 	Classes =
 	{
+		cPlugin =
+		{
+			Functions =
+			{
+			},  -- Functions
+		},  -- cPlugin
+
+
 		cPluginManager =
 		{
 			Constants =
@@ -20,6 +28,16 @@ return
 			},
 			Functions =
 			{
+				BindCommand =
+				{
+					Params =
+					{
+						{ Type = "string" },    -- command
+						{ Type = "string" },    -- permission
+						{ Type = "function" },  -- callback
+						{ Type = "string" },    -- help
+					},
+				},
 				Get =
 				{
 					IsStatic = true,
@@ -69,5 +87,16 @@ return
 
 	Globals =
 	{
-	}
+		Functions =
+		{
+			LOG =
+			{
+				Params =
+				{
+					{ Name = "text", Type = "string" },
+				},
+				Implementation = function (a_Simulator, a_Text) print("LOG: " .. a_Text) end,
+			},
+		},  -- Functions
+	},  -- Globals
 }

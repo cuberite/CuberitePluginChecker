@@ -21,8 +21,10 @@ if not(options.pluginFiles[1]) then
 	error("No plugin to check was specified.\nUse the -p <path> option to specify the plugin.")
 end
 local simulator = Simulator.create(options)
-ApiLoader.load(options, simulator)
+local api = ApiLoader.load(options)
+simulator:injectApi(api)
 simulator:run(options)
+print("Simulator has finished running")
 
 
 
