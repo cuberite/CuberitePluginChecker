@@ -1,6 +1,7 @@
 -- ApiLoader.lua
 
 -- Implements the API loader that reads the API description files and injects it into the simulator's sandbox
+-- API functions can have special implementations, rather than the default-provided dummy ones.
 
 --[[
 API table format, being returned from the loader:
@@ -121,6 +122,119 @@ local function normalizeClass(a_Class)
 	a_Class.Functions = fns
 	a_Class.Constants = a_Class.Constants or {}
 	a_Class.Variables = a_Class.Variables or {}
+end
+
+
+
+
+
+--- Returns whether the array-table representing the parameter types matches the function signature
+-- a_Signature is the API description's function signature
+-- a_ParamTypes is an array-table representation of param types, as parsed from the API implementation files
+local function signatureMatchesParams(a_Signature, a_ParamTypes)
+	-- Check params:
+	assert(type(a_Signature) == "table")
+	assert(type(a_Signature.Params) == "table")
+	assert(type(a_ParamTypes) == "table")
+
+	-- Check param count first:
+	local sParams = a_Signature.Params
+	if (#sParams ~= #a_ParamTypes) then
+		-- The param count doesn't match
+		return false
+	end
+
+	-- Check each param type:
+	for idx, t in ipairs(a_ParamTypes) do
+		if (sParams[idx].Type ~= t) then
+			-- Param type doesn't match
+			return false
+		end
+	end
+
+	-- All params have matched
+	return true
+end
+
+
+
+
+
+--- Sets the implementation of the specified function into the API description
+-- a_Api is the API description into which the implementation is to be set
+-- a_FnFullName is a string representation of the function's full name and signature ("cRoot:GetWorld(string)")
+-- a_Fn is the function to set as the implementation
+-- Raises an error if the function name cannot be resolved or no such API function
+local function setApiImplementation(a_Api, a_FnFullName, a_Fn)
+	-- Check params:
+	assert(type(a_Api) == "table")
+	assert(type(a_Api.Classes) == "table")
+	assert(type(a_Api.Globals) == "table")
+
+	-- Parse the function name:
+	local fnName, functionParamsStr = string.match(a_FnFullName, "([a-zA-Z:]+)(%b())")
+	local className, functionName = string.match(fnName, "(%a+):?(%a+)")
+	if (functionName == "") then
+		functionName, className = className, nil
+	end
+	local functionParams = {}
+	string.gsub(functionParamsStr, "[^,]+",
+		function (a_Match)
+			table.insert(functionParams, string.match(a_Match, "%s+(.+)%s+"))  -- Trim the whitespace around the match
+		end
+	)  -- Parse param types into an array
+
+	-- Find the API description for the function
+	local apiFnDesc
+	if (className) then
+		apiFnDesc = ((a_Api.Classes[className] or {}).Functions or {})[functionName]
+	else
+		apiFnDesc = a_Api.Globals.Functions[functionName]
+	end
+	if not(apiFnDesc) then
+		error(string.format("Cannot add custom implementation for function \"%s\", it is not present in the API",
+			a_FnFullName
+		))
+	end
+
+	-- Find the right signature for the function:
+	for _, signature in ipairs(apiFnDesc) do
+		if (signatureMatchesParams(signature, functionParams)) then
+			signature.Implementation = a_Fn
+			return
+		end
+	end
+	error(string.format("Cannot add custom implementation for function \"%s\", such a parameter combination is not present in the API",
+		a_FnFullName
+	))
+end
+
+
+
+
+
+--- Loads the custom implementations for API functions from the files specified in options
+-- a_Options is the global options object
+-- a_Api is the destination table where the API implementations will get stored
+local function loadApiImplementations(a_Options, a_Api)
+	-- Check params:
+	assert(type(a_Options) == "table")
+	assert(type(a_Api) == "table")
+	assert(type(a_Api.Classes) == "table")
+	assert(type(a_Api.Globals) == "table")
+
+	-- Load all files specified in options:
+	for _, fnam in ipairs(a_Options.apiImplementationFiles) do
+		print(string.format("Loading API implementation file \"%s\".", fnam))
+		local f = assert(loadfile(fnam))
+		local impl = f()
+		assert(type(impl) == "table", "API Implementation must return a dictionary-table")
+		for k, v in pairs(impl) do
+			if (type(v) == "function") then
+				setApiImplementation(a_Api, k, v)
+			end
+		end
+	end
 end
 
 
@@ -284,6 +398,9 @@ local function loadApi(a_Options)
 		normalizeClass(v)
 	end
 	normalizeClass(api.Globals)
+
+	-- Load the specific implementations for API functions:
+	loadApiImplementations(a_Options, api)
 
 	-- Mark all global functions as global:
 	for _, fn in pairs(api.Globals.Functions) do

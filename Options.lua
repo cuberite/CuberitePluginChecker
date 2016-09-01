@@ -5,9 +5,11 @@
 
 --[[
 The options object contains the following fields:
+	apiImplementationFiles - array-table of filenames to load the API implementation from
 	autoApiDescPath - path to the automatic API description files (by Cuberite's BindingsProcessor)
 	extraApiFiles - array-table of filenames to load as extra API descriptions (for manual API)
-	pluginFiles - array-table of all plugin files to check
+	pluginFiles - array-table of all plugin files to check. Each item already includes pluginPath
+	pluginPath - path to the plugin's files
 	shouldClearObjects - bool specifying whether API objects should be cleared after each callback (thus detecting potential use-after-callback)
 	shouldGCObjects - bool specifying whether API objects should be GC-ed after each callback (thus detecting storage-after-callback)
 --]]
@@ -56,6 +58,16 @@ local optionProcessor =
 		a_Options.shouldGCObjects = true
 	end,
 
+	-- "-i <filename>" specifies an API implementation file to load
+	["-i"] = function (a_Args, a_Idx, a_Options)
+		local fnam = a_Args[a_Idx + 1]
+		if (type(fnam) ~= "string") then
+			error("Invalid extra API filename parameter (-i)")
+		end
+		table.insert(a_Options.apiImplementationFiles, fnam)
+		return a_Idx + 2
+	end,
+
 	-- "-p <path>" specifies the path to the plugin to simulate
 	["-p"] = function (a_Args, a_Idx, a_Options)
 		-- Get a list of files from the folder:
@@ -77,6 +89,7 @@ local optionProcessor =
 		for _, f in ipairs(files) do
 			table.insert(a_Options.pluginFiles, f)
 		end
+		a_Options.pluginPath = pluginPath
 		return a_Idx + 2
 	end,
 
@@ -88,6 +101,7 @@ local optionProcessor =
 
 local options =
 {
+	apiImplementationFiles = {},
 	extraApiFiles = {},
 	pluginFiles = {},
 }
