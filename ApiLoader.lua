@@ -307,7 +307,8 @@ local function mergeApi(a_Dest, a_Src)
 	assert(type(a_Src) == "table")
 
 	-- Copy functions. Preserve individual signatures:
-	for fnName, fnDesc in pairs(a_Src.Functions) do
+	a_Dest.Functions = a_Dest.Functions or {}
+	for fnName, fnDesc in pairs(a_Src.Functions or {}) do
 		if not(a_Dest.Functions[fnName]) then
 			-- The entire function is not in a_Dest, copy the whole thing:
 			a_Dest.Functions[fnName] = fnDesc
@@ -321,12 +322,14 @@ local function mergeApi(a_Dest, a_Src)
 	end
 
 	-- Copy constants:
-	for cnName, cnDesc in pairs(a_Src.Constants) do
+	a_Dest.Constants = a_Dest.Constants or {}
+	for cnName, cnDesc in pairs(a_Src.Constants or {}) do
 		a_Dest.Constants[cnName] = cnDesc
 	end
 
 	-- Copy variables:
-	for varName, varDesc in pairs(a_Src.Variables) do
+	a_Dest.Variables = a_Dest.Variables or {}
+	for varName, varDesc in pairs(a_Src.Variables or {}) do
 		a_Dest.Variables[varName] = varDesc
 	end
 end
@@ -349,6 +352,7 @@ local function loadExtraApi(a_Options, a_Api)
 
 	-- Load each specified file:
 	for _, fnam in ipairs(a_Options.extraApiFiles) do
+		print(string.format("Loading ExtraAPI file \"%s\".", fnam))
 		local f, msg = loadfile(fnam)
 		if not(f) then
 			error(string.format(
@@ -369,7 +373,9 @@ local function loadExtraApi(a_Options, a_Api)
 				mergeApi(dst, classApi)
 			end
 		end
-		mergeApi(a_Api.Globals, partialApi.Globals or {})
+		if (partialApi.Globals) then
+			mergeApi(a_Api.Globals, partialApi.Globals)
+		end
 	end
 end
 
