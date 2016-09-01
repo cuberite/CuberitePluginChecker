@@ -92,7 +92,7 @@ local function convertParamTypes(a_FnSignature)
 	-- Convert returns:
 	a_FnSignature.Returns = a_FnSignature.Returns or {}
 	for _, ret in ipairs(a_FnSignature.Returns) do
-		ret.Type = g_CTypeToLuaType[ret.type] or ret.Type
+		ret.Type = g_CTypeToLuaType[ret.Type] or ret.Type
 	end
 end
 
@@ -270,6 +270,7 @@ local function loadApi(a_Options)
 	-- Check params
 	assert(type(a_Options) == "table")
 
+	-- Load the API from files:
 	local api =
 	{
 		Classes = {},

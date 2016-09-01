@@ -628,7 +628,7 @@ end
 
 
 --- Creates a new Simulator object with default callbacks
-local function createSimulator()
+local function createSimulator(a_Options)
 	local res =
 	{
 		-- Hooks that the simulator calls for various events
@@ -694,6 +694,13 @@ local function createSimulator()
 		{
 			n = 0,
 		},
+
+		-- Values used for synthesizing semi-random API return values:
+		testStringIndex = 1,
+		testNumber = 1,
+
+		-- Store the options so that they may be retrieved later on
+		options = a_Options,
 	}
 	setmetatable(res, Simulator)
 	return res
