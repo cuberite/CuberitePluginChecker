@@ -16,4 +16,4 @@ dependencies:
 test:
  override:
   - lua CuberitePluginChecker.lua -p tests/MinimalPlugin -a tests/DummyApiDesc
-  - lua CuberitePluginChecker.lua -p ~/Gallery -a ~/AutoAPI
+  - lua CuberitePluginChecker.lua -p ~/Gallery -a ~/AutoAPI -e ManualAPI.lua
