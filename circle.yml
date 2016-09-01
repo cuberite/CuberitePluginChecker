@@ -10,7 +10,7 @@ dependencies:
   - wget -O ~/gallery.zip https://github.com/cuberite/gallery/archive/master.zip
   - unzip -j -d ~/Gallery ~/gallery.zip
   - mkdir ~/AutoAPI
-  - wget -O AutoAPI.tgz http://cuberite.xoft.cz/AutoAPI.tgz
+  - wget -O ~/AutoAPI.tgz http://cuberite.xoft.cz/AutoAPI.tgz
   - tar xzf ~/AutoAPI.tgz -C ~/AutoAPI
 
 test:
