@@ -238,9 +238,9 @@ function Simulator:createApiEndpoint(a_ClassApi, a_SymbolName, a_ClassName)
 	if (a_ClassApi.Functions[a_SymbolName]) then
 		return self:createClassFunction(a_ClassApi.Functions[a_SymbolName], a_SymbolName, a_ClassName)
 	elseif (a_ClassApi.Constants[a_SymbolName]) then
-		return self:createClassConstant(a_ClassApi.Constants[a_SymbolName], a_SymbolName)
+		return self:createClassConstant(a_ClassApi.Constants[a_SymbolName], a_SymbolName, a_ClassName)
 	elseif (a_ClassApi.Variables[a_SymbolName]) then
-		return self:createClassVariable(a_ClassApi.Variables[a_SymbolName], a_SymbolName)
+		return self:createClassVariable(a_ClassApi.Variables[a_SymbolName], a_SymbolName, a_ClassName)
 	end
 
 	-- Endpoint not found:
@@ -286,6 +286,28 @@ function Simulator:createClass(a_ClassName, a_ClassApi)
 	local res = {__index}
 	res.__index = res
 	return setmetatable(res, mt)
+end
+
+
+
+
+
+--- Creates a constant based on its API description
+-- Provides a dummy value if no value is given
+function Simulator:createClassConstant(a_ConstDesc, a_ConstName, a_ClassName)
+	-- Check params:
+	assert(self)
+	assert(type(a_ConstDesc) == "table")
+	assert(type(a_ConstName) == "string")
+	assert(type(a_ClassName) == "string")
+
+	-- If the value is specified, return it directly:
+	if (a_ConstDesc.Value) then
+		return a_ConstDesc.Value
+	end
+
+	-- Synthesize a dummy value of the proper type:
+	return self:createInstance(a_ConstDesc)
 end
 
 
