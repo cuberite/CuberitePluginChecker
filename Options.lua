@@ -4,6 +4,14 @@
 -- The module has one global object, into which the options are stored
 
 --[[
+The commandline options understood by the framework:
+	-a <path>      -- Path to the AutoAPI description files (by Cuberite's BindingsProcessor)
+	-c             -- Check by clearing each API object after each callback
+	-e <filename>  -- Load file as extra API description (ManualAPI.lua by ManualApiDump plugin)
+	-g             -- Check by running garbage-collector after each callback
+	-i <filename>  -- Load special API implementation from the file (files in APIImpl folder)
+	-p <path>      -- Plugin path
+
 The options object contains the following fields:
 	apiImplementationFiles - array-table of filenames to load the API implementation from
 	autoApiDescPath - path to the automatic API description files (by Cuberite's BindingsProcessor)
@@ -73,9 +81,14 @@ local optionProcessor =
 		-- Get a list of files from the folder:
 		local pluginPath = a_Args[a_Idx + 1]
 		local files = {}
+		local hasInfoLua = false
 		for fnam in lfs.dir(pluginPath) do
-			if ((fnam ~= "Info.lua") and string.match(fnam, ".*%.lua")) then
-				table.insert(files, pluginPath .. "/" .. fnam)
+			if (string.match(fnam, ".*%.lua")) then
+				if (fnam ~= "Info.lua") then
+					table.insert(files, pluginPath .. "/" .. fnam)
+				else
+					hasInfoLua = true
+				end
 			end
 		end
 		if not(files[1]) then
@@ -84,6 +97,9 @@ local optionProcessor =
 
 		-- Sort the files the same way as Cuberite:
 		table.sort(files)
+		if (hasInfoLua) then
+			table.insert(files, pluginPath .. "/Info.lua")
+		end
 
 		-- Insert the current list of files into a_Options' filelist:
 		for _, f in ipairs(files) do
