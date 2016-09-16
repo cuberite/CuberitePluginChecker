@@ -172,15 +172,30 @@ local function setApiImplementation(a_Api, a_FnFullName, a_Fn)
 	assert(type(a_Api.Globals) == "table")
 
 	-- Parse the function name:
-	local fnName, functionParamsStr = string.match(a_FnFullName, "([a-zA-Z:]+)(%b())")
-	local className, functionName = string.match(fnName, "(%a+):?(%a+)")
+	local fnName, functionParamsStr = string.match(a_FnFullName, "([a-zA-Z0-9:]+)(%b())")
+	local idxColon = string.find(fnName, ":")
+	local className, functionName
+	if (idxColon) then
+		className = string.sub(fnName, 1, idxColon - 1)
+		functionName = string.sub(fnName, idxColon + 1)
+	else
+		functionName = fnName
+	end
+	--[[
+	local className, functionName = string.match(fnName, "([a-zA-Z0-9]+):?([a-zA-Z0-9]+)")
+	-- local className, functionName = string.match(fnName, "(%a+):?(%a+)")
 	if (functionName == "") then
 		functionName, className = className, nil
 	end
+	--]]
 	local functionParams = {}
 	string.gsub(functionParamsStr, "[^,]+",
 		function (a_Match)
-			table.insert(functionParams, string.match(a_Match, "%s+(.+)%s+"))  -- Trim the whitespace around the match
+			local param = string.gsub(a_Match, "[()]", "")  -- Remove the parentheses
+			param = param:match("^%s*(.-)%s*$")  -- Trim the whitespace
+			if (param and (param ~= "")) then
+				table.insert(functionParams, param)
+			end
 		end
 	)  -- Parse param types into an array
 
@@ -410,12 +425,9 @@ local function loadApi(a_Options)
 
 	-- Mark all global functions as global:
 	for _, fn in pairs(api.Globals.Functions) do
-		fn.IsGlobal = true
-		--[[
 		for _, signature in ipairs(fn) do
 			signature.IsGlobal = true
 		end
-		--]]
 	end
 
 	return api
