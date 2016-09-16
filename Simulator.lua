@@ -314,6 +314,27 @@ end
 
 
 
+--- Creates a variable based on its API description
+function Simulator:createClassVariable(a_VarDesc, a_VarName, a_ClassName)
+	-- Check params:
+	assert(self)
+	assert(type(a_VarDesc) == "table")
+	assert(type(a_VarName) == "string")
+	assert(type(a_ClassName) == "string")
+
+	-- If the value is specified, return it directly:
+	if (a_VarDesc.Value) then
+		return a_VarDesc.Value
+	end
+
+	-- Synthesize a dummy value of the proper type:
+	return self:createInstance(a_VarDesc)
+end
+
+
+
+
+
 --- Creates a dummy API function implementation based on its API description:
 function Simulator:createClassFunction(a_FnDesc, a_FnName, a_ClassName)
 	-- Check params:
@@ -364,14 +385,14 @@ function Simulator:createInstance(a_TypeDef)
 	elseif (t == "number") then
 		self.testNumber = (self.testNumber + 1) % 5  -- Repeat the same number every 5 calls
 		return self.testNumber
-	elseif (t == "bool") then
+	elseif (t == "boolean") then
 		return true
 	end
 
 	-- If it is a class param, create a class instance:
 	local classTable = self.sandbox[t]
 	if not(classTable) then
-		error("Requested an unknown param type for callback request")
+		error("Requested an unknown param type for callback request: \"" .. t .. "\".")
 	end
 	print("Created a new instance of " .. t)
 	local res = {}
@@ -402,6 +423,25 @@ end
 
 
 
+--- Replacement for the sandbox's dofile function
+-- Needs to apply the sandbox to the loaded code
+function Simulator:dofile(a_FileName)
+	-- Check params:
+	assert(self)
+	assert(type(self.sandbox) == "table")
+
+	-- print(string.format("Executing file \"%s\".", a_FileName))
+	local res, msg = loadfile(a_FileName)
+	if (res) then
+		setfenv(res, self.sandbox)
+	end
+	return res()
+end
+
+
+
+
+
 --- Returns the API signature for a function, based on its params (overload-resolution)
 -- a_FnDesc is the function's description table (array of signatures and map of properties)
 -- a_Params is an array-table of the params given by the plugin
@@ -422,15 +462,15 @@ function Simulator:findClassFunctionSignatureFromParams(a_FnDesc, a_Params, a_Cl
 	end
 
 	-- Check the signatures that have the same number of params:
-	local numSelfParams, className
-	if (a_FnDesc.IsGlobal) then
-		numSelfParams = 0
-	else
-		numSelfParams = 1
-		className = a_ClassName
-	end
 	local msgs = {}
 	for _, signature in ipairs(a_FnDesc) do
+		local numSelfParams, className
+		if (signature.IsGlobal) then
+			numSelfParams = 0
+		else
+			numSelfParams = 1
+			className = a_ClassName
+		end
 		local numSignatureParams = #(signature.Params) + numSelfParams
 		if (numSignatureParams == numParamsGiven) then
 			local doesMatch, msg = self:checkClassFunctionSignature(signature, a_Params, numParamsGiven, className)
@@ -504,18 +544,36 @@ function Simulator:listParamTypes(a_Params)
 			local mt = getmetatable(param)
 			if (mt and rawget(mt, "simulatorInternal_ClassName")) then
 				-- class
-				t = mt.simulatorInternal_ClassName
+				t = mt.simulatorInternal_ClassName .. " (class)"
 			else
 				local classMT = getmetatable(mt)
 				if (classMT and classMT.simulatorInternal_ClassName) then
 					-- class instance
-					t = classMT.simulatorInternal_ClassName
+					t = classMT.simulatorInternal_ClassName .. " (instance)"
 				end
 			end
 		end
 		res[idx] = t
 	end
 	return res
+end
+
+
+
+
+
+--- Replacement for the global "loadfile" symbol in the sandbox
+-- Needs to apply the sandbox to the loaded code
+function Simulator:loadfile(a_FileName)
+	-- Check params:
+	assert(self)
+	assert(type(self.sandbox) == "table")
+
+	local res, msg = loadfile(a_FileName)
+	if (res) then
+		setfenv(res, self.sandbox)
+	end
+	return res, msg
 end
 
 
@@ -533,6 +591,24 @@ function Simulator:loadFiles(a_FileList)
 		setfenv(fn, self.sandbox)
 		fn()
 	end
+end
+
+
+
+
+
+--- Replacement for the global "loadstring" symbol in the sandbox
+-- Needs to apply the sandbox to the loaded code
+function Simulator:loadstring(a_String)
+	-- Check params:
+	assert(self)
+	assert(type(self.sandbox) == "table")
+
+	local res, msg = loadstring(a_String)
+	if not(res) then
+		setfenv(res, self.sandbox)
+	end
+	return res, msg
 end
 
 
@@ -651,7 +727,8 @@ end
 
 --- Creates a new Simulator object with default callbacks
 local function createSimulator(a_Options)
-	local res =
+	local res
+	res =
 	{
 		-- Hooks that the simulator calls for various events
 		-- Each member is a table of functions, the simulator calls each function consecutively
@@ -679,14 +756,14 @@ local function createSimulator(a_Options)
 			-- Default Lua globals:
 			assert = assert,
 			collectgarbage = collectgarbage,
-			dofile = dofile,
+			dofile = function (a_FileName) return res:dofile(a_FileName) end,
 			error = error,
 			getfenv = getfenv,
 			getmetatable = getmetatable,
 			ipairs = ipairs,
 			load = load,
-			loadfile = loadfile,
-			loadstring = loadstring,
+			loadfile = function(a_FileName) return res:loadfile(a_FileName) end,
+			loadstring = function(a_String) return res:loadstring(a_String) end,
 			next = next,
 			pairs = pairs,
 			pcall = pcall,
