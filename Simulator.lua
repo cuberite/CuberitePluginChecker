@@ -424,7 +424,7 @@ function Simulator:dofile(a_FileName)
 	assert(self)
 	assert(type(self.sandbox) == "table")
 
-	-- print(string.format("Executing file \"%s\".", a_FileName))
+	print(string.format("Executing file \"%s\".", a_FileName))
 	local res, msg = loadfile(a_FileName)
 	if (res) then
 		setfenv(res, self.sandbox)
