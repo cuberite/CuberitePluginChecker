@@ -6,8 +6,10 @@ dependencies:
  pre:
   - sudo apt-get install lua5.1 luarocks
   - sudo luarocks install luafilesystem
+  - sudo luarocks install lsqlite3
   - mkdir ~/Gallery
   - wget -O ~/gallery.zip https://github.com/cuberite/gallery/archive/master.zip
+  - wget -O ~/InfoReg.lua https://raw.githubusercontent.com/cuberite/cuberite/master/Server/Plugins/InfoReg.lua
   - unzip -j -d ~/Gallery ~/gallery.zip
   - mkdir ~/AutoAPI
   - wget -O ~/AutoAPI.tgz http://cuberite.xoft.cz/AutoAPI.tgz
@@ -16,4 +18,4 @@ dependencies:
 test:
  override:
   - lua CuberitePluginChecker.lua -p tests/MinimalPlugin -a tests/DummyApiDesc
-  - lua CuberitePluginChecker.lua -p ~/Gallery -a ~/AutoAPI -e ManualAPI.lua
+  - lua CuberitePluginChecker.lua -p ~/Gallery -a ~/AutoAPI -e tests/ManualAPI.lua -i APIImpl/All.lua
