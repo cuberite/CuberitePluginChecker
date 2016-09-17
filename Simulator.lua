@@ -192,23 +192,17 @@ function Simulator:checkClassFunctionSignature(a_FnSignature, a_Params, a_NumPar
 
 	-- Check the type of each plugin parameter:
 	for idx = paramOffset + 1, a_NumParams do
-		local param = a_Params[idx]
 		local signatureParam = a_FnSignature.Params[idx - paramOffset]
-		if (type(param) == "table") then
+		local param = a_Params[idx]
+		local paramType = type(param)
+		if (paramType == "table") then
 			-- This is most likely a class, check the class type:
-			local classType = (getmetatable(param) or {}).simulatorInternal_ClassName or "table"
-			if (classType ~= signatureParam.Type) then
-				return false, string.format("Param #%d doesn't match, expected %s, got %s",
-					idx - paramOffset, signatureParam.Type, classType
-				)
-			end
-		else
-			-- This is a basic Lua type, check directly:
-			if (type(param) ~= signatureParam.Type) then
-				return false, string.format("Param #%d doesn't match, expected %s, got %s",
-					idx - paramOffset, signatureParam.Type, type(param)
-				)
-			end
+			paramType = (getmetatable(param) or {}).simulatorInternal_ClassName or "table"
+		end
+		if not(self:paramTypesMatch(paramType, signatureParam.Type)) then
+			return false, string.format("Param #%d doesn't match, expected %s, got %s",
+				idx - paramOffset, signatureParam.Type, type(param)
+			)
 		end
 	end
 
@@ -477,7 +471,7 @@ function Simulator:findClassFunctionSignatureFromParams(a_FnDesc, a_Params, a_Cl
 			if (doesMatch) then
 				return signature
 			end
-			table.insert(msgs, msg or "<no message>")
+			table.insert(msgs, (msg or "<no message>") .. " (signature: " .. self:prettyPrintSignature(signature) .. ")")
 		else
 			table.insert(msgs, string.format(
 				"Parameter count doesn't match, expected %d, got %d (overload \"%s\")",
@@ -609,6 +603,36 @@ function Simulator:loadstring(a_String)
 		setfenv(res, self.sandbox)
 	end
 	return res, msg
+end
+
+
+
+
+
+--- Compares the type of a parameter to the type in the signature
+-- Returns true if the param type is compatible with the signature
+-- Compatibility is either being equal, or the ParamType being a number and SignatureType being an enum
+function Simulator:paramTypesMatch(a_ParamType, a_SignatureType)
+	-- Check params:
+	assert(type(a_ParamType) == "string")
+	assert(type(a_SignatureType) == "string")
+	assert(self)
+
+	-- If the types are equal, return "compatible":
+	if (a_ParamType == a_SignatureType) then
+		return true
+	end
+
+	-- If the signature says an enum and the param is a number, return "compatible":
+	local signatureClass, signatureEnum = a_SignatureType:match("([a-zA-Z0-9]+)%#([a-zA-Z0-9]+)")
+	if (signatureClass and signatureEnum) then
+		-- For now we don't check whether it actually is an enum and whether the value is correct
+		-- Just assume all is OK
+		-- TODO: Proper checks
+		return (a_ParamType == "number")
+	end
+
+	return false
 end
 
 
