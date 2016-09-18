@@ -248,12 +248,24 @@ function Simulator:createApiEndpoint(a_ClassApi, a_SymbolName, a_ClassName)
 	assert(type(a_ClassName) == "string")
 
 	-- Create the endpoint:
+	local res
 	if (a_ClassApi.Functions[a_SymbolName]) then
-		return self:createClassFunction(a_ClassApi.Functions[a_SymbolName], a_SymbolName, a_ClassName)
+		res = self:createClassFunction(a_ClassApi.Functions[a_SymbolName], a_SymbolName, a_ClassName)
 	elseif (a_ClassApi.Constants[a_SymbolName]) then
-		return self:createClassConstant(a_ClassApi.Constants[a_SymbolName], a_SymbolName, a_ClassName)
+		res = self:createClassConstant(a_ClassApi.Constants[a_SymbolName], a_SymbolName, a_ClassName)
 	elseif (a_ClassApi.Variables[a_SymbolName]) then
-		return self:createClassVariable(a_ClassApi.Variables[a_SymbolName], a_SymbolName, a_ClassName)
+		res = self:createClassVariable(a_ClassApi.Variables[a_SymbolName], a_SymbolName, a_ClassName)
+	end
+	if (res) then
+		return res
+	end
+
+	-- If not found, try to create it in the class parents:
+	for _, className in ipairs(a_ClassApi.Inherits or {}) do
+		local res = self.sandbox[className][a_SymbolName]
+		if (res) then
+			return res
+		end
 	end
 
 	-- Endpoint not found:
