@@ -221,8 +221,18 @@ local function setApiImplementation(a_Api, a_FnFullName, a_Fn, a_Logger)
 			return
 		end
 	end
-	a_Logger:error("Cannot add custom implementation for function \"%s\", such a parameter combination is not present in the API.",
-		a_FnFullName
+
+	-- The signature was not found, build a list of string representations of all available signatures:
+	local s = {}
+	for idxS, signature in ipairs(apiFnDesc) do
+		local params = {}
+		for idxP, param in ipairs(signature.Params or {}) do
+			params[idxP] = param.Type
+		end
+		s[idxS] = table.concat(params, ", ")
+	end
+	a_Logger:error("Cannot add custom implementation for function \"%s\", such a parameter combination is not present in the API. Available signatures:\n\t%s",
+		a_FnFullName, table.concat(s, "\n\t")
 	)
 end
 
