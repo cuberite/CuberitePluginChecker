@@ -7,9 +7,10 @@
 
 
 -- Load the libraries:
-local Options = dofile("Options.lua")
+local Options   = dofile("Options.lua")
 local ApiLoader = dofile("ApiLoader.lua")
 local Simulator = dofile("Simulator.lua")
+local Logger    = dofile("Logger.lua")
 
 
 
@@ -20,11 +21,12 @@ local options = Options.parseCommandLine(...)
 if not(options.pluginFiles[1]) then
 	error("No plugin to check was specified.\nUse the -p <path> option to specify the plugin.")
 end
-local simulator = Simulator.create(options)
-local api = ApiLoader.load(options)
+local logger = Logger:new(options)
+local simulator = Simulator.create(options, logger)
+local api = ApiLoader.load(options, logger)
 simulator:injectApi(api)
 simulator:run(options)
-print("Simulator has finished running")
+logger:trace("Simulator has finished running")
 
 
 

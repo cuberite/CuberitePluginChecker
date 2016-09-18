@@ -69,9 +69,9 @@ end
 -- a_Params is an array-table of the params that were given to the callback
 -- a_Returns is an array-table of the return values that the callback returned
 function Simulator:afterCallClearObjects(a_Params, a_Returns)
-	print("afterCallClearObjects:")
-	print("\ta_Params = " .. tostring(a_Params))
-	print("\ta_Returns = " .. tostring(a_Returns))
+	self.logger:trace("afterCallClearObjects:")
+	self.logger:trace("\ta_Params = %s", tostring(a_Params))
+	self.logger:trace("\ta_Returns = %s", tostring(a_Returns))
 	-- TODO
 end
 
@@ -83,9 +83,9 @@ end
 -- a_Params is an array-table of the params that were given to the callback
 -- a_Returns is an array-table of the return values that the callback returned
 function Simulator:afterCallGCObjects(a_Params, a_Returns)
-	print("afterCallGCObjects:")
-	print("\ta_Params = " .. tostring(a_Params))
-	print("\ta_Returns = " .. tostring(a_Returns))
+	self.logger:trace("afterCallGCObjects:")
+	self.logger:trace("\ta_Params = %s", tostring(a_Params))
+	self.logger:trace("\ta_Returns = %s", tostring(a_Returns))
 	-- TODO
 end
 
@@ -96,8 +96,8 @@ end
 --- Called by the simulator after calling the callback, when the ClearObjects is specified in the options
 -- a_Params is an array-table of the params that are to be given to the callback
 function Simulator:beforeCallClearObjects(a_Params)
-	print("beforeCallClearObjects:")
-	print("\ta_Params = " .. tostring(a_Params))
+	self.logger:trace("beforeCallClearObjects:")
+	self.logger:trace("\ta_Params = %s", tostring(a_Params))
 	-- TODO
 end
 
@@ -108,8 +108,8 @@ end
 --- Called by the simulator before calling the callback, when the GCObjects is specified in the options
 -- a_Params is an array-table of the params that are to be given to the callback
 function Simulator:beforeCallGCObjects(a_Params)
-	print("beforeCallGCObjects:")
-	print("\ta_Params = " .. tostring(a_Params))
+	self.logger:trace("beforeCallGCObjects:")
+	self.logger:trace("\ta_Params = %s", tostring(a_Params))
 	-- TODO
 end
 
@@ -258,7 +258,7 @@ function Simulator:createClass(a_ClassName, a_ClassApi)
 	assert(a_ClassApi.Constants)
 	assert(a_ClassApi.Variables)
 
-	print("Creating class " .. a_ClassName)
+	self.logger:trace("Creating class \"%s\".", a_ClassName)
 	-- Create a metatable that dynamically creates the API endpoints, and stores info about the class:
 	local mt =
 	{
@@ -267,10 +267,10 @@ function Simulator:createClass(a_ClassName, a_ClassApi)
 				-- Used by debuggers all the time, spamming the log. Bail out early.
 				return nil
 			end
-			print("Creating an API endpoint " .. a_ClassName .. "." .. a_SymbolName)
+			self.logger:trace("Creating an API endpoint \"%s.%s\".", a_ClassName, a_SymbolName)
 			local endpoint = self:createApiEndpoint(a_ClassApi, a_SymbolName, a_ClassName)
 			if not(endpoint) then
-				error("Attempting to use a non-existent API: " .. a_ClassName .. "." .. a_SymbolName)
+				self.logger:error("Attempting to use a non-existent API: \"%s.%s\".", a_ClassName, a_SymbolName)
 			end
 			return endpoint
 		end,
@@ -338,16 +338,16 @@ function Simulator:createClassFunction(a_FnDesc, a_FnName, a_ClassName)
 	assert(type(a_ClassName) == "string")
 
 	return function(...)
-		print("Calling function " .. a_ClassName .. "." .. a_FnName)
+		self.logger:trace("Calling function %s.%s.", a_ClassName, a_FnName)
 		local params = { ... }
 		self:callHooks(self.hooks.onApiFunctionCall, a_ClassName, a_FnName, params)
 		local signature, msgs = self:findClassFunctionSignatureFromParams(a_FnDesc, params, a_ClassName)
 		if not(signature) then
-			error(
-				string.format("Function %s.%s used with wrong parameters, there is no overload that can take these:\n\t%s\nMatcher messages:\n\t%s",
+			self.logger:error(
+				"Function %s.%s used with wrong parameters, there is no overload that can take these:\n\t%s\nMatcher messages:\n\t%s",
 				a_ClassName, a_FnName,
 				table.concat(self:listParamTypes(params), "\n\t"),
-				table.concat(msgs, "\n\t"))
+				table.concat(msgs, "\n\t")
 			)
 		end
 		if (signature.Implementation) then
@@ -386,9 +386,9 @@ function Simulator:createInstance(a_TypeDef)
 	-- If it is a class param, create a class instance:
 	local classTable = self.sandbox[t]
 	if not(classTable) then
-		error("Requested an unknown param type for callback request: \"" .. t .. "\".")
+		self.logger:error("Requested an unknown param type for callback request: \"%s\".", t)
 	end
-	print("Created a new instance of " .. t)
+	self.logger:trace("Created a new instance of %s", t)
 	local res = {}
 	setmetatable(res, classTable)
 	assert(classTable.__index == classTable)
@@ -424,7 +424,7 @@ function Simulator:dofile(a_FileName)
 	assert(self)
 	assert(type(self.sandbox) == "table")
 
-	print(string.format("Executing file \"%s\".", a_FileName))
+	self.logger:trace("Executing file \"%s\".", a_FileName)
 	local res, msg = loadfile(a_FileName)
 	if (res) then
 		setfenv(res, self.sandbox)
@@ -515,7 +515,7 @@ function Simulator:injectApi(a_ApiDesc)
 
 		-- Failed to create the endpoint, chain to previous __index or raise an error:
 		if not(prevIndex) then
-			print("WARNING: Attempting to use an unknown Global value " .. a_SymbolName .. ", nil will be returned")
+			self.logger:warning("Attempting to use an unknown Global value \"%s\", nil will be returned", a_SymbolName)
 			return nil
 		end
 		assert(type(prevIndex) == "function")  -- We don't support table-based __index yet (but can be done)
@@ -683,7 +683,7 @@ function Simulator:processCallbackRequest(a_Request)
 	assert(a_Request.Params)
 
 	if (a_Request.Notes) then
-		print("Calling request: " .. a_Request.Notes)
+		self.logger:debug("Calling request \"%s\".", a_Request.Notes)
 	end
 
 	self:callHooks(self.hooks.onBeginRound, a_Request)
@@ -734,7 +734,7 @@ function Simulator:run(a_Options)
 	-- TODO: Add callback-requests for commands and web-tabs from a pre-configured test definition file (?)
 
 	-- As long as there are callback requests in the queue, dequeue and process them, in a LIFO manner:
-	print("Running the simulator")
+	self.logger:trace("Running the simulator")
 	while (self.callbackRequests.n > 0) do
 		local request = self.callbackRequests[self.callbackRequests.n]
 		self.callbackRequests.n = self.callbackRequests.n - 1
@@ -750,7 +750,11 @@ end
 
 
 --- Creates a new Simulator object with default callbacks
-local function createSimulator(a_Options)
+local function createSimulator(a_Options, a_Logger)
+	-- Check params:
+	assert(type(a_Options) == "table")
+	assert(type(a_Logger) == "table")
+
 	local res
 	res =
 	{
@@ -822,8 +826,11 @@ local function createSimulator(a_Options)
 		testStringIndex = 1,
 		testNumber = 1,
 
-		-- Store the options so that they may be retrieved later on
+		-- Store the options so that they may be retrieved later on:
 		options = a_Options,
+
+		-- Store the logger for later use:
+		logger = a_Logger,
 	}
 	setmetatable(res, Simulator)
 	return res

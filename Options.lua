@@ -10,12 +10,14 @@ The commandline options understood by the framework:
 	-e <filename>  -- Load file as extra API description (ManualAPI.lua by ManualApiDump plugin)
 	-g             -- Check by running garbage-collector after each callback
 	-i <filename>  -- Load special API implementation from the file (files in APIImpl folder)
+	-l <loglevel>  -- Use the specified loglevel (1 = trace, 2 = debug, 3 = info, 4 = warning, 5 = error)
 	-p <path>      -- Plugin path
 
 The options object contains the following fields:
 	apiImplementationFiles - array-table of filenames to load the API implementation from
 	autoApiDescPath - path to the automatic API description files (by Cuberite's BindingsProcessor)
 	extraApiFiles - array-table of filenames to load as extra API descriptions (for manual API)
+	logLevel - number specifying the loglevel to use, or nil
 	pluginFiles - array-table of all plugin files to check. Each item already includes pluginPath
 	pluginPath - path to the plugin's files
 	shouldClearObjects - bool specifying whether API objects should be cleared after each callback (thus detecting potential use-after-callback)
@@ -73,6 +75,15 @@ local optionProcessor =
 			error("Invalid extra API filename parameter (-i)")
 		end
 		table.insert(a_Options.apiImplementationFiles, fnam)
+		return a_Idx + 2
+	end,
+
+	["-l"] = function (a_Args, a_Idx, a_Options)
+		local level = tonumber(a_Args[a_Idx + 1])
+		if not(level) then
+			error(string.format("Invalid loglevel: \"%s\".", tostring(a_Args[a_Idx + 1])))
+		end
+		a_Options.logLevel = level
 		return a_Idx + 2
 	end,
 
