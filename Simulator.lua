@@ -181,12 +181,13 @@ function Simulator:checkClassFunctionSignature(a_FnSignature, a_Params, a_NumPar
 			if not(mt.simulatorInternal_ClassName) then
 				return false, "The \"self\" parameter is not a Cuberite class"
 			end
-			if (mt.simulatorInternal_ClassName ~= a_ClassName) then
-				return false, string.format(
-					"The \"self\" parameter is a different class. Expected %s, got %s.",
-					a_ClassName, mt.simulatorInternal_ClassName
-				)
+			if (self:classInheritsFrom(mt.simulatorInternal_ClassName, a_ClassName)) then
+				return true
 			end
+			return false, string.format(
+				"The \"self\" parameter is a different class. Expected %s, got %s.",
+				a_ClassName, mt.simulatorInternal_ClassName
+			)
 		else
 			-- For a non-static function, the first param should be an instance of the class:
 			local mt = getmetatable(a_Params[1])
@@ -200,12 +201,13 @@ function Simulator:checkClassFunctionSignature(a_FnSignature, a_Params, a_NumPar
 			if not(classMT.simulatorInternal_ClassName) then
 				return false, "The \"self\" parameter is not a Cuberite class instance"
 			end
-			if (classMT.simulatorInternal_ClassName ~= a_ClassName) then
-				return false, string.format(
-					"The \"self\" parameter is a different class instance. Expected %s, got %s.",
-					a_ClassName, classMT.simulatorInternal_ClassName
-				)
+			if (self:classInheritsFrom(classMT.simulatorInternal_ClassName, a_ClassName)) then
+				return true
 			end
+			return false, string.format(
+				"The \"self\" parameter is a different class instance. Expected %s, got %s.",
+				a_ClassName, classMT.simulatorInternal_ClassName
+			)
 		end
 	end
 
@@ -227,6 +229,41 @@ function Simulator:checkClassFunctionSignature(a_FnSignature, a_Params, a_NumPar
 
 	-- All params have matched
 	return true
+end
+
+
+
+
+
+--- Checks the inheritance tree
+-- Returns true if class "a_ChildName" inherits from class "a_ParentName" (or they are the same)
+function Simulator:classInheritsFrom(a_ChildName, a_ParentName)
+	-- Check params:
+	assert(self)
+	assert(type(a_ChildName) == "string")
+	assert(type(a_ParentName) == "string")
+
+	-- If they are the same class, consider them inheriting:
+	if (a_ChildName == a_ParentName) then
+		return true
+	end
+
+	-- Check the inheritance using the child class API:
+	local childClass = self.sandbox[a_ChildName]
+	if not(childClass) then
+		self.logger:warning("Attempting to check inheritance for non-existent class \"%s\".", a_ChildName)
+		return false
+	end
+	local childMT = getmetatable(childClass) or {}
+	local childApi = childMT.simulatorInternal_ClassApi or {}
+	for _, parent in ipairs(childApi.Inherits or {}) do
+		if (self:classInheritsFrom(parent, a_ParentName)) then
+			return true
+		end
+	end
+
+	-- None of the inherited classes matched
+	return false
 end
 
 
