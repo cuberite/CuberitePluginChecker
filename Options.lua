@@ -8,6 +8,7 @@ The commandline options understood by the framework:
 	-a <path>      -- Path to the AutoAPI description files (by Cuberite's BindingsProcessor)
 	-c             -- Check by clearing each API object after each callback
 	-e <filename>  -- Load file as extra API description (ManualAPI.lua by ManualApiDump plugin)
+	-f             -- Fuzz command handlers (send various garbate to them to test their user-input resilience)
 	-g             -- Check by running garbage-collector after each callback
 	-i <filename>  -- Load special API implementation from the file (files in APIImpl folder)
 	-l <loglevel>  -- Use the specified loglevel (1 = trace, 2 = debug, 3 = info, 4 = warning, 5 = error)
@@ -21,6 +22,7 @@ The options object contains the following fields:
 	pluginFiles - array-table of all plugin files to check. Each item already includes pluginPath
 	pluginPath - path to the plugin's files
 	shouldClearObjects - bool specifying whether API objects should be cleared after each callback (thus detecting potential use-after-callback)
+	shouldFuzzCommands - bool specifying whether commands should be fuzzed
 	shouldGCObjects - bool specifying whether API objects should be GC-ed after each callback (thus detecting storage-after-callback)
 --]]
 
@@ -61,6 +63,11 @@ local optionProcessor =
 		end
 		table.insert(a_Options.extraApiFiles, fnam)
 		return a_Idx + 2
+	end,
+
+	-- "-f" specifies to do command fuzzing
+	["-f"] = function (a_Args, a_Idx, a_Options)
+		a_Options.shouldFuzzCommands = true
 	end,
 
 	-- "-g" specified to GC API objects after each callback

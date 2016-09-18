@@ -29,20 +29,36 @@ Simulator["__index"] = Simulator
 
 
 --- Adds a new callback request to the queue to be processed
-function Simulator:addCallbackRequest(a_FnToCall, a_Params, a_Notes)
+-- a_ParamTypes is an array of strings describing the param types
+-- a_Notes is a description of the request for logging purposes
+-- a_ParamValues is an optional array of params' values
+function Simulator:addCallbackRequest(a_FnToCall, a_ParamTypes, a_Notes, a_ParamValues)
 	-- Check params:
 	assert(self)
 	assert(type(a_FnToCall) == "function")
-	local params = a_Params or {}
-	assert(type(params) == "table")
+	local paramTypes = a_ParamTypes or {}
+	assert(type(paramTypes) == "table")
 
 	-- Add the request to the queue:
 	local n = self.callbackRequests.n + 1
-	self.callbackRequests[n] = { Function = a_FnToCall, Params = params, Notes = a_Notes }
+	self.callbackRequests[n] = { Function = a_FnToCall, ParamTypes = paramTypes, ParamValues = a_ParamValues, Notes = a_Notes }
 	self.callbackRequests.n = n
 
 	-- Call the notification callback:
 	self:callHooks(self.hooks.onAddedRequest)
+end
+
+
+
+
+
+--- Adds a CallbackRequest to call the specified command with the specified CommandSplit
+-- a_Handler is the command's registered callback function
+-- a_CommandSplit is an array-table of strings used as the splitted command
+function Simulator:addCommandCallbackRequest(a_Handler, a_CommandSplit)
+	local player = self:createInstance({Type = "cPlayer"})
+	local entireCmd = table.concat(a_CommandSplit, " ")
+	self:addCallbackRequest(a_Handler, nil, string.format("command \"%s\"", entireCmd), { a_CommandSplit, player, entireCmd })
 end
 
 
@@ -58,6 +74,9 @@ function Simulator:addHooks(a_Options)
 	if (a_Options.shouldGCObjects) then
 		table.insert(self.hooks.onBeforeCallCallback, Simulator.beforeCallGCObjects)
 		table.insert(self.hooks.onAfterCallCallback,  Simulator.afterCallGCObjects)
+	end
+	if (a_Options.shouldFuzzCommands) then
+		table.insert(self.hooks.onEmptyRequestQueue, Simulator.fuzzCommandHandlers)
 	end
 end
 
@@ -489,6 +508,56 @@ end
 
 
 
+--- Called when the request queue is empty and command fuzzing is enabled
+-- If there is a command yet to be fuzzed, queues its request
+function Simulator:fuzzCommandHandlers()
+	-- Check params:
+	assert(self)
+
+	-- If called for the first time, make a list of not-yet-fuzzed commands:
+	if not(self.currentFuzzedCommandTest) then
+		self.logger:trace("Starting the command fuzzer")
+		self.commandsToFuzz = {}
+		local idx = 1
+		for cmd, _ in pairs(self.registeredCommandHandlers) do
+			self.commandsToFuzz[idx] = cmd
+			idx = idx + 1
+		end
+		self.currentFuzzedCommandTest = 1
+	end
+
+	-- If no more commands to fuzz, bail out:
+	if not(self.commandsToFuzz[1]) then
+		return
+	end
+
+	-- Add the fuzzing request for the next command handler into the queue:
+	local test = self.currentFuzzedCommandTest
+	local cmd = self.commandsToFuzz[1]
+	local desc = self.registeredCommandHandlers[cmd]
+	if (test == 1) then
+		self:addCommandCallbackRequest(desc.callback, {cmd})
+	elseif (test == 2) then
+		self:addCommandCallbackRequest(desc.callback, {cmd, "a"})
+	elseif (test == 3) then
+		self:addCommandCallbackRequest(desc.callback, {cmd, "1"})
+
+	-- TODO: more tests here
+
+	else
+		-- All tests done, move to next command (using recursion):
+		table.remove(self.commandsToFuzz, 1)
+		self.currentFuzzedCommandTest = 1
+		self:fuzzCommandHandlers()
+		return
+	end
+	self.currentFuzzedCommandTest = self.currentFuzzedCommandTest + 1
+end
+
+
+
+
+
 --- Injects the API classes and global symbols into the simulator's sandbox
 function Simulator:injectApi(a_ApiDesc)
 	-- Check params:
@@ -680,7 +749,6 @@ function Simulator:processCallbackRequest(a_Request)
 	assert(self)
 	assert(a_Request)
 	assert(a_Request.Function)
-	assert(a_Request.Params)
 
 	if (a_Request.Notes) then
 		self.logger:debug("Calling request \"%s\".", a_Request.Notes)
@@ -689,7 +757,7 @@ function Simulator:processCallbackRequest(a_Request)
 	self:callHooks(self.hooks.onBeginRound, a_Request)
 
 	-- Prepare the params:
-	local params = self:createInstances(a_Request.Params or {})
+	local params = a_Request.ParamValues or self:createInstances(a_Request.ParamTypes or {})
 	self:callHooks(self.hooks.onBeforeCallCallback, a_Request, params)
 
 	-- Call the callback:
@@ -823,7 +891,10 @@ local function createSimulator(a_Options, a_Logger)
 		registeredCommandHandlers = {},
 
 		-- The LIFO of requests for calling back
-		-- Array of { Function = <fn>, Params = { <ParamTypes> }, Notes = <optional-string> }
+		-- Array of { Function = <fn>, ParamTypes = { <ParamTypes> }, ParamValues = { <OptionalParamValues> }, Notes = <optional-string> }
+		-- ParamTypes is an array of strings describing the param types
+		-- Param values is an optional array of param values to use. If present, ParamTypes is ignored
+		-- Notes is a description for logging purposes
 		-- Has an additional count in "n" for easy access
 		callbackRequests =
 		{
