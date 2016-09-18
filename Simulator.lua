@@ -814,6 +814,14 @@ local function createSimulator(a_Options, a_Logger)
 			PluginCheckerSimulatorVersion = 1,
 		},
 
+		-- The hooks that the plugin has registered
+		-- A dictionary of HookType -> { callback1, callback2, ... }
+		registeredHooks = {},
+
+		-- The command handlers registered by the plugin
+		-- A dictionary of Command -> { permission, callback, helpString }
+		registeredCommandHandlers = {},
+
 		-- The LIFO of requests for calling back
 		-- Array of { Function = <fn>, Params = { <ParamTypes> }, Notes = <optional-string> }
 		-- Has an additional count in "n" for easy access
