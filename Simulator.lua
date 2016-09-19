@@ -313,6 +313,22 @@ end
 
 
 
+--- Definitions for operators
+-- This table pairs operators' APIDoc names with their Lua Meta-method names and names used for logging
+local g_Operators =
+{
+	{ docName = "operator_div",   metaName = "__div", logName = "operator div" },
+	{ docName = "operator_eq",    metaName = "__eq",  logName = "operator eq" },
+	{ docName = "operator_minus", metaName = "__sub", logName = "operator minus" },
+	{ docName = "operator_minus", metaName = "__unm", logName = "operator unary-minus" },
+	{ docName = "operator_mul",   metaName = "__mul", logName = "operator mul" },
+	{ docName = "operator_plus",  metaName = "__add", logName = "operator plus" },
+}
+
+
+
+
+
 --- Creates a sandbox implementation of the specified API class
 -- a_ClassName is the name of the class (used for error-reporting)
 -- a_ClassApi is the class' API description
@@ -345,6 +361,8 @@ function Simulator:createClass(a_ClassName, a_ClassApi)
 		simulatorInternal_ClassName = a_ClassName,
 		simulatorInternal_ClassApi = a_ClassApi,
 	}
+
+	-- If the class has a constructor, add it to the meta-table, because it doesn't go through the __index meta-method:
 	if (a_ClassApi.Functions.new) then
 		mt.__call = function (...)
 			self.logger:trace("Creating constructor for class %s.", a_ClassName)
@@ -355,9 +373,27 @@ function Simulator:createClass(a_ClassName, a_ClassApi)
 			return endpoint(...)
 		end
 	end
-	local res = {__index}
+
+	-- Add any operators to the class-table, because they don't go through the __index meta-method:
+	-- Also they apparently don't go through meta-table nesting, so need to create them directly in the class-table
+	local res = {}
 	res.__index = res
-	return setmetatable(res, mt)
+	for _, op in ipairs(g_Operators) do
+		if (a_ClassApi.Functions[op.docName]) then
+			res[op.metaName] = function (...)
+				self.logger:trace("Creating %s for class %s", op.logName, a_ClassName)
+				local endpoint = self:createApiEndpoint(a_ClassApi, op.docName, a_ClassName)
+				if not(endpoint) then
+					self.logger:error("Attempting to use %s for class %s that doesn't have one.", op.logName, a_ClassName)
+				end
+				return endpoint(...)
+			end
+		end
+	end
+
+	setmetatable(res, mt)
+	self.sandbox[a_ClassName] = res  -- Store the class for the next time (needed at least for operator_eq)
+	return res
 end
 
 
