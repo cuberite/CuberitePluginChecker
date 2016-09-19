@@ -101,6 +101,17 @@ end
 
 
 
+--- Map of function names that should be always forced to static
+-- Maps "FunctionName" -> true for each such function
+local g_ShouldForceStaticFunction =
+{
+	new = true,  -- Constructors are always static
+}
+
+
+
+
+
 --- Normalizes the class description for a single class (or globals)
 -- Makes sure Functions, Constants and Variables are present
 -- Makes sure each function has a multi-signature description format (FnName = { {desc1}, {desc2}, ... })
@@ -115,6 +126,9 @@ local function normalizeClass(a_Class)
 		else
 			for _, signature in ipairs(desc) do
 				convertParamTypes(signature)
+				if (g_ShouldForceStaticFunction[fnName]) then
+					signature.IsStatic = true
+				end
 			end
 			fns[fnName] = desc
 		end

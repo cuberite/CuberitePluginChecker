@@ -345,6 +345,16 @@ function Simulator:createClass(a_ClassName, a_ClassApi)
 		simulatorInternal_ClassName = a_ClassName,
 		simulatorInternal_ClassApi = a_ClassApi,
 	}
+	if (a_ClassApi.Functions.new) then
+		mt.__call = function (...)
+			self.logger:trace("Creating constructor for class %s.", a_ClassName)
+			local endpoint = self:createApiEndpoint(a_ClassApi, "new", a_ClassName)
+			if not(endpoint) then
+				self.logger:error("Attempting to use a constructor for class %s that doesn't have one.", a_ClassName)
+			end
+			return endpoint(...)
+		end
+	end
 	local res = {__index}
 	res.__index = res
 	return setmetatable(res, mt)
