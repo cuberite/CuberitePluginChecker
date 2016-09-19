@@ -162,7 +162,7 @@ end
 
 --- Sets the implementation of the specified function into the API description
 -- a_Api is the API description into which the implementation is to be set
--- a_FnFullName is a string representation of the function's full name and signature ("cRoot:GetWorld(string)")
+-- a_FnFullName is a string representation of the function's full name and signature ("<static> cPluginManager:AddHook(number, function)")
 -- a_Fn is the function to set as the implementation
 -- a_Logger is the logger to use for logging messages
 -- Raises an error if the function name cannot be resolved or no such API function
@@ -174,7 +174,14 @@ local function setApiImplementation(a_Api, a_FnFullName, a_Fn, a_Logger)
 	assert(type(a_Logger) == "table")
 
 	-- Parse the function name:
-	local fnName, functionParamsStr = string.match(a_FnFullName, "([a-zA-Z0-9:]+)(%b())")
+	local fnPropertiesStr = string.match(a_FnFullName, "(%b<>)")
+	local fnProperties = {}  -- Dictionary of "static" -> true, "global" = true where applicable
+	local fnFullName = a_FnFullName
+	if (fnPropertiesStr) then
+		fnFullName = string.sub(fnFullName, string.len(fnPropertiesStr) + 1)
+		string.gsub(fnPropertiesStr, "%w+", function (a_Match) fnProperties[a_Match] = true end)
+	end
+	local fnName, functionParamsStr = string.match(fnFullName, "([a-zA-Z0-9:]+)(%b())")
 	local idxColon = string.find(fnName, ":")
 	local className, functionName
 	if (idxColon) then
@@ -183,13 +190,6 @@ local function setApiImplementation(a_Api, a_FnFullName, a_Fn, a_Logger)
 	else
 		functionName = fnName
 	end
-	--[[
-	local className, functionName = string.match(fnName, "([a-zA-Z0-9]+):?([a-zA-Z0-9]+)")
-	-- local className, functionName = string.match(fnName, "(%a+):?(%a+)")
-	if (functionName == "") then
-		functionName, className = className, nil
-	end
-	--]]
 	local functionParams = {}
 	string.gsub(functionParamsStr, "[^,]+",
 		function (a_Match)
@@ -216,20 +216,36 @@ local function setApiImplementation(a_Api, a_FnFullName, a_Fn, a_Logger)
 
 	-- Find the right signature for the function:
 	for _, signature in ipairs(apiFnDesc) do
-		if (signatureMatchesParams(signature, functionParams)) then
+		if (
+			(signature.IsStatic == fnProperties.static) and
+			(signature.IsGlobal == fnProperties.global) and
+			(signatureMatchesParams(signature, functionParams))
+		) then
 			signature.Implementation = a_Fn
 			return
 		end
 	end
 
-	-- The signature was not found, build a list of string representations of all available signatures:
+	-- The signature was not found, log an error with representations of all available signatures:
 	local s = {}
 	for idxS, signature in ipairs(apiFnDesc) do
 		local params = {}
 		for idxP, param in ipairs(signature.Params or {}) do
 			params[idxP] = param.Type
 		end
-		s[idxS] = table.concat(params, ", ")
+		local props = {}
+		if (signature.IsStatic) then
+			table.insert(props, "static")
+		end
+		if (signature.IsGlobal) then
+			table.insert(props, "global")
+		end
+		if (props[1]) then
+			props = "<" .. table.concat(props, ", ") .. "> "
+		else
+			props = ""
+		end
+		s[idxS] = props .. fnName .. "(" .. table.concat(params, ", ") .. ")"
 	end
 	a_Logger:error("Cannot add custom implementation for function \"%s\", such a parameter combination is not present in the API. Available signatures:\n\t%s",
 		a_FnFullName, table.concat(s, "\n\t")

@@ -26,7 +26,7 @@ return
 		print("ERROR: " .. a_Text)
 	end,
 
-	["sqlite3:open(string)"] = function (a_Simulator, a_FileName)
+	["<static, global> sqlite3:open(string)"] = function (a_Simulator, a_FileName)
 		-- TODO: Add scenario-based filename redirects
 		return sqlite3.open(a_FileName)
 	end,

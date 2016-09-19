@@ -8,7 +8,7 @@
 
 return
 {
-	["cFile:Copy(string, string)"] = function (a_Simulator, a_ThisClass, a_SrcFileName, a_DstFileName)
+	["<static> cFile:Copy(string, string)"] = function (a_Simulator, a_ThisClass, a_SrcFileName, a_DstFileName)
 		local fIn = io.open(a_SrcFileName, "rb")
 		if not(fIn) then
 			return false
@@ -24,7 +24,7 @@ return
 		return true
 	end,
 
-	["cFile:IsFile(string)"] = function (a_Simulator, a_ThisClass, a_FileName)
+	["<static> cFile:IsFile(string)"] = function (a_Simulator, a_ThisClass, a_FileName)
 		local mode = lfs.attributes(a_FileName, "mode")
 		return (mode == "file")
 	end,
