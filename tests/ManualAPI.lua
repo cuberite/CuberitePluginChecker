@@ -1875,6 +1875,81 @@ return
 		{
 			Functions =
 			{
+				AddRunCommandPart =
+				{
+					{
+						Params =
+						{
+							{
+								Name = "Text",
+								Type = "string",
+							},
+							{
+								Name = "Command",
+								Type = "string",
+							},
+							{
+								IsOptional = true,
+								Name = "Style",
+								Type = "string",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "self",
+							},
+						},
+					},
+				},
+				AddShowAchievementPart =
+				{
+					{
+						Params =
+						{
+							{
+								Name = "PlayerName",
+								Type = "string",
+							},
+							{
+								Name = "AchievementName",
+								Type = "string",
+							},
+							{
+								IsOptional = true,
+								Name = "Style",
+								Type = "string",
+							},
+						},
+					},
+				},
+				AddSuggestCommandPart =
+				{
+					{
+						Params =
+						{
+							{
+								Name = "Text",
+								Type = "string",
+							},
+							{
+								Name = "Command",
+								Type = "string",
+							},
+							{
+								IsOptional = true,
+								Name = "Style",
+								Type = "string",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "self",
+							},
+						},
+					},
+				},
 				AddTextPart =
 				{
 					{
@@ -1898,8 +1973,106 @@ return
 						},
 					},
 				},
+				AddUrlPart =
+				{
+					{
+						Params =
+						{
+							{
+								Name = "Text",
+								Type = "string",
+							},
+							{
+								Name = "Url",
+								Type = "string",
+							},
+							{
+								IsOptional = true,
+								Name = "Style",
+								Type = "string",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "self",
+							},
+						},
+					},
+				},
+				Clear =
+				{
+					{
+						Returns =
+						{
+							{
+								Type = "self",
+							},
+						},
+					},
+				},
+				ParseText =
+				{
+					{
+						Params =
+						{
+							{
+								Name = "Text",
+								Type = "string",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "self",
+							},
+						},
+					},
+				},
+				SetMessageType =
+				{
+					{
+						Params =
+						{
+							{
+								Name = "MessageType",
+								Type = "eMessageType",
+							},
+							{
+								IsOptional = true,
+								Name = "AdditionalData",
+								Type = "string",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "self",
+							},
+						},
+					},
+				},
+				UnderlineUrls =
+				{
+					{
+						Returns =
+						{
+							{
+								Type = "self",
+							},
+						},
+					},
+				},
 				constructor =
 				{
+					{
+						Returns =
+						{
+							{
+								Type = "cCompositeChat",
+							},
+						},
+					},
 					{
 						Params =
 						{
@@ -1911,6 +2084,12 @@ return
 								IsOptional = true,
 								Name = "MessageType",
 								Type = "eMessageType",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "cCompositeChat",
 							},
 						},
 					},
@@ -2805,8 +2984,7 @@ return
 						Returns =
 						{
 							{
-								Name = "array table of strings",
-								Type = "string",
+								Type = "table",
 							},
 						},
 					},
@@ -3974,8 +4152,7 @@ return
 						Returns =
 						{
 							{
-								Name = "array-table of strings",
-								Type = "string",
+								Type = "table",
 							},
 						},
 					},
@@ -3986,8 +4163,7 @@ return
 						Returns =
 						{
 							{
-								Name = "array-table of string",
-								Type = "string",
+								Type = "table",
 							},
 						},
 					},
@@ -14448,6 +14624,11 @@ return
 			{
 				Type = "number",
 				Value = 120,
+			},
+			mtMaxPlusOne =
+			{
+				Type = "number",
+				Value = 10,
 			},
 			mtMooshroom =
 			{

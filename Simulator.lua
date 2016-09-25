@@ -227,6 +227,15 @@ function Simulator:checkClassFunctionSignature(a_FnSignature, a_Params, a_NumPar
 		end
 	end
 
+	-- All given params have matched, now check that all the leftover params in the signature are optional:
+	local idx = a_NumParams + 1
+	while (a_FnSignature.Params[idx]) do
+		if not(a_FnSignature.Params[idx].IsOptional) then
+			return false, string.format("Param #d (%s) is missing.", idx, a_FnSignature.Params[idx].Type)
+		end
+		idx = idx + 1
+	end
+
 	-- All params have matched
 	return true
 end
@@ -373,6 +382,16 @@ function Simulator:createClass(a_ClassName, a_ClassApi)
 			return endpoint(...)
 		end
 	end
+	if (a_ClassApi.Functions.constructor) then
+		mt.__call = function (...)
+			self.logger:trace("Creating constructor for class %s.", a_ClassName)
+			local endpoint = self:createApiEndpoint(a_ClassApi, "constructor", a_ClassName)
+			if not(endpoint) then
+				self.logger:error("Attempting to use a constructor for class %s that doesn't have one.", a_ClassName)
+			end
+			return endpoint(...)
+		end
+	end
 
 	-- Add any operators to the class-table, because they don't go through the __index meta-method:
 	-- Also they apparently don't go through meta-table nesting, so need to create them directly in the class-table
@@ -415,6 +434,9 @@ function Simulator:createClassConstant(a_ConstDesc, a_ConstName, a_ClassName)
 	end
 
 	-- Synthesize a dummy value of the proper type:
+	if not(a_ConstDesc.Type) then
+		self.logger:error("Simulator error: API description for constant %s.%s doesn't provide value nor type", a_ClassName, a_ConstName)
+	end
 	return self:createInstance(a_ConstDesc)
 end
 
@@ -469,7 +491,7 @@ function Simulator:createClassFunction(a_FnDesc, a_FnName, a_ClassName)
 			return signature.Implementation(self, ...)
 		else
 			-- Provide a default implementation by default-constructing the return values:
-			return unpack(self:createInstances(signature.Returns))
+			return unpack(self:createInstances(signature.Returns, params[1]))
 		end
 	end
 end
@@ -514,15 +536,21 @@ end
 
 
 --- Creates all object instances required for a callback request
+-- a_TypeDefList is an array of type descriptions ({Type = "string"})
+-- a_Self is the value that should be returned whenever the type specifies "self" (used by chaining functions)
 -- Returns the instances as an array-table
-function Simulator:createInstances(a_TypeDefList)
+function Simulator:createInstances(a_TypeDefList, a_Self)
 	-- Check params:
 	assert(type(a_TypeDefList) == "table")
 
 	-- Create the instances:
 	local res = {}
 	for idx, td in ipairs(a_TypeDefList) do
-		res[idx] = self:createInstance(td)
+		if (td.Type == "self") then
+			res[idx] = a_Self
+		else
+			res[idx] = self:createInstance(td)
+		end
 	end
 	return res
 end
@@ -580,19 +608,11 @@ function Simulator:findClassFunctionSignatureFromParams(a_FnDesc, a_Params, a_Cl
 			className = a_ClassName
 		end
 		local numSignatureParams = #(signature.Params) + numSelfParams
-		if (numSignatureParams == numParamsGiven) then
-			local doesMatch, msg = self:checkClassFunctionSignature(signature, a_Params, numParamsGiven, className)
-			if (doesMatch) then
-				return signature
-			end
-			table.insert(msgs, (msg or "<no message>") .. " (signature: " .. self:prettyPrintSignature(signature) .. ")")
-		else
-			table.insert(msgs, string.format(
-				"Parameter count doesn't match, expected %d, got %d (overload \"%s\")",
-				numSignatureParams, numParamsGiven,
-				self:prettyPrintSignature(signature)
-			))
+		local doesMatch, msg = self:checkClassFunctionSignature(signature, a_Params, numParamsGiven, className)
+		if (doesMatch) then
+			return signature
 		end
+		table.insert(msgs, (msg or "<no message>") .. " (signature: " .. self:prettyPrintSignature(signature) .. ")")
 	end
 
 	-- None of the signatures matched the params, report an error:

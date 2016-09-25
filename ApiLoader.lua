@@ -105,7 +105,9 @@ end
 -- Maps "FunctionName" -> true for each such function
 local g_ShouldForceStaticFunction =
 {
-	new = true,  -- Constructors are always static
+	-- Constructors are always static
+	new = true,
+	constructor = true,
 }
 
 
