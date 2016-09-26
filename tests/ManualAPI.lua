@@ -1665,98 +1665,146 @@ return
 				Black =
 				{
 					Name = "Black",
+					Type = "string",
+					Value = "§0",
 				},
 				Blue =
 				{
 					Name = "Blue",
+					Type = "string",
+					Value = "§3",
 				},
 				Bold =
 				{
 					Name = "Bold",
+					Type = "string",
+					Value = "§l",
 				},
 				Color =
 				{
 					Name = "Color",
+					Type = "string",
+					Value = "§",
 				},
 				DarkPurple =
 				{
 					Name = "DarkPurple",
+					Type = "string",
+					Value = "§9",
 				},
 				Delimiter =
 				{
 					Name = "Delimiter",
+					Type = "string",
+					Value = "§",
 				},
 				Gold =
 				{
 					Name = "Gold",
+					Type = "string",
+					Value = "§6",
 				},
 				Gray =
 				{
 					Name = "Gray",
+					Type = "string",
+					Value = "§8",
 				},
 				Green =
 				{
 					Name = "Green",
+					Type = "string",
+					Value = "§2",
 				},
 				Italic =
 				{
 					Name = "Italic",
+					Type = "string",
+					Value = "§o",
 				},
 				LightBlue =
 				{
 					Name = "LightBlue",
+					Type = "string",
+					Value = "§b",
 				},
 				LightGray =
 				{
 					Name = "LightGray",
+					Type = "string",
+					Value = "§7",
 				},
 				LightGreen =
 				{
 					Name = "LightGreen",
+					Type = "string",
+					Value = "§a",
 				},
 				LightPurple =
 				{
 					Name = "LightPurple",
+					Type = "string",
+					Value = "§d",
 				},
 				Navy =
 				{
 					Name = "Navy",
+					Type = "string",
+					Value = "§1",
 				},
 				Plain =
 				{
 					Name = "Plain",
+					Type = "string",
+					Value = "§r",
 				},
 				Purple =
 				{
 					Name = "Purple",
+					Type = "string",
+					Value = "§5",
 				},
 				Random =
 				{
 					Name = "Random",
+					Type = "string",
+					Value = "§k",
 				},
 				Red =
 				{
 					Name = "Red",
+					Type = "string",
+					Value = "§4",
 				},
 				Rose =
 				{
 					Name = "Rose",
+					Type = "string",
+					Value = "§c",
 				},
 				Strikethrough =
 				{
 					Name = "Strikethrough",
+					Type = "string",
+					Value = "§m",
 				},
 				Underlined =
 				{
 					Name = "Underlined",
+					Type = "string",
+					Value = "§n",
 				},
 				White =
 				{
 					Name = "White",
+					Type = "string",
+					Value = "§f",
 				},
 				Yellow =
 				{
 					Name = "Yellow",
+					Type = "string",
+					Value = "§e",
 				},
 			},
 		},
@@ -4122,14 +4170,20 @@ return
 				EATING_TICKS =
 				{
 					Name = "EATING_TICKS",
+					Type = "number",
+					Value = 30,
 				},
 				MAX_FOOD_LEVEL =
 				{
 					Name = "MAX_FOOD_LEVEL",
+					Type = "number",
+					Value = 20,
 				},
 				MAX_HEALTH =
 				{
 					Name = "MAX_HEALTH",
+					Type = "number",
+					Value = 20,
 				},
 			},
 			Functions =
@@ -13459,11 +13513,6 @@ return
 			{
 				Type = "number",
 				Value = 2,
-			},
-			_ =
-			{
-				Type = "boolean",
-				Value = false,
 			},
 			_CuberiteInternal_PluginName =
 			{

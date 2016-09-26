@@ -28,6 +28,20 @@ Simulator["__index"] = Simulator
 
 
 
+--- Splits the command string at spaces
+-- Returns an array-table of strings of the original command, just like Cuberite command processor works
+local function splitCommandString(a_Cmd)
+	local res = {}
+	for w in a_Cmd:gmatch("%S+") do
+		table.insert(res, w)
+	end
+	return res
+end
+
+
+
+
+
 --- Adds a new callback request to the queue to be processed
 -- a_ParamTypes is an array of strings describing the param types
 -- a_Notes is a description of the request for logging purposes
@@ -648,14 +662,16 @@ function Simulator:fuzzCommandHandlers()
 
 	-- Add the fuzzing request for the next command handler into the queue:
 	local test = self.currentFuzzedCommandTest
-	local cmd = self.commandsToFuzz[1]
-	local desc = self.registeredCommandHandlers[cmd]
+	local cmd = splitCommandString(self.commandsToFuzz[1])
+	local desc = self.registeredCommandHandlers[cmd[1]]
 	if (test == 1) then
-		self:addCommandCallbackRequest(desc.callback, {cmd})
+		self:addCommandCallbackRequest(desc.callback, cmd)
 	elseif (test == 2) then
-		self:addCommandCallbackRequest(desc.callback, {cmd, "a"})
+		table.insert(cmd, "a")
+		self:addCommandCallbackRequest(desc.callback, cmd)
 	elseif (test == 3) then
-		self:addCommandCallbackRequest(desc.callback, {cmd, "1"})
+		table.insert(cmd, "1")
+		self:addCommandCallbackRequest(desc.callback, cmd)
 
 	-- TODO: more tests here
 
