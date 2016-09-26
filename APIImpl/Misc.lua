@@ -31,4 +31,8 @@ return
 		return sqlite3.open(a_FileName)
 	end,
 
+	["<static, global> tolua:type(any)"] = function (a_Simulator, a_Object)
+		return a_Simulator:typeOf(a_Object)
+	end
+
 }

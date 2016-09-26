@@ -8354,6 +8354,8 @@ return
 				cast =
 				{
 					{
+						IsGlobal = true,
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -8377,6 +8379,8 @@ return
 				type =
 				{
 					{
+						IsGlobal = true,
+						IsStatic = true,
 						Params =
 						{
 							{

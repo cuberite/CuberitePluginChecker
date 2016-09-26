@@ -192,7 +192,7 @@ function Simulator:checkClassFunctionSignature(a_FnSignature, a_Params, a_NumPar
 			if not(mt) then
 				return false, "The \"self\" parameter is not a class (metatable)"
 			end
-			if not(mt.simulatorInternal_ClassName) then
+			if not(rawget(mt, "simulatorInternal_ClassName")) then
 				return false, "The \"self\" parameter is not a Cuberite class"
 			end
 			if (self:classInheritsFrom(mt.simulatorInternal_ClassName, a_ClassName)) then
@@ -212,7 +212,7 @@ function Simulator:checkClassFunctionSignature(a_FnSignature, a_Params, a_NumPar
 			if not(classMT) then
 				return false, "The \"self\" parameter is not a class instance (class metatable)"
 			end
-			if not(classMT.simulatorInternal_ClassName) then
+			if not(rawget(classMT, "simulatorInternal_ClassName")) then
 				return false, "The \"self\" parameter is not a Cuberite class instance"
 			end
 			if (self:classInheritsFrom(classMT.simulatorInternal_ClassName, a_ClassName)) then
@@ -232,7 +232,7 @@ function Simulator:checkClassFunctionSignature(a_FnSignature, a_Params, a_NumPar
 		local paramType = type(param)
 		if (paramType == "table") then
 			-- This is most likely a class, check the class type:
-			paramType = (getmetatable(param) or {}).simulatorInternal_ClassName or "table"
+			paramType = rawget((getmetatable(param) or {}), "simulatorInternal_ClassName") or "table"
 		end
 		if not(self:paramTypesMatch(paramType, signatureParam.Type)) then
 			return false, string.format("Param #%d doesn't match, expected %s, got %s",
@@ -741,7 +741,7 @@ function Simulator:listParamTypes(a_Params)
 				t = mt.simulatorInternal_ClassName .. " (class)"
 			else
 				local classMT = getmetatable(mt)
-				if (classMT and classMT.simulatorInternal_ClassName) then
+				if (classMT and rawget(classMT, "simulatorInternal_ClassName")) then
 					-- class instance
 					t = classMT.simulatorInternal_ClassName .. " (instance)"
 				end
@@ -817,6 +817,11 @@ function Simulator:paramTypesMatch(a_ParamType, a_SignatureType)
 	assert(type(a_ParamType) == "string")
 	assert(type(a_SignatureType) == "string")
 	assert(self)
+
+	-- If the signature type is "any", any param type matches:
+	if (a_SignatureType == "any") then
+		return true
+	end
 
 	-- If the types are equal, return "compatible":
 	if (a_ParamType == a_SignatureType) then
@@ -942,6 +947,40 @@ function Simulator:run(a_Options)
 			self:callHooks(self.hooks.onEmptyRequestQueue)
 		end
 	end
+end
+
+
+
+
+
+function Simulator:typeOf(a_Object)
+	local t = type(a_Object)
+	if (t ~= "table") then
+		-- Basic Lua type
+		return t
+	end
+
+	-- Check whether the object is a Cuberite class or class instance:
+	local mt = getmetatable(a_Object)
+	if not(mt) then
+		-- Basic Lua table
+		return "table"
+	end
+	if (rawget(mt, "simulatorInternal_ClassName")) then
+		-- Cuberite class
+		return mt.simulatorInternal_ClassName
+	end
+	local mtmt = getmetatable(mt)
+	if not(mtmt) then
+		-- Basic Lua table (with a metatable)
+		return "table"
+	end
+	if (rawget(mtmt, "simulatorInternal_ClassName")) then
+		-- Cuberite class instance
+		return mtmt.simulatorInternal_ClassName
+	end
+	-- Basic Lua table (with dual metatable)
+	return "table"
 end
 
 
