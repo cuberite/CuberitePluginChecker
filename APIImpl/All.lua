@@ -14,6 +14,7 @@ local filenames =
 	"APIImpl/Misc.lua",
 	"APIImpl/Player.lua",
 	"APIImpl/PluginManager.lua",
+	"APIImpl/World.lua",
 }
 
 

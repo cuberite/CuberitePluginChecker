@@ -32,5 +32,13 @@ return
 
 	["<static, global> tolua:type(any)"] = function (a_Simulator, a_Object)
 		return a_Simulator:typeOf(a_Object)
-	end
+	end,
+
+	["cRoot:ForEachWorld(function)"] = function(a_Simulator, a_Callback)
+		for worldName, _ in pairs(a_Simulator.worlds) do
+			local world = a_Simulator:createInstance({Type = "cWorld"})
+			world.simulatorInternal_Name = worldName
+			a_Callback(world)
+		end
+	end,
 }
