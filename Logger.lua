@@ -71,6 +71,7 @@ end
 --- Logs the message with an ERROR level and calls global "error" with the same message
 -- Usually this terminates the program
 function Logger:error(...)
+	assert(self)
 	self:log(Logger.ERROR, ...)
 	error(string.format(...), 2)
 end
@@ -81,6 +82,7 @@ end
 
 --- Logs the message with a WARNING level
 function Logger:warning(...)
+	assert(self)
 	self:log(Logger.WARNING, ...)
 end
 
@@ -90,6 +92,7 @@ end
 
 --- Logs the message with an INFO level
 function Logger:info(...)
+	assert(self)
 	self:log(Logger.INFO, ...)
 end
 
@@ -99,6 +102,7 @@ end
 
 --- Logs the message with a DEBUG level
 function Logger:debug(...)
+	assert(self)
 	self:log(Logger.DEBUG, ...)
 end
 
@@ -108,6 +112,7 @@ end
 
 --- Logs the message with a TRACE level
 function Logger:trace(...)
+	assert(self)
 	self:log(Logger.TRACE, ...)
 end
 

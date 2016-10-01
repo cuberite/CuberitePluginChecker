@@ -13,17 +13,19 @@ The commandline options understood by the framework:
 	-i <filename>  -- Load special API implementation from the file (files in APIImpl folder)
 	-l <loglevel>  -- Use the specified loglevel (1 = trace, 2 = debug, 3 = info, 4 = warning, 5 = error)
 	-p <path>      -- Plugin path
+	-s <filename>  -- Load a scenario from the specified file
 
 The options object contains the following fields:
 	apiImplementationFiles - array-table of filenames to load the API implementation from
-	autoApiDescPath - path to the automatic API description files (by Cuberite's BindingsProcessor)
-	extraApiFiles - array-table of filenames to load as extra API descriptions (for manual API)
-	logLevel - number specifying the loglevel to use, or nil
-	pluginFiles - array-table of all plugin files to check. Each item already includes pluginPath
-	pluginPath - path to the plugin's files
-	shouldClearObjects - bool specifying whether API objects should be cleared after each callback (thus detecting potential use-after-callback)
-	shouldFuzzCommands - bool specifying whether commands should be fuzzed
-	shouldGCObjects - bool specifying whether API objects should be GC-ed after each callback (thus detecting storage-after-callback)
+	autoApiDescPath        - path to the automatic API description files (by Cuberite's BindingsProcessor)
+	extraApiFiles          - array-table of filenames to load as extra API descriptions (for manual API)
+	logLevel               - number specifying the loglevel to use, or nil
+	pluginFiles            - array-table of filenames for all plugin files to check. Each item already includes pluginPath
+	pluginPath             - path to the plugin's files
+	scenarioFileNames      - array-table of filenames to load as scenario files
+	shouldClearObjects     - bool specifying whether API objects should be cleared after each callback (thus detecting potential use-after-callback)
+	shouldFuzzCommands     - bool specifying whether commands should be fuzzed
+	shouldGCObjects        - bool specifying whether API objects should be GC-ed after each callback (thus detecting storage-after-callback)
 --]]
 
 
@@ -127,6 +129,16 @@ local optionProcessor =
 		return a_Idx + 2
 	end,
 
+
+	-- -s <filename> -- Load a scenario from the specified file
+	["-s"] = function (a_Args, a_Idx, a_Options)
+		local fileName = a_Args[a_Idx + 1]
+		if not(fileName) then
+			error(string.format("Invalid option \"-s\" (%d), expected a scenario filename following it.", a_Idx))
+		end
+		table.insert(a_Options.scenarioFileNames, fileName)
+		return a_Idx + 2
+	end,
 }
 
 
@@ -138,6 +150,7 @@ local options =
 	apiImplementationFiles = {},
 	extraApiFiles = {},
 	pluginFiles = {},
+	scenarioFileNames = {},
 }
 
 

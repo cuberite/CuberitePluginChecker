@@ -10,7 +10,7 @@
 -- There are two separate API endpoints for the same implementation, so the implementation is pulled into a common function
 local function BindCommand(a_Simulator, a_Self, a_Command, a_Permission, a_Callback, a_HelpString)
 	if (a_Command:match("%s")) then
-		a_Simulator.logger:warning("Registering a command containing whitespace(%s), such a handler will never be called by Cuberite", a_Command)
+		a_Simulator.logger:trace("Registering a command containing whitespace(%s), such a handler will never be called by Cuberite.%s", a_Command, debug.traceback("", 2))
 	end
 	if (a_Simulator.registeredCommandHandlers[a_Command]) then
 		a_Simulator.logger:info("Registering  a command that is already registered (%s). The second handler will not be called / tested.", a_Command)

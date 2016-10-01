@@ -20,23 +20,23 @@ local unpack = unpack or table.unpack
 
 
 
+--- Use the Scenario loading library:
+local Scenario = dofile("Scenario.lua")
+
+
+
+
+
+--- The protocol number to use for things that report client protocol
+local PROTOCOL_NUMBER = 210  -- client version 1.10.0
+
+
+
+
+
 --- The class (metatable) to be used for all simulators
 local Simulator = {}
 Simulator["__index"] = Simulator
-
-
-
-
-
---- Splits the command string at spaces
--- Returns an array-table of strings of the original command, just like Cuberite command processor works
-local function splitCommandString(a_Cmd)
-	local res = {}
-	for w in a_Cmd:gmatch("%S+") do
-		table.insert(res, w)
-	end
-	return res
-end
 
 
 
@@ -69,8 +69,9 @@ end
 --- Adds a CallbackRequest to call the specified command with the specified CommandSplit
 -- a_Handler is the command's registered callback function
 -- a_CommandSplit is an array-table of strings used as the splitted command
-function Simulator:addCommandCallbackRequest(a_Handler, a_CommandSplit)
-	local player = self:createInstance({Type = "cPlayer"})
+-- a_PlayerInstance is an optional cPlayer instance representing the player. If not given, a dummy one is created
+function Simulator:addCommandCallbackRequest(a_Handler, a_CommandSplit, a_PlayerInstance)
+	local player = a_PlayerInstance or self:createInstance({Type = "cPlayer"})
 	local entireCmd = table.concat(a_CommandSplit, " ")
 	self:addCallbackRequest(a_Handler, nil, string.format("command \"%s\"", entireCmd), { a_CommandSplit, player, entireCmd })
 end
@@ -91,6 +92,23 @@ function Simulator:addHooks(a_Options)
 	end
 	if (a_Options.shouldFuzzCommands) then
 		table.insert(self.hooks.onEmptyRequestQueue, Simulator.fuzzCommandHandlers)
+	end
+end
+
+
+
+
+
+--- Adds the specified file / folder redirections
+-- The previous redirects are kept
+function Simulator:addRedirects(a_Redirects)
+	-- Check params:
+	assert(self)
+	assert(type(a_Redirects) == "table")
+
+	-- Add the redirects:
+	for orig, new in pairs(a_Redirects) do
+		self.redirects[orig] = new
 	end
 end
 
@@ -195,13 +213,12 @@ function Simulator:checkClassFunctionSignature(a_FnSignature, a_Params, a_NumPar
 			if not(rawget(mt, "simulatorInternal_ClassName")) then
 				return false, "The \"self\" parameter is not a Cuberite class"
 			end
-			if (self:classInheritsFrom(mt.simulatorInternal_ClassName, a_ClassName)) then
-				return true
+			if not(self:classInheritsFrom(mt.simulatorInternal_ClassName, a_ClassName)) then
+				return false, string.format(
+					"The \"self\" parameter is a different class. Expected %s, got %s.",
+					a_ClassName, mt.simulatorInternal_ClassName
+				)
 			end
-			return false, string.format(
-				"The \"self\" parameter is a different class. Expected %s, got %s.",
-				a_ClassName, mt.simulatorInternal_ClassName
-			)
 		else
 			-- For a non-static function, the first param should be an instance of the class:
 			local mt = getmetatable(a_Params[1])
@@ -215,28 +232,26 @@ function Simulator:checkClassFunctionSignature(a_FnSignature, a_Params, a_NumPar
 			if not(rawget(classMT, "simulatorInternal_ClassName")) then
 				return false, "The \"self\" parameter is not a Cuberite class instance"
 			end
-			if (self:classInheritsFrom(classMT.simulatorInternal_ClassName, a_ClassName)) then
-				return true
+			if not(self:classInheritsFrom(classMT.simulatorInternal_ClassName, a_ClassName)) then
+				return false, string.format(
+					"The \"self\" parameter is a different class instance. Expected %s, got %s.",
+					a_ClassName, classMT.simulatorInternal_ClassName
+				)
 			end
-			return false, string.format(
-				"The \"self\" parameter is a different class instance. Expected %s, got %s.",
-				a_ClassName, classMT.simulatorInternal_ClassName
-			)
 		end
 	end
 
 	-- Check the type of each plugin parameter:
 	for idx = paramOffset + 1, a_NumParams do
 		local signatureParam = a_FnSignature.Params[idx - paramOffset]
-		local param = a_Params[idx]
-		local paramType = type(param)
-		if (paramType == "table") then
-			-- This is most likely a class, check the class type:
-			paramType = rawget((getmetatable(param) or {}), "simulatorInternal_ClassName") or "table"
+		if not(signatureParam) then
+			return false, string.format("There are more parameters (%d) than in the signature (%d)", a_NumParams - paramOffset, idx - paramOffset - 1)
 		end
+		local param = a_Params[idx]
+		local paramType = self:typeOf(param)
 		if not(self:paramTypesMatch(paramType, signatureParam.Type)) then
 			return false, string.format("Param #%d doesn't match, expected %s, got %s",
-				idx - paramOffset, signatureParam.Type, type(param)
+				idx - paramOffset, signatureParam.Type, paramType
 			)
 		end
 	end
@@ -287,6 +302,95 @@ function Simulator:classInheritsFrom(a_ChildName, a_ParentName)
 
 	-- None of the inherited classes matched
 	return false
+end
+
+
+
+
+
+--- Removes all state information previously added through a scenario
+-- Removes worlds, players
+function Simulator:clearState()
+	-- Check params:
+	assert(self)
+
+	self.worlds = {}
+	self.players = {}
+end
+
+
+
+
+
+--- Collapses the relative parts of the path, such as "folder/../"
+function Simulator:collapseRelativePath(a_Path)
+	-- Check params:
+	assert(type(a_Path) == "string")
+
+	-- Split the path and rebuild without the relativeness:
+	local res = {}
+	a_Path:gsub("[^/]+",
+		function(a_Part)
+			if (a_Part == "..") then
+				if ((#res > 0) and (res[#res - 1] ~= "..")) then  -- The previous part is not relative
+					table.remove(res)
+				else
+					table.insert(res, a_Part)
+				end
+			else
+				table.insert(res, a_Part)
+			end
+		end
+	)
+	return table.concat(res, "/")
+end
+
+
+
+
+
+--- Simulates a player joining the game
+-- a_PlayerDesc is a dictionary-table describing the player (name, worldName, gameMode, ip)
+-- "name" is compulsory, the rest is optional
+-- Calls all the hooks that are normally triggered for a joining player
+-- If any of the hooks refuse the join, doesn't add the player and returns false
+-- Returns true if the player was added successfully
+function Simulator:connectPlayer(a_PlayerDesc)
+	-- Check params:
+	assert(self)
+	assert(type(a_PlayerDesc) == "table")
+	local playerName = a_PlayerDesc.name
+	assert(type(playerName) == "string")
+	assert(self.defaultWorldName, "No world in the simulator")
+
+	-- Create the player, with some reasonable defaults:
+	a_PlayerDesc.worldName = a_PlayerDesc.worldName or self.defaultWorldName
+	self.players[playerName] = a_PlayerDesc
+
+	-- Call the hooks to simulate the player joining:
+	local client = self:createInstance({Type = "cClientHandle"})
+	client.simulatorInternal_PlayerName = playerName
+	if (self:executeHookCallback("HOOK_LOGIN", client, PROTOCOL_NUMBER, playerName)) then
+		self.logger:trace("Plugin refused player \"%s\" to connect.", playerName)
+		self.players[playerName] = nil  -- Remove the player
+		return false
+	end
+	self:executeHookCallback("HOOK_PLAYER_JOINED", self:getPlayerByName(playerName))
+
+	-- If the plugin kicked the player, abort:
+	if not(self.players[playerName]) then
+		self.logger:trace("Plugin kicked player \"%s\" while they were joining.", playerName)
+		return false
+	end
+
+	-- Spawn the player:
+	self:executeHookCallback("HOOK_PLAYER_SPAWNED", self:getPlayerByName(playerName))
+	if not(self.players[playerName]) then
+		self.logger:trace("Plugin kicked player \"%s\" while they were spawning.", playerName)
+		return false
+	end
+
+	return true
 end
 
 
@@ -573,6 +677,41 @@ end
 
 
 
+--- Creates a new world with the specified parameters
+-- a_WorldDesc is a dictionary-table containing the world description - name, dimension, default gamemode etc.
+-- Only the name member is compulsory, the rest are optional
+-- After creating the world, the world creation hooks are executed
+function Simulator:createNewWorld(a_WorldDesc)
+	-- Check params:
+	assert(self)
+	assert(type(a_WorldDesc) == "table")
+	assert(type(a_WorldDesc.name) == "string")
+
+	-- Check if such a world already present:
+	local worldName = a_WorldDesc.name
+	if (self.worlds[worldName]) then
+		self.logger:error("Cannot create world, a world with name \"%s\" already exists.", worldName)
+	end
+
+	-- Create the world:
+	self.logger:trace("Creating new world \"%s\".", worldName)
+	a_WorldDesc.dimension = a_WorldDesc.dimension or 0
+	a_WorldDesc.defaultGameMode = a_WorldDesc.defaultGameMode or 0
+	self.worlds[worldName] = a_WorldDesc
+	if not(self.defaultWorldName) then
+		self.defaultWorldName = worldName
+	end
+
+	-- Call the hooks for the world creation:
+	local world = self:createInstance({Type = "cWorld"})
+	world.simulatorInternal_worldName = worldName
+	self:executeHookCallback("HOOK_WORLD_STARTED", world)
+end
+
+
+
+
+
 --- Replacement for the sandbox's dofile function
 -- Needs to apply the sandbox to the loaded code
 function Simulator:dofile(a_FileName)
@@ -586,6 +725,86 @@ function Simulator:dofile(a_FileName)
 		setfenv(res, self.sandbox)
 	end
 	return res()
+end
+
+
+
+
+
+--- Executes a callback request simulating the specified hook type
+-- a_HookTypeStr is the string name of the hook ("HOOK_PLAYER_DISCONNECTING" etc.)
+-- All the rest of the params are given to the hook as-is
+-- If a hook returns true (abort), stops processing the hooks and returns false
+-- Otherwise returns false and the rest of the values returned by the hook
+function Simulator:executeHookCallback(a_HookTypeStr, ...)
+	-- Check params:
+	assert(self)
+	assert(type(a_HookTypeStr) == "string")
+	local hookType = self.sandbox.cPluginManager[a_HookTypeStr]
+	assert(hookType)
+
+	-- Call all hook handlers:
+	self.logger:trace("Triggering hook handlers for %s", a_HookTypeStr)
+	local params = {...}
+	local hooks = self.registeredHooks[a_HookType] or {}
+	local res
+	for idx, callback in ipairs(hooks) do
+		res = self:processCallbackRequest(
+			{
+				Function = callback,
+				ParamValues = params,
+				Notes = a_HookTypeStr,
+			}
+		)
+		if (res[1]) then
+			-- The hook asked for an abort
+			self.logger:trace("Hook handler #%d for hook %s aborted the hook chain.", idx, a_HookTypeStr)
+			return true
+		end
+		-- TODO: Some hooks should have special processing - returning a value overwrites the param for the rest of the hooks
+	end
+	if (res) then
+		return false, unpack(res, 2)
+	else
+		return false
+	end
+end
+
+
+
+
+
+--- Executes a callback request simulating the player executing the specified command
+-- Calls the command execution hooks and if they allow, the command handler itself
+-- Returns true if the command was executed, false if not.
+-- Doesn't care whether the player is in the list of connected players or not
+function Simulator:executePlayerCommand(a_PlayerName, a_CommandString)
+	-- Check params:
+	assert(self)
+	assert(type(a_PlayerName) == "string")
+	assert(type(a_CommandString) == "string")
+
+	-- Call the command execution hook:
+	local split = self:splitCommandString(a_CommandString)
+	if (self:executeHookCallback("HOOK_EXECUTE_COMMAND", self:getPlayerByName(a_PlayerName), split, a_CommandString)) then
+		self.logger:trace("Plugin hook refused to execute command \"%s\" from player %s.", a_CommandString, a_PlayerName)
+		return false
+	end
+
+	-- Call the command handler:
+	split = self:splitCommandString(a_CommandString)  -- Re-split, in case the hooks changed it
+	local cmdReg = self.registeredCommandHandlers[split[1]]
+	if not(cmdReg) then
+		self.logger:warning("Trying to execute command \"%s\" for which there's no registered handler.", split[1])
+		return
+	end
+	self:processCallbackRequest(
+		{
+			Function = cmdReg.callback,
+			ParamValues = { split, self:getPlayerByName(a_PlayerName), a_CommandString },
+			Notes = "Command " .. a_CommandString,
+		}
+	)
 end
 
 
@@ -689,6 +908,28 @@ end
 
 
 
+--- Returns a cPlayer instance that is bound to the specified player
+-- If the player is not in the list of players, returns nil
+function Simulator:getPlayerByName(a_PlayerName)
+	-- Check params:
+	assert(self)
+	assert(type(a_PlayerName) == "string")
+
+	-- If the player is not currently connected, return nil:
+	if not(self.players[a_PlayerName]) then
+		return nil
+	end
+
+	-- Create a new instance and bind it:
+	local player = self:createInstance({Type = "cPlayer"})
+	player.simulatorInternal_Name = a_PlayerName
+	return player
+end
+
+
+
+
+
 --- Injects the API classes and global symbols into the simulator's sandbox
 function Simulator:injectApi(a_ApiDesc)
 	-- Check params:
@@ -777,6 +1018,7 @@ end
 --- Loads the specified plugin files and executes the globals:
 function Simulator:loadFiles(a_FileList)
 	-- Check params:
+	assert(self)
 	assert(a_FileList[1])  -- We need at least one file
 
 	-- Load and execute each file:
@@ -784,6 +1026,23 @@ function Simulator:loadFiles(a_FileList)
 		local fn = assert(loadfile(fnam))
 		setfenv(fn, self.sandbox)
 		fn()
+	end
+end
+
+
+
+
+
+--- Loads all scenarios from files specified in the options
+function Simulator:loadScenarios(a_Options)
+	-- Check params:
+	assert(self)
+	assert(type(a_Options) == "table")
+	assert(type(a_Options.scenarioFileNames) == "table")
+
+	-- Load the scenarios:
+	for idx, fnam in ipairs(a_Options.scenarioFileNames) do
+		self.scenarios[idx] = Scenario:new(fnam, self.logger)
 	end
 end
 
@@ -903,6 +1162,73 @@ function Simulator:processCallbackRequest(a_Request)
 	self:callHooks(self.hooks.onAfterCallCallback, a_Request, params, returns)
 
 	self:callHooks(self.hooks.onEndRound, a_Request)
+	return returns
+end
+
+
+
+
+
+--- Called when the callback request queue is empty, to fill it with the next scenario, if available
+function Simulator:queueNextScenario()
+	-- Check params:
+	assert(self)
+
+	-- If there is a scenario left, execute it until it queues a callback request or has no work left:
+	local scenario = self.scenarios[1]
+	while(true) do
+		if not(scenario) then
+			-- No more scenarios to execute
+			return
+		end
+		if (scenario:execute(self)) then
+			-- The scenario has finished, remove it and go to the next one:
+			table.remove(self.scenarios, 1)
+			scenario = self.scenarios[1]
+			if not(scenario) then
+				-- No more scenarios to execute
+				return
+			end
+		end
+		if (self.callbackRequests.n > 0) then
+			-- The scenario has produced a callback request, execute it:
+			return
+		end
+		-- The scenario has advanced but doesn't have work for us to do, execute it again in the next loop
+	end
+end
+
+
+
+
+
+--- Returns a path to use, while checking for redirection
+function Simulator:redirectPath(a_Path)
+	-- Check params:
+	assert(self)
+	assert(type(a_Path) == "string")
+
+	a_Path = self:collapseRelativePath(a_Path)
+
+	-- If there is a matching entry in the redirects, use it:
+	local match = self.redirects[a_Path]
+	if (match) then
+		return match
+	end
+
+	-- If there is a full foldername match, use it:
+	-- (eg. redirect for "folder1/folder2/", path is "folder1/folder2/folder3/file.txt" -> use the redirect for the front part
+	local idx = 0
+	while (true) do
+		idx = a_Path:find("/", idx + 1)  -- find the next slash
+		if not(idx) then
+			return a_Path
+		end
+		local match = self.redirects[a_Path:sub(1, idx)]  -- check the path up to the current slash for redirects:
+		if (match) then
+			return match .. a_Path.sub(idx + 1)
+		end
+	end
 end
 
 
@@ -935,8 +1261,6 @@ function Simulator:run(a_Options)
 		"Initialize()"
 	)
 
-	-- TODO: Add callback-requests for commands and web-tabs from a pre-configured test definition file (?)
-
 	-- As long as there are callback requests in the queue, dequeue and process them, in a LIFO manner:
 	self.logger:trace("Running the simulator")
 	while (self.callbackRequests.n > 0) do
@@ -944,7 +1268,10 @@ function Simulator:run(a_Options)
 		self.callbackRequests.n = self.callbackRequests.n - 1
 		self:processCallbackRequest(request)
 		if (self.callbackRequests.n == 0) then
-			self:callHooks(self.hooks.onEmptyRequestQueue)
+			self:queueNextScenario()
+			if (self.callbackRequests.n == 0) then
+				self:callHooks(self.hooks.onEmptyRequestQueue)
+			end
 		end
 	end
 end
@@ -953,7 +1280,27 @@ end
 
 
 
+--- Splits the command string at spaces
+-- Returns an array-table of strings of the original command, just like Cuberite command processor works
+function Simulator:splitCommandString(a_Cmd)
+	local res = {}
+	for w in a_Cmd:gmatch("%S+") do
+		table.insert(res, w)
+	end
+	return res
+end
+
+
+
+
+
+--- Returns the type of the object
+-- Takes into account the emulated class types as well as the basic Lua types
 function Simulator:typeOf(a_Object)
+	-- Check params:
+	assert(self)
+	assert(getmetatable(self) == Simulator)
+
 	local t = type(a_Object)
 	if (t ~= "table") then
 		-- Basic Lua type
@@ -1080,6 +1427,16 @@ local function createSimulator(a_Options, a_Logger)
 
 		-- Store the logger for later use:
 		logger = a_Logger,
+
+		-- Array-table of scenarios that should be executed once the plugin is initialized
+		scenarios = {},
+
+		-- A dictionary of file / folder redirections. Maps the original path to the new path.
+		redirects = {},
+
+		-- State manipulated through scenarios:
+		worlds = {},
+		players = {},
 	}
 	setmetatable(res, Simulator)
 	return res

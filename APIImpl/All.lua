@@ -9,8 +9,10 @@
 --- List all the APIImpl files:
 local filenames =
 {
+	"APIImpl/CompositeChat.lua",
 	"APIImpl/File.lua",
 	"APIImpl/Misc.lua",
+	"APIImpl/Player.lua",
 	"APIImpl/PluginManager.lua",
 }
 
