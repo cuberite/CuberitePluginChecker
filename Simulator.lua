@@ -934,6 +934,8 @@ end
 function Simulator:injectApi(a_ApiDesc)
 	-- Check params:
 	assert(self)
+	assert(type(a_ApiDesc.Classes) == "table")
+	assert(type(a_ApiDesc.Globals) == "table")
 
 	-- Inject the metatable override that creates global API symbols:
 	local sandboxMT = getmetatable(self.sandbox)
@@ -961,6 +963,16 @@ function Simulator:injectApi(a_ApiDesc)
 		end
 		assert(type(prevIndex) == "function")  -- We don't support table-based __index yet (but can be done)
 		return prevIndex(a_Table, a_SymbolName)
+	end
+
+	-- Store all enum definitions in a separate table:
+	for className, cls in pairs(a_ApiDesc.Classes) do
+		for enumName, enumValues in pairs(cls.Enums or {}) do
+			self.enums[className .. "#" .. enumName] = enumValues
+		end
+	end
+	for enumName, enumValues in pairs(a_ApiDesc.Globals.Enums or {}) do
+		self.enums[enumName] = enumValues
 	end
 end
 
@@ -1088,13 +1100,12 @@ function Simulator:paramTypesMatch(a_ParamType, a_SignatureType)
 	end
 
 	-- If the signature says an enum and the param is a number, return "compatible":
-	local signatureClass, signatureEnum = a_SignatureType:match("([a-zA-Z0-9]+)%#([a-zA-Z0-9]+)")
-	if (signatureClass and signatureEnum) then
-		-- For now we don't check whether it actually is an enum and whether the value is correct
-		-- Just assume all is OK
-		-- TODO: Proper checks
-		return (a_ParamType == "number")
+	if (a_ParamType == "number") then
+		if (self.enums[a_SignatureType]) then
+			return true
+		end
 	end
+
 
 	return false
 end
@@ -1398,6 +1409,11 @@ local function createSimulator(a_Options, a_Logger)
 			IsPluginCheckerSimulator = true,
 			PluginCheckerSimulatorVersion = 1,
 		},
+
+		-- Enums extracted from the injected API
+		-- Dictionary-table of "cClass#eEnum" -> { {Name = "ValueName1"}, {Name = "ValueName2"}, ... }
+		-- The global enums have a key "eEnum"
+		enums = {},
 
 		-- The hooks that the plugin has registered
 		-- A dictionary of HookType -> { callback1, callback2, ... }

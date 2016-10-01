@@ -1011,7 +1011,7 @@ return
 		},
 		cArrowEntity =
 		{
-			Variables =
+			Constants =
 			{
 				psInCreative =
 				{
@@ -1029,9 +1029,132 @@ return
 					Value = 0,
 				},
 			},
+			Enums =
+			{
+				ePickupState =
+				{
+					{
+						Name = "psInCreative",
+					},
+					{
+						Name = "psInSurvivalOrCreative",
+					},
+					{
+						Name = "psNoPickup",
+					},
+				},
+			},
 		},
 		cBlockArea =
 		{
+			Constants =
+			{
+				baLight =
+				{
+					Type = "number",
+					Value = 4,
+				},
+				baMetas =
+				{
+					Type = "number",
+					Value = 2,
+				},
+				baSkyLight =
+				{
+					Type = "number",
+					Value = 8,
+				},
+				baTypes =
+				{
+					Type = "number",
+					Value = 1,
+				},
+				msDifference =
+				{
+					Type = "number",
+					Value = 5,
+				},
+				msFillAir =
+				{
+					Type = "number",
+					Value = 1,
+				},
+				msImprint =
+				{
+					Type = "number",
+					Value = 2,
+				},
+				msLake =
+				{
+					Type = "number",
+					Value = 3,
+				},
+				msMask =
+				{
+					Type = "number",
+					Value = 7,
+				},
+				msOverwrite =
+				{
+					Type = "number",
+					Value = 0,
+				},
+				msSimpleCompare =
+				{
+					Type = "number",
+					Value = 6,
+				},
+				msSpongePrint =
+				{
+					Type = "number",
+					Value = 4,
+				},
+			},
+			Enums =
+			{
+				BATypes =
+				{
+					{
+						Name = "baSkyLight",
+					},
+					{
+						Name = "baTypes",
+					},
+					{
+						Name = "baLight",
+					},
+					{
+						Name = "baMetas",
+					},
+				},
+				MergeStrategies =
+				{
+					{
+						Name = "msSimpleCompare",
+					},
+					{
+						Name = "msSpongePrint",
+					},
+					{
+						Name = "msImprint",
+					},
+					{
+						Name = "msFillAir",
+					},
+					{
+						Name = "msLake",
+					},
+					{
+						Name = "msMask",
+					},
+					{
+						Name = "msOverwrite",
+					},
+					{
+						Name = "msDifference",
+					},
+				},
+			},
 			Functions =
 			{
 				GetBlockTypeMeta =
@@ -1259,69 +1382,6 @@ return
 							},
 						},
 					},
-				},
-			},
-			Variables =
-			{
-				baLight =
-				{
-					Type = "number",
-					Value = 4,
-				},
-				baMetas =
-				{
-					Type = "number",
-					Value = 2,
-				},
-				baSkyLight =
-				{
-					Type = "number",
-					Value = 8,
-				},
-				baTypes =
-				{
-					Type = "number",
-					Value = 1,
-				},
-				msDifference =
-				{
-					Type = "number",
-					Value = 5,
-				},
-				msFillAir =
-				{
-					Type = "number",
-					Value = 1,
-				},
-				msImprint =
-				{
-					Type = "number",
-					Value = 2,
-				},
-				msLake =
-				{
-					Type = "number",
-					Value = 3,
-				},
-				msMask =
-				{
-					Type = "number",
-					Value = 7,
-				},
-				msOverwrite =
-				{
-					Type = "number",
-					Value = 0,
-				},
-				msSimpleCompare =
-				{
-					Type = "number",
-					Value = 6,
-				},
-				msSpongePrint =
-				{
-					Type = "number",
-					Value = 4,
 				},
 			},
 		},
@@ -1624,7 +1684,7 @@ return
 		},
 		cBrewingstandEntity =
 		{
-			Variables =
+			Constants =
 			{
 				ContentsHeight =
 				{
@@ -1655,6 +1715,24 @@ return
 				{
 					Type = "number",
 					Value = 2,
+				},
+			},
+			Enums =
+			{
+				SlotIndices =
+				{
+					{
+						Name = "bsLeftBottle",
+					},
+					{
+						Name = "bsRightBottle",
+					},
+					{
+						Name = "bsMiddleBottle",
+					},
+					{
+						Name = "bsIngredient",
+					},
 				},
 			},
 		},
@@ -1810,7 +1888,7 @@ return
 		},
 		cChestEntity =
 		{
-			Variables =
+			Constants =
 			{
 				ContentsHeight =
 				{
@@ -1886,6 +1964,19 @@ return
 		},
 		cClientHandle =
 		{
+			Constants =
+			{
+				MAX_VIEW_DISTANCE =
+				{
+					Type = "number",
+					Value = 32,
+				},
+				MIN_VIEW_DISTANCE =
+				{
+					Type = "number",
+					Value = 1,
+				},
+			},
 			Functions =
 			{
 				SendPluginMessage =
@@ -1903,19 +1994,6 @@ return
 							},
 						},
 					},
-				},
-			},
-			Variables =
-			{
-				MAX_VIEW_DISTANCE =
-				{
-					Type = "number",
-					Value = 32,
-				},
-				MIN_VIEW_DISTANCE =
-				{
-					Type = "number",
-					Value = 1,
 				},
 			},
 		},
@@ -2382,6 +2460,19 @@ return
 		},
 		cDropSpenserEntity =
 		{
+			Constants =
+			{
+				ContentsHeight =
+				{
+					Type = "number",
+					Value = 3,
+				},
+				ContentsWidth =
+				{
+					Type = "number",
+					Value = 3,
+				},
+			},
 			Functions =
 			{
 				SetRedstonePower =
@@ -2397,70 +2488,10 @@ return
 					},
 				},
 			},
-			Variables =
-			{
-				ContentsHeight =
-				{
-					Type = "number",
-					Value = 3,
-				},
-				ContentsWidth =
-				{
-					Type = "number",
-					Value = 3,
-				},
-			},
 		},
 		cEnchantments =
 		{
-			Functions =
-			{
-				constructor =
-				{
-					{
-						Returns =
-						{
-							{
-								Type = "cEnchantments",
-							},
-						},
-					},
-					{
-						Params =
-						{
-							{
-								Name = "StringSpec",
-								Type = "string",
-							},
-						},
-						Returns =
-						{
-							{
-								Type = "cEnchantments",
-							},
-						},
-					},
-				},
-				operator_eq =
-				{
-					{
-						Params =
-						{
-							{
-								Name = "OtherEnchantments",
-								Type = "cEnchantments",
-							},
-						},
-						Returns =
-						{
-							{
-								Type = "boolean",
-							},
-						},
-					},
-				},
-			},
-			Variables =
+			Constants =
 			{
 				enchAquaAffinity =
 				{
@@ -2588,36 +2619,57 @@ return
 					Value = 34,
 				},
 			},
-		},
-		cEntity =
-		{
 			Functions =
 			{
-				GetRot =
+				constructor =
 				{
 					{
 						Returns =
 						{
 							{
-								Type = "Vector3f",
+								Type = "cEnchantments",
+							},
+						},
+					},
+					{
+						Params =
+						{
+							{
+								Name = "StringSpec",
+								Type = "string",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "cEnchantments",
 							},
 						},
 					},
 				},
-				SetRot =
+				operator_eq =
 				{
 					{
 						Params =
 						{
 							{
-								Name = "Rotation",
-								Type = "Vector3f",
+								Name = "OtherEnchantments",
+								Type = "cEnchantments",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "boolean",
 							},
 						},
 					},
 				},
 			},
-			Variables =
+		},
+		cEntity =
+		{
+			Constants =
 			{
 				INVALID_ID =
 				{
@@ -2700,10 +2752,87 @@ return
 					Value = 8,
 				},
 			},
+			Enums =
+			{
+				EntityType =
+				{
+					{
+						Name = "etProjectile",
+					},
+					{
+						Name = "etBoat",
+					},
+					{
+						Name = "etItemFrame",
+					},
+					{
+						Name = "etEntity",
+					},
+					{
+						Name = "etMonster",
+					},
+					{
+						Name = "etTNT",
+					},
+					{
+						Name = "etPlayer",
+					},
+					{
+						Name = "etExpOrb",
+					},
+					{
+						Name = "etFloater",
+					},
+					{
+						Name = "etPainting",
+					},
+					{
+						Name = "etMinecart",
+					},
+					{
+						Name = "etFallingBlock",
+					},
+					{
+						Name = "etMob",
+					},
+					{
+						Name = "etEnderCrystal",
+					},
+					{
+						Name = "etPickup",
+					},
+				},
+			},
+			Functions =
+			{
+				GetRot =
+				{
+					{
+						Returns =
+						{
+							{
+								Type = "Vector3f",
+							},
+						},
+					},
+				},
+				SetRot =
+				{
+					{
+						Params =
+						{
+							{
+								Name = "Rotation",
+								Type = "Vector3f",
+							},
+						},
+					},
+				},
+			},
 		},
 		cEntityEffect =
 		{
-			Variables =
+			Constants =
 			{
 				effAbsorption =
 				{
@@ -3160,7 +3289,7 @@ return
 		},
 		cFurnaceEntity =
 		{
-			Variables =
+			Constants =
 			{
 				ContentsHeight =
 				{
@@ -3188,9 +3317,42 @@ return
 					Value = 2,
 				},
 			},
+			Enums =
+			{
+				SlotIndices =
+				{
+					{
+						Name = "fsFuel",
+					},
+					{
+						Name = "fsOutput",
+					},
+					{
+						Name = "fsInput",
+					},
+				},
+			},
 		},
 		cHopperEntity =
 		{
+			Constants =
+			{
+				ContentsHeight =
+				{
+					Type = "number",
+					Value = 1,
+				},
+				ContentsWidth =
+				{
+					Type = "number",
+					Value = 5,
+				},
+				TICKS_PER_TRANSFER =
+				{
+					Type = "number",
+					Value = 8,
+				},
+			},
 			Functions =
 			{
 				GetOutputBlockPos =
@@ -3225,27 +3387,17 @@ return
 					},
 				},
 			},
-			Variables =
-			{
-				ContentsHeight =
-				{
-					Type = "number",
-					Value = 1,
-				},
-				ContentsWidth =
-				{
-					Type = "number",
-					Value = 5,
-				},
-				TICKS_PER_TRANSFER =
-				{
-					Type = "number",
-					Value = 8,
-				},
-			},
 		},
 		cIniFile =
 		{
+			Constants =
+			{
+				noID =
+				{
+					Type = "number",
+					Value = -1,
+				},
+			},
 			Functions =
 			{
 				constructor =
@@ -3260,18 +3412,10 @@ return
 					},
 				},
 			},
-			Variables =
-			{
-				noID =
-				{
-					Type = "number",
-					Value = -1,
-				},
-			},
 		},
 		cInventory =
 		{
-			Variables =
+			Constants =
 			{
 				invArmorCount =
 				{
@@ -3307,6 +3451,33 @@ return
 				{
 					Type = "number",
 					Value = 40,
+				},
+			},
+			Enums =
+			{
+				SlotIndices =
+				{
+					{
+						Name = "invNumSlots",
+					},
+					{
+						Name = "invInventoryCount",
+					},
+					{
+						Name = "invHotbarCount",
+					},
+					{
+						Name = "invArmorCount",
+					},
+					{
+						Name = "invArmorOffset",
+					},
+					{
+						Name = "invHotbarOffset",
+					},
+					{
+						Name = "invInventoryOffset",
+					},
 				},
 			},
 		},
@@ -3630,7 +3801,7 @@ return
 		},
 		cMap =
 		{
-			Variables =
+			Constants =
 			{
 				E_BASE_COLOR_BLUE =
 				{
@@ -3887,7 +4058,7 @@ return
 		},
 		cMonster =
 		{
-			Variables =
+			Constants =
 			{
 				mfAmbient =
 				{
@@ -3918,6 +4089,30 @@ return
 				{
 					Type = "number",
 					Value = 3,
+				},
+			},
+			Enums =
+			{
+				eFamily =
+				{
+					{
+						Name = "mfNoSpawn",
+					},
+					{
+						Name = "mfUnhandled",
+					},
+					{
+						Name = "mfPassive",
+					},
+					{
+						Name = "mfAmbient",
+					},
+					{
+						Name = "mfWater",
+					},
+					{
+						Name = "mfHostile",
+					},
 				},
 			},
 		},
@@ -4060,7 +4255,7 @@ return
 		},
 		cObjective =
 		{
-			Variables =
+			Constants =
 			{
 				otAchievement =
 				{
@@ -4312,313 +4507,7 @@ return
 		},
 		cPluginManager =
 		{
-			Functions =
-			{
-				AddHook =
-				{
-					{
-						IsStatic = true,
-						Params =
-						{
-							{
-								Name = "HookType",
-								Type = "cPluginManager#PluginHook",
-							},
-							{
-								IsOptional = true,
-								Name = "Callback",
-								Type = "function",
-							},
-						},
-					},
-				},
-				BindCommand =
-				{
-					{
-						Params =
-						{
-							{
-								Name = "Command",
-								Type = "string",
-							},
-							{
-								Name = "Permission",
-								Type = "string",
-							},
-							{
-								Name = "Callback",
-								Type = "function",
-							},
-							{
-								Name = "HelpString",
-								Type = "string",
-							},
-						},
-						Returns =
-						{
-							{
-								Type = "boolean",
-							},
-						},
-					},
-					{
-						IsStatic = true,
-						Params =
-						{
-							{
-								Name = "Command",
-								Type = "string",
-							},
-							{
-								Name = "Permission",
-								Type = "string",
-							},
-							{
-								Name = "Callback",
-								Type = "function",
-							},
-							{
-								Name = "HelpString",
-								Type = "string",
-							},
-						},
-						Returns =
-						{
-							{
-								Type = "boolean",
-							},
-						},
-					},
-				},
-				BindConsoleCommand =
-				{
-					{
-						IsStatic = true,
-						Params =
-						{
-							{
-								Name = "Command",
-								Type = "string",
-							},
-							{
-								Name = "Callback",
-								Type = "function",
-							},
-							{
-								Name = "HelpString",
-								Type = "string",
-							},
-						},
-						Returns =
-						{
-							{
-								IsOptional = true,
-								Type = "boolean",
-							},
-						},
-					},
-					{
-						Params =
-						{
-							{
-								Name = "Command",
-								Type = "string",
-							},
-							{
-								Name = "Callback",
-								Type = "function",
-							},
-							{
-								Name = "HelpString",
-								Type = "string",
-							},
-						},
-						Returns =
-						{
-							{
-								IsOptional = true,
-								Type = "boolean",
-							},
-						},
-					},
-				},
-				CallPlugin =
-				{
-					{
-						IsStatic = true,
-						Params =
-						{
-							{
-								Name = "PluginName",
-								Type = "string",
-							},
-							{
-								Name = "FunctionName",
-								Type = "string",
-							},
-							{
-								IsOptional = true,
-								Name = "FunctionArgs...",
-								Type = "...",
-							},
-						},
-						Returns =
-						{
-							{
-								IsOptional = true,
-								Name = "FunctionRets",
-								Type = "...",
-							},
-						},
-					},
-				},
-				DoWithPlugin =
-				{
-					{
-						IsStatic = true,
-						Params =
-						{
-							{
-								Name = "PluginName",
-								Type = "string",
-							},
-							{
-								Name = "CallbackFn",
-								Type = "function",
-							},
-						},
-						Returns =
-						{
-							{
-								Type = "boolean",
-							},
-						},
-					},
-				},
-				ExecuteConsoleCommand =
-				{
-					{
-						Params =
-						{
-							{
-								Name = "CommandStr",
-								Type = "string",
-							},
-						},
-						Returns =
-						{
-							{
-								Type = "boolean",
-							},
-							{
-								Type = "string",
-							},
-						},
-					},
-				},
-				ForEachCommand =
-				{
-					{
-						Params =
-						{
-							{
-								Name = "CallbackFn",
-								Type = "function",
-							},
-						},
-						Returns =
-						{
-							{
-								Type = "boolean",
-							},
-						},
-					},
-				},
-				ForEachConsoleCommand =
-				{
-					{
-						Params =
-						{
-							{
-								Name = "CallbackFn",
-								Type = "function",
-							},
-						},
-						Returns =
-						{
-							{
-								Type = "boolean",
-							},
-						},
-					},
-				},
-				ForEachPlugin =
-				{
-					{
-						IsStatic = true,
-						Params =
-						{
-							{
-								Name = "CallbackFn",
-								Type = "function",
-							},
-						},
-						Returns =
-						{
-							{
-								Type = "boolean",
-							},
-						},
-					},
-				},
-				GetAllPlugins =
-				{
-					{
-						Returns =
-						{
-							{
-								Type = "table",
-							},
-						},
-					},
-				},
-				GetCurrentPlugin =
-				{
-					{
-						Returns =
-						{
-							{
-								Type = "cPlugin",
-							},
-						},
-					},
-				},
-				GetPlugin =
-				{
-					{
-						Params =
-						{
-							{
-								Name = "PluginName",
-								Type = "string",
-							},
-						},
-						Returns =
-						{
-							{
-								Type = "cPlugin",
-							},
-						},
-					},
-				},
-				LogStackTrace =
-				{
-					{
-						IsStatic = true,
-					},
-				},
-			},
-			Variables =
+			Constants =
 			{
 				HOOK_BLOCK_SPREAD =
 				{
@@ -5006,24 +4895,559 @@ return
 					Value = 2,
 				},
 			},
-		},
-		cProjectileEntity =
-		{
+			Enums =
+			{
+				CommandResult =
+				{
+					{
+						Name = "crError",
+					},
+					{
+						Name = "crBlocked",
+					},
+					{
+						Name = "crNoPermission",
+					},
+					{
+						Name = "crExecuted",
+					},
+					{
+						Name = "crUnknownCommand",
+					},
+				},
+				PluginHook =
+				{
+					{
+						Name = "HOOK_CHUNK_GENERATED",
+					},
+					{
+						Name = "HOOK_UPDATING_SIGN",
+					},
+					{
+						Name = "HOOK_PLAYER_FISHING",
+					},
+					{
+						Name = "HOOK_PLAYER_BROKEN_BLOCK",
+					},
+					{
+						Name = "HOOK_HOPPER_PUSHING_ITEM",
+					},
+					{
+						Name = "HOOK_SPAWNED_MONSTER",
+					},
+					{
+						Name = "HOOK_WORLD_STARTED",
+					},
+					{
+						Name = "HOOK_PLAYER_BREAKING_BLOCK",
+					},
+					{
+						Name = "HOOK_HANDSHAKE",
+					},
+					{
+						Name = "HOOK_PLAYER_PLACING_BLOCK",
+					},
+					{
+						Name = "HOOK_BLOCK_SPREAD",
+					},
+					{
+						Name = "HOOK_PLAYER_USED_BLOCK",
+					},
+					{
+						Name = "HOOK_PLAYER_EATING",
+					},
+					{
+						Name = "HOOK_BREWING_COMPLETING",
+					},
+					{
+						Name = "HOOK_COLLECTING_PICKUP",
+					},
+					{
+						Name = "HOOK_CHUNK_GENERATING",
+					},
+					{
+						Name = "HOOK_WEATHER_CHANGING",
+					},
+					{
+						Name = "HOOK_PLAYER_SPAWNED",
+					},
+					{
+						Name = "HOOK_PLAYER_SHOOTING",
+					},
+					{
+						Name = "HOOK_PRE_CRAFTING",
+					},
+					{
+						Name = "HOOK_PLAYER_USING_BLOCK",
+					},
+					{
+						Name = "HOOK_ENTITY_CHANGED_WORLD",
+					},
+					{
+						Name = "HOOK_SPAWNING_ENTITY",
+					},
+					{
+						Name = "HOOK_BREWING_COMPLETED",
+					},
+					{
+						Name = "HOOK_PLAYER_USED_ITEM",
+					},
+					{
+						Name = "HOOK_BLOCK_TO_PICKUPS",
+					},
+					{
+						Name = "HOOK_CHUNK_UNLOADING",
+					},
+					{
+						Name = "HOOK_TAKE_DAMAGE",
+					},
+					{
+						Name = "HOOK_ENTITY_ADD_EFFECT",
+					},
+					{
+						Name = "HOOK_EXPLODED",
+					},
+					{
+						Name = "HOOK_PROJECTILE_HIT_BLOCK",
+					},
+					{
+						Name = "HOOK_CHUNK_AVAILABLE",
+					},
+					{
+						Name = "HOOK_SPAWNING_MONSTER",
+					},
+					{
+						Name = "HOOK_KILLING",
+					},
+					{
+						Name = "HOOK_PLAYER_USING_ITEM",
+					},
+					{
+						Name = "HOOK_PLAYER_LEFT_CLICK",
+					},
+					{
+						Name = "HOOK_PROJECTILE_HIT_ENTITY",
+					},
+					{
+						Name = "HOOK_PLAYER_DESTROYED",
+					},
+					{
+						Name = "HOOK_DISCONNECT",
+					},
+					{
+						Name = "HOOK_EXPLODING",
+					},
+					{
+						Name = "HOOK_POST_CRAFTING",
+					},
+					{
+						Name = "HOOK_CHUNK_UNLOADED",
+					},
+					{
+						Name = "HOOK_HOPPER_PULLING_ITEM",
+					},
+					{
+						Name = "HOOK_ENTITY_TELEPORT",
+					},
+					{
+						Name = "HOOK_PLAYER_RIGHT_CLICK",
+					},
+					{
+						Name = "HOOK_EXECUTE_COMMAND",
+					},
+					{
+						Name = "HOOK_PLAYER_FISHED",
+					},
+					{
+						Name = "HOOK_SERVER_PING",
+					},
+					{
+						Name = "HOOK_UPDATED_SIGN",
+					},
+					{
+						Name = "HOOK_CRAFTING_NO_RECIPE",
+					},
+					{
+						Name = "HOOK_LOGIN",
+					},
+					{
+						Name = "HOOK_PLAYER_FOOD_LEVEL_CHANGE",
+					},
+					{
+						Name = "HOOK_PLAYER_JOINED",
+					},
+					{
+						Name = "HOOK_PLAYER_RIGHT_CLICKING_ENTITY",
+					},
+					{
+						Name = "HOOK_CHAT",
+					},
+					{
+						Name = "HOOK_PLUGINS_LOADED",
+					},
+					{
+						Name = "HOOK_SPAWNED_ENTITY",
+					},
+					{
+						Name = "HOOK_WEATHER_CHANGED",
+					},
+					{
+						Name = "HOOK_TICK",
+					},
+					{
+						Name = "HOOK_PLAYER_PLACED_BLOCK",
+					},
+					{
+						Name = "HOOK_KILLED",
+					},
+					{
+						Name = "HOOK_PLAYER_ANIMATION",
+					},
+					{
+						Name = "HOOK_PLAYER_TOSSING_ITEM",
+					},
+					{
+						Name = "HOOK_PLUGIN_MESSAGE",
+					},
+					{
+						Name = "HOOK_PLAYER_MOVING",
+					},
+					{
+						Name = "HOOK_ENTITY_CHANGING_WORLD",
+					},
+					{
+						Name = "HOOK_WORLD_TICK",
+					},
+				},
+				PluginStatus =
+				{
+					{
+						Name = "psDisabled",
+					},
+					{
+						Name = "psLoaded",
+					},
+					{
+						Name = "psUnloaded",
+					},
+					{
+						Name = "psError",
+					},
+					{
+						Name = "psNotFound",
+					},
+				},
+			},
 			Functions =
 			{
-				GetCreator =
+				AddHook =
+				{
+					{
+						IsStatic = true,
+						Params =
+						{
+							{
+								Name = "HookType",
+								Type = "cPluginManager#PluginHook",
+							},
+							{
+								IsOptional = true,
+								Name = "Callback",
+								Type = "function",
+							},
+						},
+					},
+				},
+				BindCommand =
+				{
+					{
+						Params =
+						{
+							{
+								Name = "Command",
+								Type = "string",
+							},
+							{
+								Name = "Permission",
+								Type = "string",
+							},
+							{
+								Name = "Callback",
+								Type = "function",
+							},
+							{
+								Name = "HelpString",
+								Type = "string",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "boolean",
+							},
+						},
+					},
+					{
+						IsStatic = true,
+						Params =
+						{
+							{
+								Name = "Command",
+								Type = "string",
+							},
+							{
+								Name = "Permission",
+								Type = "string",
+							},
+							{
+								Name = "Callback",
+								Type = "function",
+							},
+							{
+								Name = "HelpString",
+								Type = "string",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "boolean",
+							},
+						},
+					},
+				},
+				BindConsoleCommand =
+				{
+					{
+						IsStatic = true,
+						Params =
+						{
+							{
+								Name = "Command",
+								Type = "string",
+							},
+							{
+								Name = "Callback",
+								Type = "function",
+							},
+							{
+								Name = "HelpString",
+								Type = "string",
+							},
+						},
+						Returns =
+						{
+							{
+								IsOptional = true,
+								Type = "boolean",
+							},
+						},
+					},
+					{
+						Params =
+						{
+							{
+								Name = "Command",
+								Type = "string",
+							},
+							{
+								Name = "Callback",
+								Type = "function",
+							},
+							{
+								Name = "HelpString",
+								Type = "string",
+							},
+						},
+						Returns =
+						{
+							{
+								IsOptional = true,
+								Type = "boolean",
+							},
+						},
+					},
+				},
+				CallPlugin =
+				{
+					{
+						IsStatic = true,
+						Params =
+						{
+							{
+								Name = "PluginName",
+								Type = "string",
+							},
+							{
+								Name = "FunctionName",
+								Type = "string",
+							},
+							{
+								IsOptional = true,
+								Name = "FunctionArgs...",
+								Type = "...",
+							},
+						},
+						Returns =
+						{
+							{
+								IsOptional = true,
+								Name = "FunctionRets",
+								Type = "...",
+							},
+						},
+					},
+				},
+				DoWithPlugin =
+				{
+					{
+						IsStatic = true,
+						Params =
+						{
+							{
+								Name = "PluginName",
+								Type = "string",
+							},
+							{
+								Name = "CallbackFn",
+								Type = "function",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "boolean",
+							},
+						},
+					},
+				},
+				ExecuteConsoleCommand =
+				{
+					{
+						Params =
+						{
+							{
+								Name = "CommandStr",
+								Type = "string",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "boolean",
+							},
+							{
+								Type = "string",
+							},
+						},
+					},
+				},
+				ForEachCommand =
+				{
+					{
+						Params =
+						{
+							{
+								Name = "CallbackFn",
+								Type = "function",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "boolean",
+							},
+						},
+					},
+				},
+				ForEachConsoleCommand =
+				{
+					{
+						Params =
+						{
+							{
+								Name = "CallbackFn",
+								Type = "function",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "boolean",
+							},
+						},
+					},
+				},
+				ForEachPlugin =
+				{
+					{
+						IsStatic = true,
+						Params =
+						{
+							{
+								Name = "CallbackFn",
+								Type = "function",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "boolean",
+							},
+						},
+					},
+				},
+				GetAllPlugins =
 				{
 					{
 						Returns =
 						{
 							{
-								Type = "cEntity",
+								Type = "table",
 							},
 						},
 					},
 				},
+				GetCurrentPlugin =
+				{
+					{
+						Returns =
+						{
+							{
+								Type = "cPlugin",
+							},
+						},
+					},
+				},
+				GetPlugin =
+				{
+					{
+						Params =
+						{
+							{
+								Name = "PluginName",
+								Type = "string",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "cPlugin",
+							},
+						},
+					},
+				},
+				LogStackTrace =
+				{
+					{
+						IsStatic = true,
+					},
+				},
 			},
-			Variables =
+		},
+		cProjectileEntity =
+		{
+			Constants =
 			{
 				pkArrow =
 				{
@@ -5079,6 +5503,59 @@ return
 				{
 					Type = "number",
 					Value = 66,
+				},
+			},
+			Enums =
+			{
+				eKind =
+				{
+					{
+						Name = "pkArrow",
+					},
+					{
+						Name = "pkFirework",
+					},
+					{
+						Name = "pkEnderPearl",
+					},
+					{
+						Name = "pkFishingFloat",
+					},
+					{
+						Name = "pkEgg",
+					},
+					{
+						Name = "pkFireCharge",
+					},
+					{
+						Name = "pkSnowball",
+					},
+					{
+						Name = "pkExpBottle",
+					},
+					{
+						Name = "pkWitherSkull",
+					},
+					{
+						Name = "pkSplashPotion",
+					},
+					{
+						Name = "pkGhastFireball",
+					},
+				},
+			},
+			Functions =
+			{
+				GetCreator =
+				{
+					{
+						Returns =
+						{
+							{
+								Type = "cEntity",
+							},
+						},
+					},
 				},
 			},
 		},
@@ -5868,6 +6345,29 @@ return
 		},
 		cScoreboard =
 		{
+			Constants =
+			{
+				dsCount =
+				{
+					Type = "number",
+					Value = 3,
+				},
+				dsList =
+				{
+					Type = "number",
+					Value = 0,
+				},
+				dsName =
+				{
+					Type = "number",
+					Value = 2,
+				},
+				dsSidebar =
+				{
+					Type = "number",
+					Value = 1,
+				},
+			},
 			Functions =
 			{
 				ForEachObjective =
@@ -5916,29 +6416,6 @@ return
 							},
 						},
 					},
-				},
-			},
-			Variables =
-			{
-				dsCount =
-				{
-					Type = "number",
-					Value = 3,
-				},
-				dsList =
-				{
-					Type = "number",
-					Value = 0,
-				},
-				dsName =
-				{
-					Type = "number",
-					Value = 2,
-				},
-				dsSidebar =
-				{
-					Type = "number",
-					Value = 1,
 				},
 			},
 		},
@@ -6755,7 +7232,7 @@ return
 		},
 		cWindow =
 		{
-			Variables =
+			Constants =
 			{
 				wtAnimalChest =
 				{
@@ -7899,6 +8376,24 @@ return
 		},
 		lxp =
 		{
+			Constants =
+			{
+				_COPYRIGHT =
+				{
+					Type = "string",
+					Value = "Copyright (C) 2003-2012 Kepler Project",
+				},
+				_DESCRIPTION =
+				{
+					Type = "string",
+					Value = "LuaExpat is a SAX XML parser based on the Expat library",
+				},
+				_VERSION =
+				{
+					Type = "string",
+					Value = "LuaExpat 1.3.0",
+				},
+			},
 			Functions =
 			{
 				new =
@@ -7926,99 +8421,10 @@ return
 					},
 				},
 			},
-			Variables =
-			{
-				_COPYRIGHT =
-				{
-					Type = "string",
-					Value = "Copyright (C) 2003-2012 Kepler Project",
-				},
-				_DESCRIPTION =
-				{
-					Type = "string",
-					Value = "LuaExpat is a SAX XML parser based on the Expat library",
-				},
-				_VERSION =
-				{
-					Type = "string",
-					Value = "LuaExpat 1.3.0",
-				},
-			},
 		},
 		sqlite3 =
 		{
-			Functions =
-			{
-				complete =
-				{
-					{
-						IsGlobal = true,
-						IsStatic = true,
-						Params =
-						{
-							{
-								Name = "SQL",
-								Type = "string",
-							},
-						},
-						Returns =
-						{
-							{
-								Type = "boolean",
-							},
-						},
-					},
-				},
-				open =
-				{
-					{
-						IsGlobal = true,
-						IsStatic = true,
-						Params =
-						{
-							{
-								Name = "FileName",
-								Type = "string",
-							},
-						},
-						Returns =
-						{
-							{
-								Name = "DBClass",
-								Type = "SQLite DB object",
-							},
-						},
-					},
-				},
-				open_memory =
-				{
-					{
-						IsGlobal = true,
-						IsStatic = true,
-						Returns =
-						{
-							{
-								Name = "DBClass",
-								Type = "SQLite DB object",
-							},
-						},
-					},
-				},
-				version =
-				{
-					{
-						IsGlobal = true,
-						IsStatic = true,
-						Returns =
-						{
-							{
-								Type = "string",
-							},
-						},
-					},
-				},
-			},
-			Variables =
+			Constants =
 			{
 				ABORT =
 				{
@@ -8346,6 +8752,77 @@ return
 					Value = 23,
 				},
 			},
+			Functions =
+			{
+				complete =
+				{
+					{
+						IsGlobal = true,
+						IsStatic = true,
+						Params =
+						{
+							{
+								Name = "SQL",
+								Type = "string",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "boolean",
+							},
+						},
+					},
+				},
+				open =
+				{
+					{
+						IsGlobal = true,
+						IsStatic = true,
+						Params =
+						{
+							{
+								Name = "FileName",
+								Type = "string",
+							},
+						},
+						Returns =
+						{
+							{
+								Name = "DBClass",
+								Type = "SQLite DB object",
+							},
+						},
+					},
+				},
+				open_memory =
+				{
+					{
+						IsGlobal = true,
+						IsStatic = true,
+						Returns =
+						{
+							{
+								Name = "DBClass",
+								Type = "SQLite DB object",
+							},
+						},
+					},
+				},
+				version =
+				{
+					{
+						IsGlobal = true,
+						IsStatic = true,
+						Returns =
+						{
+							{
+								Type = "string",
+							},
+						},
+					},
+				},
+			},
 		},
 		tolua =
 		{
@@ -8403,820 +8880,6 @@ return
 	Globals =
 	{
 		Constants =
-		{
-			g_BlockFullyOccupiesVoxel =
-			{
-				Name = "g_BlockFullyOccupiesVoxel",
-			},
-			g_BlockIsSnowable =
-			{
-				Name = "g_BlockIsSnowable",
-			},
-			g_BlockIsSolid =
-			{
-				Name = "g_BlockIsSolid",
-			},
-			g_BlockLightValue =
-			{
-				Name = "g_BlockLightValue",
-			},
-			g_BlockOneHitDig =
-			{
-				Name = "g_BlockOneHitDig",
-			},
-			g_BlockPistonBreakable =
-			{
-				Name = "g_BlockPistonBreakable",
-			},
-			g_BlockSpreadLightFalloff =
-			{
-				Name = "g_BlockSpreadLightFalloff",
-			},
-			g_BlockTransparent =
-			{
-				Name = "g_BlockTransparent",
-			},
-		},
-		Functions =
-		{
-			AddFaceDirection =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "BlockX",
-							Type = "number",
-						},
-						{
-							Name = "BlockY",
-							Type = "number",
-						},
-						{
-							Name = "BlockZ",
-							Type = "number",
-						},
-						{
-							Name = "BlockFace",
-							Type = "eBlockFace",
-						},
-						{
-							IsOptional = true,
-							Name = "IsInverse",
-							Type = "boolean",
-						},
-					},
-					Returns =
-					{
-						{
-							Name = "BlockX",
-							Type = "number",
-						},
-						{
-							Name = "BlockY",
-							Type = "number",
-						},
-						{
-							Name = "BlockZ",
-							Type = "number",
-						},
-					},
-				},
-			},
-			BlockFaceToString =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "eBlockFace",
-							Type = "eBlockFace",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "string",
-						},
-					},
-				},
-			},
-			BlockStringToType =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "BlockTypeString",
-							Type = "string",
-						},
-					},
-					Returns =
-					{
-						{
-							Name = "BLOCKTYPE",
-							Type = "number",
-						},
-					},
-				},
-			},
-			Clamp =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "Number",
-							Type = "number",
-						},
-						{
-							Name = "Min",
-							Type = "number",
-						},
-						{
-							Name = "Max",
-							Type = "number",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "number",
-						},
-					},
-				},
-			},
-			ClickActionToString =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "ClickAction",
-							Type = "eClickAction",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "string",
-						},
-					},
-				},
-			},
-			DamageTypeToString =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "DamageType",
-							Type = "eDamageType",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "string",
-						},
-					},
-				},
-			},
-			EscapeString =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "Input",
-							Type = "string",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "string",
-						},
-					},
-				},
-			},
-			GetChar =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "Input",
-							Type = "string",
-						},
-						{
-							Name = "Index",
-							Type = "number",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "string",
-						},
-					},
-				},
-			},
-			GetIniItemSet =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "IniFile",
-							Type = "cIniFile",
-						},
-						{
-							Name = "SectionName",
-							Type = "string",
-						},
-						{
-							Name = "KeyName",
-							Type = "string",
-						},
-						{
-							Name = "DefaultValue",
-							Type = "string",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "cItem",
-						},
-					},
-				},
-			},
-			GetTime =
-			{
-				{
-					Returns =
-					{
-						{
-							Type = "number",
-						},
-					},
-				},
-			},
-			IsBiomeNoDownfall =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "Biome",
-							Type = "EMCSBiome",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "boolean",
-						},
-					},
-				},
-			},
-			IsValidBlock =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "BlockType",
-							Type = "number",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "boolean",
-						},
-					},
-				},
-			},
-			IsValidItem =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "ItemType",
-							Type = "number",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "boolean",
-						},
-					},
-				},
-			},
-			ItemToFullString =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "cItem",
-							Type = "cItem",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "string",
-						},
-					},
-				},
-			},
-			ItemToString =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "cItem",
-							Type = "cItem",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "string",
-						},
-					},
-				},
-			},
-			ItemTypeToString =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "ItemType",
-							Type = "number",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "string",
-						},
-					},
-				},
-			},
-			LOG =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "Message",
-							Type = "string",
-						},
-					},
-				},
-				{
-					Params =
-					{
-						{
-							Name = "Message",
-							Type = "cCompositeChat",
-						},
-					},
-				},
-			},
-			LOGERROR =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "Message",
-							Type = "string",
-						},
-					},
-				},
-				{
-					Params =
-					{
-						{
-							Name = "Message",
-							Type = "cCompositeChat",
-						},
-					},
-				},
-			},
-			LOGINFO =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "Message",
-							Type = "string",
-						},
-					},
-				},
-				{
-					Params =
-					{
-						{
-							Name = "Message",
-							Type = "cCompositeChat",
-						},
-					},
-				},
-			},
-			LOGWARN =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "Message",
-							Type = "string",
-						},
-					},
-				},
-				{
-					Params =
-					{
-						{
-							Name = "Message",
-							Type = "cCompositeChat",
-						},
-					},
-				},
-			},
-			LOGWARNING =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "Message",
-							Type = "string",
-						},
-					},
-				},
-				{
-					Params =
-					{
-						{
-							Name = "Message",
-							Type = "cCompositeChat",
-						},
-					},
-				},
-			},
-			MirrorBlockFaceY =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "eBlockFace",
-							Type = "eBlockFace",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "eBlockFace",
-						},
-					},
-				},
-			},
-			NoCaseCompare =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "Value1",
-							Type = "string",
-						},
-						{
-							Name = "Value2",
-							Type = "string",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "number",
-						},
-					},
-				},
-			},
-			NormalizeAngleDegrees =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "AngleDegrees",
-							Type = "number",
-						},
-					},
-					Returns =
-					{
-						{
-							Name = "AngleDegrees",
-							Type = "number",
-						},
-					},
-				},
-			},
-			ReplaceString =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "full-string",
-							Type = "string",
-						},
-						{
-							Name = "to-be-replaced-string",
-							Type = "string",
-						},
-						{
-							Name = "to-replace-string",
-							Type = "string",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "string",
-						},
-					},
-				},
-			},
-			RotateBlockFaceCCW =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "eBlockFace",
-							Type = "eBlockFace",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "eBlockFace",
-						},
-					},
-				},
-			},
-			RotateBlockFaceCW =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "eBlockFace",
-							Type = "eBlockFace",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "eBlockFace",
-						},
-					},
-				},
-			},
-			StringSplit =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "Input",
-							Type = "string",
-						},
-						{
-							Name = "SeperatorsString",
-							Type = "string",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "table",
-						},
-					},
-				},
-			},
-			StringSplitAndTrim =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "Input",
-							Type = "string",
-						},
-						{
-							Name = "SeperatorsString",
-							Type = "string",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "table",
-						},
-					},
-				},
-			},
-			StringSplitWithQuotes =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "Input",
-							Type = "string",
-						},
-						{
-							Name = "SeperatorsString",
-							Type = "string",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "table",
-						},
-					},
-				},
-			},
-			StringToBiome =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "Input",
-							Type = "string",
-						},
-					},
-					Returns =
-					{
-						{
-							Name = "BiomeType",
-							Type = "Globals#BiomeTypes",
-						},
-					},
-				},
-			},
-			StringToDamageType =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "Input",
-							Type = "string",
-						},
-					},
-					Returns =
-					{
-						{
-							Name = "DamageType",
-							Type = "Globals#DamageType",
-						},
-					},
-				},
-			},
-			StringToDimension =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "Input",
-							Type = "string",
-						},
-					},
-					Returns =
-					{
-						{
-							Name = "Dimension",
-							Type = "Globals#WorldDimension",
-						},
-					},
-				},
-			},
-			StringToItem =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "StringToParse",
-							Type = "string",
-						},
-						{
-							Name = "DestItem",
-							Type = "cItem",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "boolean",
-						},
-					},
-				},
-			},
-			StringToMobType =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "MobTypeString",
-							Type = "string",
-						},
-					},
-					Returns =
-					{
-						{
-							Name = "MobType",
-							Type = "Globals#MobType",
-						},
-					},
-				},
-			},
-			StripColorCodes =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "Input",
-							Type = "string",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "string",
-						},
-					},
-				},
-			},
-			TrimString =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "Input",
-							Type = "string",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "string",
-						},
-					},
-				},
-			},
-			md5 =
-			{
-				{
-					Params =
-					{
-						{
-							Name = "Data",
-							Type = "string",
-						},
-					},
-					Returns =
-					{
-						{
-							Type = "string",
-						},
-					},
-				},
-			},
-		},
-		Variables =
 		{
 			BLOCK_FACE_BOTTOM =
 			{
@@ -14513,6 +14176,38 @@ return
 				Type = "number",
 				Value = 8,
 			},
+			g_BlockFullyOccupiesVoxel =
+			{
+				Name = "g_BlockFullyOccupiesVoxel",
+			},
+			g_BlockIsSnowable =
+			{
+				Name = "g_BlockIsSnowable",
+			},
+			g_BlockIsSolid =
+			{
+				Name = "g_BlockIsSolid",
+			},
+			g_BlockLightValue =
+			{
+				Name = "g_BlockLightValue",
+			},
+			g_BlockOneHitDig =
+			{
+				Name = "g_BlockOneHitDig",
+			},
+			g_BlockPistonBreakable =
+			{
+				Name = "g_BlockPistonBreakable",
+			},
+			g_BlockSpreadLightFalloff =
+			{
+				Name = "g_BlockSpreadLightFalloff",
+			},
+			g_BlockTransparent =
+			{
+				Name = "g_BlockTransparent",
+			},
 			gmAdventure =
 			{
 				Type = "number",
@@ -14972,6 +14667,785 @@ return
 			{
 				Type = "number",
 				Value = 2,
+			},
+		},
+		Functions =
+		{
+			AddFaceDirection =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "BlockX",
+							Type = "number",
+						},
+						{
+							Name = "BlockY",
+							Type = "number",
+						},
+						{
+							Name = "BlockZ",
+							Type = "number",
+						},
+						{
+							Name = "BlockFace",
+							Type = "eBlockFace",
+						},
+						{
+							IsOptional = true,
+							Name = "IsInverse",
+							Type = "boolean",
+						},
+					},
+					Returns =
+					{
+						{
+							Name = "BlockX",
+							Type = "number",
+						},
+						{
+							Name = "BlockY",
+							Type = "number",
+						},
+						{
+							Name = "BlockZ",
+							Type = "number",
+						},
+					},
+				},
+			},
+			BlockFaceToString =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "eBlockFace",
+							Type = "eBlockFace",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "string",
+						},
+					},
+				},
+			},
+			BlockStringToType =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "BlockTypeString",
+							Type = "string",
+						},
+					},
+					Returns =
+					{
+						{
+							Name = "BLOCKTYPE",
+							Type = "number",
+						},
+					},
+				},
+			},
+			Clamp =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "Number",
+							Type = "number",
+						},
+						{
+							Name = "Min",
+							Type = "number",
+						},
+						{
+							Name = "Max",
+							Type = "number",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "number",
+						},
+					},
+				},
+			},
+			ClickActionToString =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "ClickAction",
+							Type = "eClickAction",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "string",
+						},
+					},
+				},
+			},
+			DamageTypeToString =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "DamageType",
+							Type = "eDamageType",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "string",
+						},
+					},
+				},
+			},
+			EscapeString =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "Input",
+							Type = "string",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "string",
+						},
+					},
+				},
+			},
+			GetChar =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "Input",
+							Type = "string",
+						},
+						{
+							Name = "Index",
+							Type = "number",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "string",
+						},
+					},
+				},
+			},
+			GetIniItemSet =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "IniFile",
+							Type = "cIniFile",
+						},
+						{
+							Name = "SectionName",
+							Type = "string",
+						},
+						{
+							Name = "KeyName",
+							Type = "string",
+						},
+						{
+							Name = "DefaultValue",
+							Type = "string",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "cItem",
+						},
+					},
+				},
+			},
+			GetTime =
+			{
+				{
+					Returns =
+					{
+						{
+							Type = "number",
+						},
+					},
+				},
+			},
+			IsBiomeNoDownfall =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "Biome",
+							Type = "EMCSBiome",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "boolean",
+						},
+					},
+				},
+			},
+			IsValidBlock =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "BlockType",
+							Type = "number",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "boolean",
+						},
+					},
+				},
+			},
+			IsValidItem =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "ItemType",
+							Type = "number",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "boolean",
+						},
+					},
+				},
+			},
+			ItemToFullString =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "cItem",
+							Type = "cItem",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "string",
+						},
+					},
+				},
+			},
+			ItemToString =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "cItem",
+							Type = "cItem",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "string",
+						},
+					},
+				},
+			},
+			ItemTypeToString =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "ItemType",
+							Type = "number",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "string",
+						},
+					},
+				},
+			},
+			LOG =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "Message",
+							Type = "string",
+						},
+					},
+				},
+				{
+					Params =
+					{
+						{
+							Name = "Message",
+							Type = "cCompositeChat",
+						},
+					},
+				},
+			},
+			LOGERROR =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "Message",
+							Type = "string",
+						},
+					},
+				},
+				{
+					Params =
+					{
+						{
+							Name = "Message",
+							Type = "cCompositeChat",
+						},
+					},
+				},
+			},
+			LOGINFO =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "Message",
+							Type = "string",
+						},
+					},
+				},
+				{
+					Params =
+					{
+						{
+							Name = "Message",
+							Type = "cCompositeChat",
+						},
+					},
+				},
+			},
+			LOGWARN =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "Message",
+							Type = "string",
+						},
+					},
+				},
+				{
+					Params =
+					{
+						{
+							Name = "Message",
+							Type = "cCompositeChat",
+						},
+					},
+				},
+			},
+			LOGWARNING =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "Message",
+							Type = "string",
+						},
+					},
+				},
+				{
+					Params =
+					{
+						{
+							Name = "Message",
+							Type = "cCompositeChat",
+						},
+					},
+				},
+			},
+			MirrorBlockFaceY =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "eBlockFace",
+							Type = "eBlockFace",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "eBlockFace",
+						},
+					},
+				},
+			},
+			NoCaseCompare =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "Value1",
+							Type = "string",
+						},
+						{
+							Name = "Value2",
+							Type = "string",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "number",
+						},
+					},
+				},
+			},
+			NormalizeAngleDegrees =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "AngleDegrees",
+							Type = "number",
+						},
+					},
+					Returns =
+					{
+						{
+							Name = "AngleDegrees",
+							Type = "number",
+						},
+					},
+				},
+			},
+			ReplaceString =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "full-string",
+							Type = "string",
+						},
+						{
+							Name = "to-be-replaced-string",
+							Type = "string",
+						},
+						{
+							Name = "to-replace-string",
+							Type = "string",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "string",
+						},
+					},
+				},
+			},
+			RotateBlockFaceCCW =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "eBlockFace",
+							Type = "eBlockFace",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "eBlockFace",
+						},
+					},
+				},
+			},
+			RotateBlockFaceCW =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "eBlockFace",
+							Type = "eBlockFace",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "eBlockFace",
+						},
+					},
+				},
+			},
+			StringSplit =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "Input",
+							Type = "string",
+						},
+						{
+							Name = "SeperatorsString",
+							Type = "string",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "table",
+						},
+					},
+				},
+			},
+			StringSplitAndTrim =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "Input",
+							Type = "string",
+						},
+						{
+							Name = "SeperatorsString",
+							Type = "string",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "table",
+						},
+					},
+				},
+			},
+			StringSplitWithQuotes =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "Input",
+							Type = "string",
+						},
+						{
+							Name = "SeperatorsString",
+							Type = "string",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "table",
+						},
+					},
+				},
+			},
+			StringToBiome =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "Input",
+							Type = "string",
+						},
+					},
+					Returns =
+					{
+						{
+							Name = "BiomeType",
+							Type = "Globals#BiomeTypes",
+						},
+					},
+				},
+			},
+			StringToDamageType =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "Input",
+							Type = "string",
+						},
+					},
+					Returns =
+					{
+						{
+							Name = "DamageType",
+							Type = "Globals#DamageType",
+						},
+					},
+				},
+			},
+			StringToDimension =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "Input",
+							Type = "string",
+						},
+					},
+					Returns =
+					{
+						{
+							Name = "Dimension",
+							Type = "Globals#WorldDimension",
+						},
+					},
+				},
+			},
+			StringToItem =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "StringToParse",
+							Type = "string",
+						},
+						{
+							Name = "DestItem",
+							Type = "cItem",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "boolean",
+						},
+					},
+				},
+			},
+			StringToMobType =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "MobTypeString",
+							Type = "string",
+						},
+					},
+					Returns =
+					{
+						{
+							Name = "MobType",
+							Type = "Globals#MobType",
+						},
+					},
+				},
+			},
+			StripColorCodes =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "Input",
+							Type = "string",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "string",
+						},
+					},
+				},
+			},
+			TrimString =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "Input",
+							Type = "string",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "string",
+						},
+					},
+				},
+			},
+			md5 =
+			{
+				{
+					Params =
+					{
+						{
+							Name = "Data",
+							Type = "string",
+						},
+					},
+					Returns =
+					{
+						{
+							Type = "string",
+						},
+					},
+				},
 			},
 		},
 	},
