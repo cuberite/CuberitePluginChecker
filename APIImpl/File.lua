@@ -36,6 +36,12 @@ end
 return
 {
 	["<static> cFile:Copy(string, string)"] = function(a_Simulator, a_ThisClass, a_SrcFileName, a_DstFileName)
+		if (a_SrcFileName == "") then
+			a_Simulator.logger:error("Attempting to copy console to file %q.", a_DstFileName)
+		end
+		if (a_DstFileName == "") then
+			a_Simulator.logger:error("Attempting to copy file %q to console.", a_SrcFileName)
+		end
 		a_SrcFileName = a_Simulator:redirectPath(a_SrcFileName)
 		a_DstFileName = a_Simulator:redirectPath(a_DstFileName)
 		local fIn = io.open(a_SrcFileName, "rb")
