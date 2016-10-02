@@ -1369,9 +1369,50 @@ local function createSimulator(a_Options, a_Logger)
 		sandbox =
 		{
 			-- Default Lua libraries:
-			io = io,
+			io =
+			{
+				close = io.close,
+				flush = io.flush,
+				input = io.input,
+				lines = function(a_FileName, ...)
+					-- Handles both io.lines("filename") and fileobj:lines(), need to distinguish:
+					if (type(a_FileName) == "string") then
+						a_FileName = res:redirectPath(a_FileName)
+					end
+					return io.lines(a_FileName, ...)
+				end,
+				open = function(a_FileName, ...)
+					a_FileName = res:redirectPath(a_FileName)
+					return io.open(a_FileName, ...)
+				end,
+				output = io.output,
+				popen = io.popen,
+				read = io.read,
+				tmpfile = io.tmpfile,
+				type = io.type,
+				write = io.write,
+			},
 			math = math,
-			os = os,
+			os =
+			{
+				clock = os.clock,
+				date = os.date,
+				difftime = os.difftime,
+				execute = os.execute,
+				exit = function(...)
+					res.logger:error("The os.exit() function should never be used in a Cuberite plugin!")
+				end,
+				getenv = os.getenv,
+				remove = function(a_FileName, ...)
+					return os.remove(res:redirectPath(a_FileName), ...)
+				end,
+				rename = function(a_SrcFileName, a_DstFileName, ...)
+					return os.rename(res:redirectPath(a_SrcFileName), res:redirectPath(a_DstFileName), ...)
+				end,
+				setlocale = os.setlocale,
+				time = os.time,
+				tmpname = os.tmpname,
+			},
 			string = string,
 			table = table,
 
@@ -1452,32 +1493,6 @@ local function createSimulator(a_Options, a_Logger)
 		worlds = {},
 		players = {},
 	}
-
-	-- Add filesystem redirection to the sandboxed IO library:
-	res.sandbox.io.open = function(a_FileName, ...)
-		a_FileName = res:redirectPath(a_FileName)
-		return io.open(a_FileName, ...)
-	end
-	res.sandbox.io.lines = function(a_FileName, ...)
-		-- Handles both io.lines("filename") and fileobj:lines(), need to distinguish:
-		if (type(a_FileName) == "string") then
-			a_FileName = res:redirectPath(a_FileName)
-		end
-		return io.lines(a_FileName, ...)
-	end
-
-	-- Add filesystem redirection to the sandboxed OS library:
-	res.sandbox.os.remove = function(a_FileName, ...)
-		return os.remove(res:redirectPath(a_FileName), ...)
-	end
-	res.sandbox.os.rename = function(a_SrcFileName, a_DstFileName, ...)
-		return os.rename(res:redirectPath(a_SrcFileName), res:redirectPath(a_DstFileName), ...)
-	end
-
-	-- Explicitly mark the os.exit() as dangerous:
-	res.sandbox.os.exit = function(...)
-		res.logger:error("The os.exit() function should never be used in a Cuberite plugin!")
-	end
 
 	setmetatable(res, Simulator)
 	return res
