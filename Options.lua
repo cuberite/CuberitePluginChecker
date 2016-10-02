@@ -12,8 +12,8 @@ The commandline options understood by the framework:
 	-g             -- Check by running garbage-collector after each callback
 	-i <filename>  -- Load special API implementation from the file (files in APIImpl folder)
 	-l <loglevel>  -- Use the specified loglevel (1 = trace, 2 = debug, 3 = info, 4 = warning, 5 = error)
-	-p <path>      -- Plugin path
-	-s <filename>  -- Load a scenario from the specified file
+	-p <path>      -- Plugin path (required)
+	-s <filename>  -- Load the scenario from the specified file
 
 The options object contains the following fields:
 	apiImplementationFiles - array-table of filenames to load the API implementation from
@@ -22,9 +22,8 @@ The options object contains the following fields:
 	logLevel               - number specifying the loglevel to use, or nil
 	pluginFiles            - array-table of filenames for all plugin files to check. Each item already includes pluginPath
 	pluginPath             - path to the plugin's files
-	scenarioFileNames      - array-table of filenames to load as scenario files
+	scenarioFileName       - filename to load as scenario file
 	shouldClearObjects     - bool specifying whether API objects should be cleared after each callback (thus detecting potential use-after-callback)
-	shouldFuzzCommands     - bool specifying whether commands should be fuzzed
 	shouldGCObjects        - bool specifying whether API objects should be GC-ed after each callback (thus detecting storage-after-callback)
 --]]
 
@@ -132,11 +131,16 @@ local optionProcessor =
 
 	-- -s <filename> -- Load a scenario from the specified file
 	["-s"] = function (a_Args, a_Idx, a_Options)
-		local fileName = a_Args[a_Idx + 1]
-		if not(fileName) then
+		-- If a scenario was already given, abort with an error:
+		if (a_Options.scenarioFileName) then
+			error("A scenario file (%s) has already been specified, cannot execute two scenarios (%s, option #%d). Please execute a separate session for the second scenario.",
+				a_Options.scenarioFileName, a_Args[a_Idx + 1], a_Idx
+			)
+		end
+		a_Options.scenarioFileName = a_Args[a_Idx + 1]
+		if not(a_Options.scenarioFileName) then
 			error(string.format("Invalid option \"-s\" (%d), expected a scenario filename following it.", a_Idx))
 		end
-		table.insert(a_Options.scenarioFileNames, fileName)
 		return a_Idx + 2
 	end,
 }
@@ -150,7 +154,6 @@ local options =
 	apiImplementationFiles = {},
 	extraApiFiles = {},
 	pluginFiles = {},
-	scenarioFileNames = {},
 }
 
 

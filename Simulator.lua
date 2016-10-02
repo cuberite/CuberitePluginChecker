@@ -90,9 +90,6 @@ function Simulator:addHooks(a_Options)
 		table.insert(self.hooks.onBeforeCallCallback, Simulator.beforeCallGCObjects)
 		table.insert(self.hooks.onAfterCallCallback,  Simulator.afterCallGCObjects)
 	end
-	if (a_Options.shouldFuzzCommands) then
-		table.insert(self.hooks.onEmptyRequestQueue, Simulator.fuzzCommandHandlers)
-	end
 end
 
 
@@ -930,6 +927,25 @@ end
 
 
 
+--- Calls the plugin's Initialize() function
+function Simulator:initializePlugin()
+	-- Check params:
+	assert(getmetatable(self) == Simulator)
+
+	-- Call the plugin's Initialize function:
+	self:processCallbackRequest(
+		{
+			Function = self.sandbox.Initialize,
+			Params = { self.sandbox.cPluginManager:Get():GetCurrentPlugin() },
+			Notes = "Initialize()",
+		}
+	)
+end
+
+
+
+
+
 --- Injects the API classes and global symbols into the simulator's sandbox
 function Simulator:injectApi(a_ApiDesc)
 	-- Check params:
@@ -1027,35 +1043,19 @@ end
 
 
 
---- Loads the specified plugin files and executes the globals:
-function Simulator:loadFiles(a_FileList)
+--- Loads the plugin's files and executes their globals
+function Simulator:loadPluginFiles()
 	-- Check params:
-	assert(self)
-	assert(a_FileList[1])  -- We need at least one file
+	assert(getmetatable(self) == Simulator)
+	assert(self.options.pluginFiles[1])
 
-	-- Load and execute each file:
-	for _, fnam in ipairs(a_FileList) do
+	-- Load the plugin files, execute the globals:
+	for _, fnam in ipairs(self.options.pluginFiles) do
 		local fn = assert(loadfile(fnam))
 		setfenv(fn, self.sandbox)
 		fn()
 	end
-end
-
-
-
-
-
---- Loads all scenarios from files specified in the options
-function Simulator:loadScenarios(a_Options)
-	-- Check params:
-	assert(self)
-	assert(type(a_Options) == "table")
-	assert(type(a_Options.scenarioFileNames) == "table")
-
-	-- Load the scenarios:
-	for idx, fnam in ipairs(a_Options.scenarioFileNames) do
-		self.scenarios[idx] = Scenario:new(fnam, self.logger)
-	end
+	assert(self.sandbox.Initialize, "The plugin doesn't have the Initialize() function.")
 end
 
 
@@ -1261,31 +1261,17 @@ function Simulator:run(a_Options)
 	-- Add the hooks based on the options:
 	self:addHooks(a_Options)
 
-	-- Load the plugin files, execute the globals:
-	self:loadFiles(a_Options.pluginFiles)
-	assert(self.sandbox.Initialize, "The plugin doesn't have the Initialize() function.")
-
-	-- Add the request to call the Initialize function:
-	self:addCallbackRequest(
-		self.sandbox.Initialize,
-		{ {Type = "cPlugin" } },
-		"Initialize()"
-	)
-
-	-- As long as there are callback requests in the queue, dequeue and process them, in a LIFO manner:
-	self.logger:trace("Running the simulator")
-	while (self.callbackRequests.n > 0) do
-		local request = self.callbackRequests[self.callbackRequests.n]
-		self.callbackRequests.n = self.callbackRequests.n - 1
-		self:processCallbackRequest(request)
-		if (self.callbackRequests.n == 0) then
-			self:queueNextScenario()
-			if (self.callbackRequests.n == 0) then
-				self:callHooks(self.hooks.onEmptyRequestQueue)
-			end
-		end
+	-- Load and execute the scenario:
+	if not(a_Options.scenarioFileName) then
+		self.logger:warning("No scenario file was specified, testing only plugin initialization. Use \"-s <filename>\" to specify a scenario file to execute.")
+		self:loadPluginFiles()
+		self:initializePlugin()
+	else
+		local scenario = Scenario:new(a_Options.scenarioFileName, self.logger)
+		scenario:execute(self)
 	end
 end
+
 
 
 
@@ -1363,7 +1349,6 @@ local function createSimulator(a_Options, a_Logger)
 			onAfterCallCallback  = {},  -- Right after the plugin's code returns
 			onEndRound           = {},  -- After finishing processing the callback request
 			onAddedRequest       = {},  -- Aftera new callback request is added to the callback request queue
-			onEmptyRequestQueue  = {},  -- When the callback request queue is empty. Hook may insert more requests.
 			onApiFunctionCall    = {},  -- An API function is being called
 		},
 
@@ -1380,13 +1365,13 @@ local function createSimulator(a_Options, a_Logger)
 			-- Default Lua globals:
 			assert = assert,
 			collectgarbage = collectgarbage,
-			dofile = function (a_FileName) return res:dofile(a_FileName) end,
+			dofile = function (a_FileName) return res:dofile(res:redirectPath(a_FileName)) end,
 			error = error,
 			getfenv = getfenv,
 			getmetatable = getmetatable,
 			ipairs = ipairs,
 			load = load,
-			loadfile = function(a_FileName) return res:loadfile(a_FileName) end,
+			loadfile = function(a_FileName) return res:loadfile(res:redirectPath(a_FileName)) end,
 			loadstring = function(a_String) return res:loadstring(a_String) end,
 			next = next,
 			pairs = pairs,
@@ -1454,6 +1439,33 @@ local function createSimulator(a_Options, a_Logger)
 		worlds = {},
 		players = {},
 	}
+
+	-- Add filesystem redirection to the sandboxed IO library:
+	res.sandbox.io.open = function(a_FileName, ...)
+		a_FileName = res:redirectPath(a_FileName)
+		return io.open(a_FileName, ...)
+	end
+	res.sandbox.io.lines = function(a_FileName, ...)
+		-- Handles both io.lines("filename") and fileobj:lines(), need to distinguish:
+		if (type(a_FileName) == "string") then
+			a_FileName = res:redirectPath(a_FileName)
+		end
+		return io.lines(a_FileName, ...)
+	end
+
+	-- Add filesystem redirection to the sandboxed OS library:
+	res.sandbox.os.remove = function(a_FileName, ...)
+		return os.remove(res:redirectPath(a_FileName), ...)
+	end
+	res.sandbox.os.rename = function(a_SrcFileName, a_DstFileName, ...)
+		return os.rename(res:redirectPath(a_SrcFileName), res:redirectPath(a_DstFileName), ...)
+	end
+
+	-- Explicitly mark the os.exit() as dangerous:
+	res.sandbox.os.exit = function(...)
+		res.logger:error("The os.exit() function should never be used in a Cuberite plugin!")
+	end
+
 	setmetatable(res, Simulator)
 	return res
 end

@@ -5,9 +5,17 @@
 --[[
 A scenario is loaded from a file with special syntax - basically a long chained function call of predefined
 global functions that form a scenario specification. A single scenario consists of an array-table of actions,
-these actions are then called one after another by the simulator. Each action is a table that has an
-"executeAction" member that provides the function that is to be called, it receives a single argument, the
-Simulator instance.
+these actions are then called one after another by the simulator. Each action is either a function or a table
+that has an "execute" member that provides the function that is to be called. It receives a single argument,
+the Simulator instance.
+
+Actions:
+	- loadPluginFiles   -- Loads all the plugin files and executes the globals
+	- initializePlugin  -- Calls the Initialize function. If not loaded, loads the plugin files first.
+	- world             -- Creates a new world
+	- playerConnect     -- Simulates a new player connecting to the server
+	- playerCommand     -- Simulates a player executing a command
+	- fuzzAllCommands   -- Simulates a player executing each command with a wide range of parameters (fuzzing)
 
 Example scenario file:
 scenario
@@ -16,7 +24,7 @@ scenario
 	{
 		name = "world",
 	},
-	player.connect
+	playerConnect
 	{
 		name = "player",
 		worldName = "world",
@@ -196,6 +204,43 @@ end
 
 
 
+--- Sandbox handler of the "initializePlugin" keyword.
+-- Initializes the plugin (and loads it before that if not loaded yet)
+local function sandboxInitializePlugin(a_Table)
+	return
+	{
+		isInitializePlugin = true,
+		execute = function(a_Simulator)
+			if not(a_Simulator.isPluginLoaded) then
+				a_Simulator:loadPluginFiles()
+				a_Simulator.isPluginLoaded = true
+			end
+			a_Simulator:initializePlugin()
+		end,
+	}
+end
+
+
+
+
+
+--- Sandbox handler of the "loadPluginFiles" keyword.
+-- Loads the plugin files into the simulator
+local function sandboxLoadPluginFiles(a_Table)
+	return
+	{
+		isLoadPluginFiles = true,
+		execute = function(a_Simulator)
+			a_Simulator:loadPluginFiles()
+			a_Simulator.isPluginLoaded = true
+		end,
+	}
+end
+
+
+
+
+
 --- The sandbox used for scenario files
 -- Provides only the scenario functions
 local scenarioSandbox =
@@ -206,6 +251,8 @@ local scenarioSandbox =
 	connectPlayer = sandboxConnectPlayer,
 	playerCommand = sandboxPlayerCommand,
 	fuzzAllCommands = sandboxFuzzAllCommands,
+	initializePlugin = sandboxInitializePlugin,
+	loadPluginFiles = sandboxLoadPluginFiles,
 }
 
 
@@ -223,7 +270,6 @@ function Scenario:new(a_FileName, a_Logger)
 	-- Create a new scenario instance:
 	local res =
 	{
-		currentSubscenario = 1,
 		fileName = a_FileName,
 		logger = a_Logger,
 	}
@@ -231,13 +277,34 @@ function Scenario:new(a_FileName, a_Logger)
 
 	-- Modify the sandbox to fit this specific scenario file:
 	scenarioSandbox.scenario = function (a_Table)
-		a_Table.currentAction = 1
+		if (res.scenario) then
+			error("Multiple \"scenario\" top level keywords. Only one is supported.", 2)
+		end
+		local hasInitialization = false
+		local hasLoading = false
 		for idx, action in ipairs(a_Table) do
-			if not(type(action) == "function") then
-				error(string.format("Error in scenario file %s: element %d is not an action", a_FileName, idx))
+			local t = type(action)
+			if (t == "table") then
+				if (action.isInitializePlugin) then
+					hasInitialization = true
+					hasLoading = true
+				elseif (action.isLoadPluginFiles) then
+					hasLoading = true
+				end
+			elseif (t ~= "function") then
+				error(string.format("Error in scenario file %s: element #%d is not an action", a_FileName, idx))
 			end
 		end
-		table.insert(res, a_Table)
+		if not(hasInitialization) then
+			a_Logger:warning("Scenario file %s is missing the \"initializePlugin\" action, the plugin will not be fully loaded.", a_FileName)
+		end
+		if not(hasLoading) then
+			error(string.format(
+				"Scenario file %s doesn't specify the action to load the plugin files. Use either the \"initializePlugin\" action, or the explicit \"loadPluginFiles\" action.",
+				a_FileName
+			))
+		end
+		res.actions = a_Table
 	end
 
 	-- Load the scenario:
@@ -249,7 +316,7 @@ function Scenario:new(a_FileName, a_Logger)
 	scenarioFn()
 
 	-- Check that a proper scenario was created:
-	if not(res[1]) then
+	if not(res.actions) then
 		error(string.format("Scenario file %s is invalid, it doesn't have a \"scenario\" top-level element", a_FileName))
 	end
 
@@ -270,28 +337,17 @@ function Scenario:execute(a_Simulator)
 	assert(self)
 	assert(type(a_Simulator) == "table")
 
-	-- If we've executed all the subscenarios, bail out:
-	if (self.currentSubscenario > #self) then
-		return true
+	-- Execute each action in the scenario:
+	for idx, action in ipairs(self.actions) do
+		local t = type(action)
+		if (t == "function") then
+			action(a_Simulator)
+		elseif (t == "table") then
+			action.execute(a_Simulator)
+		else
+			assert(false, "Unknown scenario action runtime")
+		end
 	end
-	local subscenario = self[self.currentSubscenario]
-
-	-- If we've executed all actions in the subscenario, move to the next subscenario:
-	if (subscenario.currentAction > #subscenario) then
-		self.currentSubscenario = self.currentSubscenario + 1
-		a_Simulator:clearState()
-		return false
-	end
-	local action = subscenario[subscenario.currentAction]
-
-	-- Execute the next action in the subscenario:
-	self.logger:trace("Executing action #%d in subscenario #%d (%s) of scenario file %s",
-		subscenario.currentAction,
-		self.currentSubscenario, subscenario.name or "<no name>",
-		self.fileName
-	)
-	action(a_Simulator)
-	subscenario.currentAction = subscenario.currentAction + 1
 end
 
 

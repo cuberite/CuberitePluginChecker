@@ -19,6 +19,7 @@ scenario
 	{
 		name = "world",
 	},
+	initializePlugin(),
 	connectPlayer  -- Simulate a player connection
 	{
 		name = "player1",
