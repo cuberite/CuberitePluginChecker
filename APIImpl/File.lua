@@ -44,14 +44,18 @@ return
 		end
 		a_SrcFileName = a_Simulator:redirectPath(a_SrcFileName)
 		a_DstFileName = a_Simulator:redirectPath(a_DstFileName)
-		local fIn = io.open(a_SrcFileName, "rb")
+		assert(a_SrcFileName ~= "")
+		assert(a_DstFileName ~= "")
+		local fIn, msg = io.open(a_SrcFileName, "rb")
 		if not(fIn) then
+			a_Simulator.logger:debug("cFile:Copy(): failed to open src file %q: %s", a_SrcFileName, msg)
 			return false
 		end
 		local contents = fIn:read("*a")
 		fIn:close()
-		local fOut = io.open(a_DstFileName, "wb")
+		local fOut, msg2 = io.open(a_DstFileName, "wb")
 		if not(fOut) then
+			a_Simulator.logger:debug("cFile:Copy(): failed to open dst file %q: %s", a_DstFileName, msg2)
 			return false
 		end
 		fOut:write(contents)
