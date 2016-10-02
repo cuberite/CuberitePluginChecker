@@ -62,6 +62,7 @@ function Logger:log(a_LogLevel, a_Format, ...)
 
 	-- Output the message
 	print(string.format(a_Format, ...))
+	io.stdout:flush()
 end
 
 
