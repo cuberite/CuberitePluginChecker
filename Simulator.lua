@@ -324,21 +324,29 @@ function Simulator:collapseRelativePath(a_Path)
 	-- Check params:
 	assert(type(a_Path) == "string")
 
-	-- Split the path and rebuild without the relativeness:
+	-- Split the path on each "/" and rebuild without the relativeness:
 	local res = {}
-	a_Path:gsub("[^/]+",
-		function(a_Part)
-			if (a_Part == "..") then
-				if ((#res > 0) and (res[#res - 1] ~= "..")) then  -- The previous part is not relative
-					table.remove(res)
-				else
-					table.insert(res, a_Part)
-				end
-			else
-				table.insert(res, a_Part)
-			end
+	local idx = 0
+	while (idx) do
+		local lastIdx = idx + 1
+		idx = a_Path:find("/", lastIdx)
+		local part
+		if not(idx) then
+			part = a_Path:sub(lastIdx)
+		else
+			part = a_Path:sub(lastIdx, idx - 1)
 		end
-	)
+
+		if (part == "..") then
+			if ((#res > 0) and (res[#res - 1] ~= "..")) then  -- The previous part is not relative
+				table.remove(res)
+			else
+				table.insert(res, part)
+			end
+		else
+			table.insert(res, part)
+		end
+	end
 	return table.concat(res, "/")
 end
 
