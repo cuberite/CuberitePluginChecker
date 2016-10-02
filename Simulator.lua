@@ -746,7 +746,7 @@ function Simulator:executeHookCallback(a_HookTypeStr, ...)
 	-- Call all hook handlers:
 	self.logger:trace("Triggering hook handlers for %s", a_HookTypeStr)
 	local params = {...}
-	local hooks = self.registeredHooks[a_HookType] or {}
+	local hooks = self.registeredHooks[hookType] or {}
 	local res
 	for idx, callback in ipairs(hooks) do
 		res = self:processCallbackRequest(
