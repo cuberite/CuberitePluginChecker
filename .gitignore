@@ -1,3 +1,5 @@
 AutoAPI/
 *.cfg
 *.sqlite
+tests/ManualAPI header.txt
+tests/updateManualAPI.cmd

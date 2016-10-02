@@ -1127,7 +1127,7 @@ return
 						Name = "baMetas",
 					},
 				},
-				MergeStrategies =
+				eMergeStrategy =
 				{
 					{
 						Name = "msSimpleCompare",
@@ -1329,6 +1329,12 @@ return
 								Type = "string",
 							},
 						},
+						Returns =
+						{
+							{
+								Type = "boolean",
+							},
+						},
 					},
 				},
 				LoadFromSchematicString =
@@ -1339,6 +1345,12 @@ return
 							{
 								Name = "SchematicData",
 								Type = "string",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "boolean",
 							},
 						},
 					},
@@ -2754,7 +2766,7 @@ return
 			},
 			Enums =
 			{
-				EntityType =
+				eEntityType =
 				{
 					{
 						Name = "etProjectile",
@@ -5119,7 +5131,7 @@ return
 						Name = "HOOK_WORLD_TICK",
 					},
 				},
-				PluginStatus =
+				ePluginStatus =
 				{
 					{
 						Name = "psDisabled",
@@ -15450,3 +15462,4 @@ return
 		},
 	},
 }
+
