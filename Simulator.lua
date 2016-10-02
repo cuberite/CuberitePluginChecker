@@ -933,13 +933,16 @@ function Simulator:initializePlugin()
 	assert(getmetatable(self) == Simulator)
 
 	-- Call the plugin's Initialize function:
-	self:processCallbackRequest(
+	local res = self:processCallbackRequest(
 		{
 			Function = self.sandbox.Initialize,
 			Params = { self.sandbox.cPluginManager:Get():GetCurrentPlugin() },
 			Notes = "Initialize()",
 		}
 	)
+	if not(res[1]) then
+		self.logger:error("The plugin initialization failed")
+	end
 end
 
 
@@ -1150,6 +1153,7 @@ end
 --- Processes a single callback request
 -- Prepares the params and calls the function
 -- Calls the appropriate simulator hooks
+-- Returns all the values that the callback returned
 function Simulator:processCallbackRequest(a_Request)
 	-- Check params:
 	assert(self)
