@@ -718,9 +718,10 @@ function Simulator:dofile(a_FileName)
 
 	self.logger:trace("Executing file \"%s\".", a_FileName)
 	local res, msg = loadfile(a_FileName)
-	if (res) then
-		setfenv(res, self.sandbox)
+	if not(res) then
+		self.logger:error("Error while executing file \"%s\": %s", a_FileName, msg)
 	end
+	setfenv(res, self.sandbox)
 	return res()
 end
 
