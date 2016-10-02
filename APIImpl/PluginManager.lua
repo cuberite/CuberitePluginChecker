@@ -42,7 +42,13 @@ return
 
 	["cPluginManager:GetCurrentPlugin()"] = function (a_Simulator, a_Self)
 		local res = a_Simulator:createInstance({Type = "cPlugin"})
-		res.GetLocalPath = function (a_Self) return a_Simulator.options.pluginPath end  -- Override the plugin to act as "self"
+		-- Override the plugin to act as "self":
+		res.GetLocalFolder = function(a_Self)
+			if not(a_Self == res) then
+				error("Bad cPlugin:GetLocalFolder() usage, the first parameter is not \"self\".")
+			end
+			return a_Simulator.options.pluginPath
+		end
 		return res
 	end,
 
