@@ -11,8 +11,9 @@ scenario
 	name = "Fuzz all commands",
 	redirect -- Redirect files / folders
 	{
-		["Gallery.cfg"] = "tests/Gallery/FuzzCommands.cfg",
-		["Gallery.sqlite"] = "tests/Gallery/FuzzCommands.sqlite",
+		["Galleries.cfg"] = "tests/Gallery/FuzzCommands.cfg",
+		["Galleries.example.cfg"] = "tests/Gallery/FuzzCommands.example.cfg",
+		["Galleries.sqlite"] = "tests/Gallery/FuzzCommands.sqlite",
 	},
 	world  -- Create a world
 	{
