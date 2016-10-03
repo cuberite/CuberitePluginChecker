@@ -17,4 +17,4 @@ dependencies:
 
 test:
  override:
-  - lua CuberitePluginChecker.lua -p ~/Gallery -a ~/AutoAPI -e tests/ManualAPI.lua -i APIImpl/All.lua -s tests/Gallery/FuzzCommands.lua -l 1
+  - lua CuberitePluginChecker.lua -p ~/Gallery -a ~/AutoAPI -e tests/ManualAPI.lua -i APIImpl/All.lua -s tests/Gallery/FuzzCommands.lua
