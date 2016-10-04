@@ -10,7 +10,8 @@
 
 
 return
-{	Classes =
+{
+	Classes =
 	{
 		HTTPFormData =
 		{
@@ -2965,6 +2966,84 @@ return
 				{
 					Type = "number",
 					Value = 20,
+				},
+			},
+			Enums =
+			{
+				eType =
+				{
+					{
+						Name = "effSlowness",
+					},
+					{
+						Name = "effNoEffect",
+					},
+					{
+						Name = "effHaste",
+					},
+					{
+						Name = "effInstantHealth",
+					},
+					{
+						Name = "effHealthBoost",
+					},
+					{
+						Name = "effNightVision",
+					},
+					{
+						Name = "effFireResistance",
+					},
+					{
+						Name = "effHunger",
+					},
+					{
+						Name = "effRegeneration",
+					},
+					{
+						Name = "effMiningFatigue",
+					},
+					{
+						Name = "effInvisibility",
+					},
+					{
+						Name = "effStrength",
+					},
+					{
+						Name = "effPoison",
+					},
+					{
+						Name = "effInstantDamage",
+					},
+					{
+						Name = "effBlindness",
+					},
+					{
+						Name = "effSaturation",
+					},
+					{
+						Name = "effWaterBreathing",
+					},
+					{
+						Name = "effJumpBoost",
+					},
+					{
+						Name = "effAbsorption",
+					},
+					{
+						Name = "effResistance",
+					},
+					{
+						Name = "effWeakness",
+					},
+					{
+						Name = "effSpeed",
+					},
+					{
+						Name = "effWither",
+					},
+					{
+						Name = "effNausea",
+					},
 				},
 			},
 		},
@@ -7209,8 +7288,8 @@ return
 						Params =
 						{
 							{
-								Name = "HTTPRequest",
-								Type = "Request",
+								Name = "Request",
+								Type = "HTTPRequest",
 							},
 						},
 						Returns =
@@ -7310,6 +7389,51 @@ return
 				{
 					Type = "number",
 					Value = 1,
+				},
+			},
+			Enums =
+			{
+				WindowType =
+				{
+					{
+						Name = "wtFurnace",
+					},
+					{
+						Name = "wtBrewery",
+					},
+					{
+						Name = "wtBeacon",
+					},
+					{
+						Name = "wtAnvil",
+					},
+					{
+						Name = "wtInventory",
+					},
+					{
+						Name = "wtAnimalChest",
+					},
+					{
+						Name = "wtChest",
+					},
+					{
+						Name = "wtWorkbench",
+					},
+					{
+						Name = "wtNPCTrade",
+					},
+					{
+						Name = "wtDropper",
+					},
+					{
+						Name = "wtEnchantment",
+					},
+					{
+						Name = "wtHopper",
+					},
+					{
+						Name = "wtDropSpenser",
+					},
 				},
 			},
 		},
@@ -14681,6 +14805,3336 @@ return
 				Value = 2,
 			},
 		},
+		Enums =
+		{
+			DigStatuses =
+			{
+				{
+					Name = "DIG_STATUS_SHOOT_EAT",
+				},
+				{
+					Name = "DIG_STATUS_DROP_HELD",
+				},
+				{
+					Name = "DIG_STATUS_SWAP_ITEM_IN_HAND",
+				},
+				{
+					Name = "DIG_STATUS_FINISHED",
+				},
+				{
+					Name = "DIG_STATUS_DROP_STACK",
+				},
+				{
+					Name = "DIG_STATUS_CANCELLED",
+				},
+				{
+					Name = "DIG_STATUS_STARTED",
+				},
+			},
+			EMCSBiome =
+			{
+				{
+					Name = "biSavanna",
+				},
+				{
+					Name = "biExtremeHillsEdge",
+				},
+				{
+					Name = "biJungle",
+				},
+				{
+					Name = "biMegaSpruceTaigaHills",
+				},
+				{
+					Name = "biColdTaiga",
+				},
+				{
+					Name = "biSwampland",
+				},
+				{
+					Name = "biMesaPlateauF",
+				},
+				{
+					Name = "biFlowerForest",
+				},
+				{
+					Name = "biStoneBeach",
+				},
+				{
+					Name = "biExtremeHillsM",
+				},
+				{
+					Name = "biOcean",
+				},
+				{
+					Name = "biSky",
+				},
+				{
+					Name = "biMesaBryce",
+				},
+				{
+					Name = "biJungleM",
+				},
+				{
+					Name = "biNumVariantBiomes",
+				},
+				{
+					Name = "biPlains",
+				},
+				{
+					Name = "biFirstBiome",
+				},
+				{
+					Name = "biFrozenRiver",
+				},
+				{
+					Name = "biMaxVariantBiome",
+				},
+				{
+					Name = "biMesaPlateauM",
+				},
+				{
+					Name = "biExtremeHillsPlus",
+				},
+				{
+					Name = "biTaigaHills",
+				},
+				{
+					Name = "biFirstVariantBiome",
+				},
+				{
+					Name = "biJungleEdgeM",
+				},
+				{
+					Name = "biMesa",
+				},
+				{
+					Name = "biDeepOcean",
+				},
+				{
+					Name = "biBirchForestHills",
+				},
+				{
+					Name = "biMegaTaiga",
+				},
+				{
+					Name = "biMegaSpruceTaiga",
+				},
+				{
+					Name = "biBirchForestM",
+				},
+				{
+					Name = "biColdTaigaHills",
+				},
+				{
+					Name = "biJungleHills",
+				},
+				{
+					Name = "biIcePlainsSpikes",
+				},
+				{
+					Name = "biExtremeHills",
+				},
+				{
+					Name = "biSwamplandM",
+				},
+				{
+					Name = "biMushroomShore",
+				},
+				{
+					Name = "biSavannaPlateauM",
+				},
+				{
+					Name = "biEnd",
+				},
+				{
+					Name = "biMesaPlateauFM",
+				},
+				{
+					Name = "biHell",
+				},
+				{
+					Name = "biSunflowerPlains",
+				},
+				{
+					Name = "biDesertM",
+				},
+				{
+					Name = "biColdTaigaM",
+				},
+				{
+					Name = "biColdBeach",
+				},
+				{
+					Name = "biIceMountains",
+				},
+				{
+					Name = "biRiver",
+				},
+				{
+					Name = "biMushroomIsland",
+				},
+				{
+					Name = "biRoofedForest",
+				},
+				{
+					Name = "biNumBiomes",
+				},
+				{
+					Name = "biFrozenOcean",
+				},
+				{
+					Name = "biMegaTaigaHills",
+				},
+				{
+					Name = "biIcePlains",
+				},
+				{
+					Name = "biRoofedForestM",
+				},
+				{
+					Name = "biTundra",
+				},
+				{
+					Name = "biExtremeHillsPlusM",
+				},
+				{
+					Name = "biJungleEdge",
+				},
+				{
+					Name = "biMaxBiome",
+				},
+				{
+					Name = "biSavannaPlateau",
+				},
+				{
+					Name = "biSavannaM",
+				},
+				{
+					Name = "biBirchForest",
+				},
+				{
+					Name = "biTaiga",
+				},
+				{
+					Name = "biBeach",
+				},
+				{
+					Name = "biVariant",
+				},
+				{
+					Name = "biForest",
+				},
+				{
+					Name = "biBirchForestHillsM",
+				},
+				{
+					Name = "biInvalidBiome",
+				},
+				{
+					Name = "biForestHills",
+				},
+				{
+					Name = "biDesertHills",
+				},
+				{
+					Name = "biMesaPlateau",
+				},
+				{
+					Name = "biNether",
+				},
+				{
+					Name = "biDesert",
+				},
+				{
+					Name = "biTaigaM",
+				},
+			},
+			ItemTypes =
+			{
+				{
+					Name = "E_ITEM_DIAMOND",
+				},
+				{
+					Name = "E_ITEM_SUGARCANE",
+				},
+				{
+					Name = "E_ITEM_POTATO",
+				},
+				{
+					Name = "E_ITEM_GOLD_LEGGINGS",
+				},
+				{
+					Name = "E_ITEM_BANNER",
+				},
+				{
+					Name = "E_ITEM_RAW_RABBIT",
+				},
+				{
+					Name = "E_ITEM_REDSTONE_DUST",
+				},
+				{
+					Name = "E_ITEM_LEATHER_PANTS",
+				},
+				{
+					Name = "E_ITEM_CARROT",
+				},
+				{
+					Name = "E_ITEM_FIREWORK_STAR",
+				},
+				{
+					Name = "E_ITEM_COOKIE",
+				},
+				{
+					Name = "E_ITEM_COOKED_PORKCHOP",
+				},
+				{
+					Name = "E_ITEM_BOWL",
+				},
+				{
+					Name = "E_ITEM_NETHER_STAR",
+				},
+				{
+					Name = "E_ITEM_STAL_DISC",
+				},
+				{
+					Name = "E_ITEM_SLIMEBALL",
+				},
+				{
+					Name = "E_ITEM_PUMPKIN_PIE",
+				},
+				{
+					Name = "E_ITEM_11_DISC",
+				},
+				{
+					Name = "E_ITEM_LAST_DISC_PLUS_ONE",
+				},
+				{
+					Name = "E_ITEM_SUGAR",
+				},
+				{
+					Name = "E_ITEM_STONE_AXE",
+				},
+				{
+					Name = "E_ITEM_RED_APPLE",
+				},
+				{
+					Name = "E_ITEM_WRITTEN_BOOK",
+				},
+				{
+					Name = "E_ITEM_13_DISC",
+				},
+				{
+					Name = "E_ITEM_CAKE",
+				},
+				{
+					Name = "E_ITEM_GOLD_HELMET",
+				},
+				{
+					Name = "E_ITEM_RABBIT_STEW",
+				},
+				{
+					Name = "E_ITEM_GOLDEN_APPLE",
+				},
+				{
+					Name = "E_ITEM_COOKED_MUTTON",
+				},
+				{
+					Name = "E_ITEM_NUMBER_OF_CONSECUTIVE_TYPES",
+				},
+				{
+					Name = "E_ITEM_MAP",
+				},
+				{
+					Name = "E_ITEM_BUCKET",
+				},
+				{
+					Name = "E_ITEM_COOKED_RABBIT",
+				},
+				{
+					Name = "E_ITEM_SPRUCE_DOOR",
+				},
+				{
+					Name = "E_ITEM_STONE_SHOVEL",
+				},
+				{
+					Name = "E_ITEM_RAW_PORKCHOP",
+				},
+				{
+					Name = "E_ITEM_STRAD_DISC",
+				},
+				{
+					Name = "E_ITEM_MUSHROOM_SOUP",
+				},
+				{
+					Name = "E_ITEM_GOLDEN_CARROT",
+				},
+				{
+					Name = "E_ITEM_ARROW",
+				},
+				{
+					Name = "E_ITEM_BONE",
+				},
+				{
+					Name = "E_ITEM_PAPER",
+				},
+				{
+					Name = "E_ITEM_RAW_FISH",
+				},
+				{
+					Name = "E_ITEM_MELON_SLICE",
+				},
+				{
+					Name = "E_ITEM_DIAMOND_BOOTS",
+				},
+				{
+					Name = "E_ITEM_DARK_OAK_DOOR",
+				},
+				{
+					Name = "E_ITEM_FLOWER_POT",
+				},
+				{
+					Name = "E_ITEM_BLAZE_POWDER",
+				},
+				{
+					Name = "E_ITEM_ENCHANTED_BOOK",
+				},
+				{
+					Name = "E_ITEM_STICK",
+				},
+				{
+					Name = "E_ITEM_NAME_TAG",
+				},
+				{
+					Name = "E_ITEM_DIAMOND_HELMET",
+				},
+				{
+					Name = "E_ITEM_PAINTING",
+				},
+				{
+					Name = "E_ITEM_SADDLE",
+				},
+				{
+					Name = "E_ITEM_CHEST_MINECART",
+				},
+				{
+					Name = "E_ITEM_CHAIN_HELMET",
+				},
+				{
+					Name = "E_ITEM_FISHING_ROD",
+				},
+				{
+					Name = "E_ITEM_ITEM_FRAME",
+				},
+				{
+					Name = "E_ITEM_COMPARATOR",
+				},
+				{
+					Name = "E_ITEM_LEATHER_CAP",
+				},
+				{
+					Name = "E_ITEM_BREWING_STAND",
+				},
+				{
+					Name = "E_ITEM_MILK",
+				},
+				{
+					Name = "E_ITEM_FURNACE_MINECART",
+				},
+				{
+					Name = "E_ITEM_COMPASS",
+				},
+				{
+					Name = "E_ITEM_WOODEN_SWORD",
+				},
+				{
+					Name = "E_ITEM_CHAIN_LEGGINGS",
+				},
+				{
+					Name = "E_ITEM_DIAMOND_CHESTPLATE",
+				},
+				{
+					Name = "E_ITEM_IRON_SHOVEL",
+				},
+				{
+					Name = "E_ITEM_FIRST_DISC",
+				},
+				{
+					Name = "E_ITEM_SEEDS",
+				},
+				{
+					Name = "E_ITEM_DIAMOND_SWORD",
+				},
+				{
+					Name = "E_ITEM_IRON_BOOTS",
+				},
+				{
+					Name = "E_ITEM_LEAD",
+				},
+				{
+					Name = "E_ITEM_BLAZE_ROD",
+				},
+				{
+					Name = "E_ITEM_LEATHER",
+				},
+				{
+					Name = "E_ITEM_LEATHER_TUNIC",
+				},
+				{
+					Name = "E_ITEM_RAW_BEEF",
+				},
+				{
+					Name = "E_ITEM_GOLD_BOOTS",
+				},
+				{
+					Name = "E_ITEM_BLOCKS_DISC",
+				},
+				{
+					Name = "E_ITEM_DIAMOND_HORSE_ARMOR",
+				},
+				{
+					Name = "E_ITEM_IRON_DOOR",
+				},
+				{
+					Name = "E_ITEM_WOODEN_AXE",
+				},
+				{
+					Name = "E_ITEM_MINECART_WITH_COMMAND_BLOCK",
+				},
+				{
+					Name = "E_ITEM_SPIDER_EYE",
+				},
+				{
+					Name = "E_ITEM_GUNPOWDER",
+				},
+				{
+					Name = "E_ITEM_BREAD",
+				},
+				{
+					Name = "E_ITEM_FAR_DISC",
+				},
+				{
+					Name = "E_ITEM_STRING",
+				},
+				{
+					Name = "E_ITEM_IRON_CHESTPLATE",
+				},
+				{
+					Name = "E_ITEM_BOW",
+				},
+				{
+					Name = "E_ITEM_MAGMA_CREAM",
+				},
+				{
+					Name = "E_ITEM_REDSTONE_REPEATER",
+				},
+				{
+					Name = "E_ITEM_GLISTERING_MELON",
+				},
+				{
+					Name = "E_ITEM_RAW_MUTTON",
+				},
+				{
+					Name = "E_ITEM_EMPTY_MAP",
+				},
+				{
+					Name = "E_ITEM_DIAMOND_HOE",
+				},
+				{
+					Name = "E_ITEM_FLINT",
+				},
+				{
+					Name = "E_ITEM_NETHER_BRICK",
+				},
+				{
+					Name = "E_ITEM_POTION",
+				},
+				{
+					Name = "E_ITEM_COOKED_FISH",
+				},
+				{
+					Name = "E_ITEM_GLOWSTONE_DUST",
+				},
+				{
+					Name = "E_ITEM_LEATHER_BOOTS",
+				},
+				{
+					Name = "E_ITEM_CAULDRON",
+				},
+				{
+					Name = "E_ITEM_GOLD_PICKAXE",
+				},
+				{
+					Name = "E_ITEM_IRON_AXE",
+				},
+				{
+					Name = "E_ITEM_LAST",
+				},
+				{
+					Name = "E_ITEM_MINECART_WITH_TNT",
+				},
+				{
+					Name = "E_ITEM_SNOWBALL",
+				},
+				{
+					Name = "E_ITEM_CHIRP_DISC",
+				},
+				{
+					Name = "E_ITEM_STONE_SWORD",
+				},
+				{
+					Name = "E_ITEM_GOLD_HOE",
+				},
+				{
+					Name = "E_ITEM_FIREWORK_ROCKET",
+				},
+				{
+					Name = "E_ITEM_IRON",
+				},
+				{
+					Name = "E_ITEM_CLAY",
+				},
+				{
+					Name = "E_ITEM_ENDER_PEARL",
+				},
+				{
+					Name = "E_ITEM_ARMOR_STAND",
+				},
+				{
+					Name = "E_ITEM_EYE_OF_ENDER",
+				},
+				{
+					Name = "E_ITEM_IRON_PICKAXE",
+				},
+				{
+					Name = "E_ITEM_DYE",
+				},
+				{
+					Name = "E_ITEM_PUMPKIN_SEEDS",
+				},
+				{
+					Name = "E_ITEM_WOODEN_PICKAXE",
+				},
+				{
+					Name = "E_ITEM_POTIONS",
+				},
+				{
+					Name = "E_ITEM_BED",
+				},
+				{
+					Name = "E_ITEM_FIRE_CHARGE",
+				},
+				{
+					Name = "E_ITEM_GOLD_SHOVEL",
+				},
+				{
+					Name = "E_ITEM_POISONOUS_POTATO",
+				},
+				{
+					Name = "E_ITEM_FERMENTED_SPIDER_EYE",
+				},
+				{
+					Name = "E_ITEM_MINECART_WITH_HOPPER",
+				},
+				{
+					Name = "E_ITEM_RABBITS_FOOT",
+				},
+				{
+					Name = "E_ITEM_BOTTLE_O_ENCHANTING",
+				},
+				{
+					Name = "E_ITEM_IRON_HOE",
+				},
+				{
+					Name = "E_ITEM_CHAIN_CHESTPLATE",
+				},
+				{
+					Name = "E_ITEM_WATER_BUCKET",
+				},
+				{
+					Name = "E_ITEM_LAVA_BUCKET",
+				},
+				{
+					Name = "E_ITEM_COOKED_CHICKEN",
+				},
+				{
+					Name = "E_ITEM_BIRCH_DOOR",
+				},
+				{
+					Name = "E_ITEM_BOAT",
+				},
+				{
+					Name = "E_ITEM_IRON_HELMET",
+				},
+				{
+					Name = "E_ITEM_MELLOHI_DISC",
+				},
+				{
+					Name = "E_ITEM_EMERALD",
+				},
+				{
+					Name = "E_ITEM_SHEARS",
+				},
+				{
+					Name = "E_ITEM_STONE_HOE",
+				},
+				{
+					Name = "E_ITEM_HEAD",
+				},
+				{
+					Name = "E_ITEM_BOOK",
+				},
+				{
+					Name = "E_ITEM_GHAST_TEAR",
+				},
+				{
+					Name = "E_ITEM_BAKED_POTATO",
+				},
+				{
+					Name = "E_ITEM_MAX_CONSECUTIVE_TYPE_ID",
+				},
+				{
+					Name = "E_ITEM_GOLD_HORSE_ARMOR",
+				},
+				{
+					Name = "E_ITEM_CARROT_ON_STICK",
+				},
+				{
+					Name = "E_ITEM_RAW_CHICKEN",
+				},
+				{
+					Name = "E_ITEM_GOLD_CHESTPLATE",
+				},
+				{
+					Name = "E_ITEM_WAIT_DISC",
+				},
+				{
+					Name = "E_ITEM_CAT_DISC",
+				},
+				{
+					Name = "E_ITEM_GOLD_NUGGET",
+				},
+				{
+					Name = "E_ITEM_NETHER_QUARTZ",
+				},
+				{
+					Name = "E_ITEM_PRISMARINE_SHARD",
+				},
+				{
+					Name = "E_ITEM_IRON_HORSE_ARMOR",
+				},
+				{
+					Name = "E_ITEM_CLOCK",
+				},
+				{
+					Name = "E_ITEM_GOLD_AXE",
+				},
+				{
+					Name = "E_ITEM_WHEAT",
+				},
+				{
+					Name = "E_ITEM_NETHER_WART",
+				},
+				{
+					Name = "E_ITEM_WOODEN_SHOVEL",
+				},
+				{
+					Name = "E_ITEM_STONE_PICKAXE",
+				},
+				{
+					Name = "E_ITEM_GLASS_BOTTLE",
+				},
+				{
+					Name = "E_ITEM_DIAMOND_PICKAXE",
+				},
+				{
+					Name = "E_ITEM_WARD_DISC",
+				},
+				{
+					Name = "E_ITEM_FEATHER",
+				},
+				{
+					Name = "E_ITEM_MINECART",
+				},
+				{
+					Name = "E_ITEM_FIRST",
+				},
+				{
+					Name = "E_ITEM_RABBIT_HIDE",
+				},
+				{
+					Name = "E_ITEM_BOOK_AND_QUILL",
+				},
+				{
+					Name = "E_ITEM_CHAIN_BOOTS",
+				},
+				{
+					Name = "E_ITEM_JUNGLE_DOOR",
+				},
+				{
+					Name = "E_ITEM_SUGAR_CANE",
+				},
+				{
+					Name = "E_ITEM_ROTTEN_FLESH",
+				},
+				{
+					Name = "E_ITEM_FLINT_AND_STEEL",
+				},
+				{
+					Name = "E_ITEM_SIGN",
+				},
+				{
+					Name = "E_ITEM_GOLD_SWORD",
+				},
+				{
+					Name = "E_ITEM_MALL_DISC",
+				},
+				{
+					Name = "E_ITEM_DIAMOND_SHOVEL",
+				},
+				{
+					Name = "E_ITEM_GOLD",
+				},
+				{
+					Name = "E_ITEM_PRISMARINE_CRYSTALS",
+				},
+				{
+					Name = "E_ITEM_ACACIA_DOOR",
+				},
+				{
+					Name = "E_ITEM_COAL",
+				},
+				{
+					Name = "E_ITEM_EMPTY",
+				},
+				{
+					Name = "E_ITEM_IRON_LEGGINGS",
+				},
+				{
+					Name = "E_ITEM_LAST_DISC",
+				},
+				{
+					Name = "E_ITEM_CLAY_BRICK",
+				},
+				{
+					Name = "E_ITEM_IRON_SWORD",
+				},
+				{
+					Name = "E_ITEM_EGG",
+				},
+				{
+					Name = "E_ITEM_STEAK",
+				},
+				{
+					Name = "E_ITEM_MELON_SEEDS",
+				},
+				{
+					Name = "E_ITEM_WOODEN_DOOR",
+				},
+				{
+					Name = "E_ITEM_DIAMOND_LEGGINGS",
+				},
+				{
+					Name = "E_ITEM_WOODEN_HOE",
+				},
+				{
+					Name = "E_ITEM_SPAWN_EGG",
+				},
+				{
+					Name = "E_ITEM_DIAMOND_AXE",
+				},
+			},
+			MetaValues =
+			{
+				{
+					Name = "E_META_LEAVES_BIRCH",
+				},
+				{
+					Name = "E_META_QUARTZ_PILLAR",
+				},
+				{
+					Name = "E_META_PRESSURE_PLATE_DEPRESSED",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_PANE_LIGHTGRAY",
+				},
+				{
+					Name = "E_META_RAIL_ASCEND_ZM",
+				},
+				{
+					Name = "E_META_RED_SANDSTONE_ORNAMENT",
+				},
+				{
+					Name = "E_META_CHEST_FACING_ZP",
+				},
+				{
+					Name = "E_META_NEWLOG_ACACIA_UP_DOWN",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_MINECART_HOPPER",
+				},
+				{
+					Name = "E_META_STAINED_CLAY_PURPLE",
+				},
+				{
+					Name = "E_META_DIRT_GRASSLESS",
+				},
+				{
+					Name = "E_META_SAPLING_BIRCH",
+				},
+				{
+					Name = "E_META_PRISMARINE_BLOCK_BRICKS",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_EYE_OF_ENDER",
+				},
+				{
+					Name = "E_META_HOPPER_FACING_XM",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_COW",
+				},
+				{
+					Name = "E_META_STONE_SLAB_BRICK",
+				},
+				{
+					Name = "E_META_WOOL_WHITE",
+				},
+				{
+					Name = "E_META_LOG_SPRUCE_X",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_PINK",
+				},
+				{
+					Name = "E_META_SAPLING_DARK_OAK",
+				},
+				{
+					Name = "E_META_SAPLING_ACACIA",
+				},
+				{
+					Name = "E_META_HEAD_PLAYER",
+				},
+				{
+					Name = "E_META_BANNER_GRAY",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_MINECART_SPAWNER",
+				},
+				{
+					Name = "E_META_WOOL_YELLOW",
+				},
+				{
+					Name = "E_META_BIG_FLOWER_LILAC",
+				},
+				{
+					Name = "E_META_LOG_BIRCH",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_WITHER_SKULL",
+				},
+				{
+					Name = "E_META_CARPET_PINK",
+				},
+				{
+					Name = "E_META_TORCH_NORTH",
+				},
+				{
+					Name = "E_META_TORCH_FLOOR",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_PAINTING",
+				},
+				{
+					Name = "E_META_WOODEN_DOUBLE_SLAB_ACACIA",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_OCELOT",
+				},
+				{
+					Name = "E_META_STONE_BRICK_CRACKED",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_SPLASH_POTION",
+				},
+				{
+					Name = "E_META_BANNER_GREEN",
+				},
+				{
+					Name = "E_META_DROPSPENSER_FACING_YM",
+				},
+				{
+					Name = "E_META_STONE_POLISHED_GRANITE",
+				},
+				{
+					Name = "E_META_TALL_GRASS_GRASS",
+				},
+				{
+					Name = "E_META_LEAVES_JUNGLE",
+				},
+				{
+					Name = "E_META_BANNER_CYAN",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_PANE_LIGHTGREEN",
+				},
+				{
+					Name = "E_META_CARPET_BLACK",
+				},
+				{
+					Name = "E_META_FLOWER_ORANGE_TULIP",
+				},
+				{
+					Name = "E_META_STAINED_CLAY_MAGENTA",
+				},
+				{
+					Name = "E_META_RAIL_CURVED_ZM_XP",
+				},
+				{
+					Name = "E_META_STONE_BRICK_MOSSY",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_PRIMED_TNT",
+				},
+				{
+					Name = "E_META_DYE_WHITE",
+				},
+				{
+					Name = "E_META_NEWLOG_ACACIA_BARK_ONLY",
+				},
+				{
+					Name = "E_META_WOOL_GREEN",
+				},
+				{
+					Name = "E_META_HOPPER_FACING_ZP",
+				},
+				{
+					Name = "E_META_STONE_SLAB_NETHER_BRICK",
+				},
+				{
+					Name = "E_META_LOG_SPRUCE_BARK_ONLY",
+				},
+				{
+					Name = "E_META_LOG_JUNGLE_X",
+				},
+				{
+					Name = "E_META_DROPSPENSER_FACING_YP",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_PANE_CYAN",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_SMALL_FIREBALL",
+				},
+				{
+					Name = "E_META_SNOW_LAYER_SEVEN",
+				},
+				{
+					Name = "E_META_STAINED_CLAY_BLACK",
+				},
+				{
+					Name = "E_META_WOODEN_DOUBLE_SLAB_BIRCH",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_BLUE",
+				},
+				{
+					Name = "E_META_WOODEN_SLAB_BIRCH",
+				},
+				{
+					Name = "E_META_TORCH_XM",
+				},
+				{
+					Name = "E_META_HEAD_ZOMBIE",
+				},
+				{
+					Name = "E_META_PLANKS_SPRUCE",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_GRAY",
+				},
+				{
+					Name = "E_META_LOG_JUNGLE_UP_DOWN",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_LEASH_KNOT",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_MINECART_FURNACE",
+				},
+				{
+					Name = "E_META_LEAVES_APPLE_NO_DECAY",
+				},
+				{
+					Name = "E_META_CARPET_LIGHTGRAY",
+				},
+				{
+					Name = "E_META_TRACKS_Z",
+				},
+				{
+					Name = "E_META_FLOWER_WHITE_TULIP",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_PANE_LIGHTBLUE",
+				},
+				{
+					Name = "E_META_SNOW_LAYER_ONE",
+				},
+				{
+					Name = "E_META_RAIL_ASCEND_ZP",
+				},
+				{
+					Name = "E_META_CARPET_BROWN",
+				},
+				{
+					Name = "E_META_PLANKS_OAK",
+				},
+				{
+					Name = "E_META_TRACKS_X",
+				},
+				{
+					Name = "E_META_FLOWER_PINK_TULIP",
+				},
+				{
+					Name = "E_META_DYE_LIGHTGRAY",
+				},
+				{
+					Name = "E_META_NEWLOG_ACACIA_X",
+				},
+				{
+					Name = "E_META_RAIL_XM_XP",
+				},
+				{
+					Name = "E_META_WOODEN_DOUBLE_SLAB_DARK_OAK",
+				},
+				{
+					Name = "E_META_DOUBLE_STONE_SLAB_BRICK",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_ENDER_PEARL",
+				},
+				{
+					Name = "E_META_STONE_DIORITE",
+				},
+				{
+					Name = "E_META_PISTON_DOWN",
+				},
+				{
+					Name = "E_META_CARPET_MAGENTA",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_PANE_PURPLE",
+				},
+				{
+					Name = "E_META_NEW_LOG_DARK_OAK_WOOD",
+				},
+				{
+					Name = "E_META_WOOL_GRAY",
+				},
+				{
+					Name = "E_META_RAIL_CURVED_ZP_XM",
+				},
+				{
+					Name = "E_META_HEAD_SKELETON",
+				},
+				{
+					Name = "E_META_TORCH_ZM",
+				},
+				{
+					Name = "E_META_NEWLOG_ACACIA_Z",
+				},
+				{
+					Name = "E_META_HOPPER_UNATTACHED",
+				},
+				{
+					Name = "E_META_WOODEN_SLAB_JUNGLE",
+				},
+				{
+					Name = "E_META_SILVERFISH_EGG_STONE_BRICK",
+				},
+				{
+					Name = "E_META_SAPLING_CONIFER",
+				},
+				{
+					Name = "E_META_STONE_POLISHED_DIORITE",
+				},
+				{
+					Name = "E_META_DOUBLE_STONE_SLAB_SMOOTH_SANDSTONE",
+				},
+				{
+					Name = "E_META_PISTON_XP",
+				},
+				{
+					Name = "E_META_CARPET_CYAN",
+				},
+				{
+					Name = "E_META_WOOL_MAGENTA",
+				},
+				{
+					Name = "E_META_WOOL_LIGHTGRAY",
+				},
+				{
+					Name = "E_META_SAPLING_JUNGLE",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_PANE_GRAY",
+				},
+				{
+					Name = "E_META_WOOL_ORANGE",
+				},
+				{
+					Name = "E_META_FLOWER_RED_TULIP",
+				},
+				{
+					Name = "E_META_TALL_GRASS_DEAD_SHRUB",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_GHAST",
+				},
+				{
+					Name = "E_META_WOODEN_SLAB_UPSIDE_DOWN",
+				},
+				{
+					Name = "E_META_STONE_BRICK_ORNAMENT",
+				},
+				{
+					Name = "E_META_STONE_SLAB_PLANKS",
+				},
+				{
+					Name = "E_META_SNOW_LAYER_TWO",
+				},
+				{
+					Name = "E_META_COAL_NORMAL",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_VILLAGER",
+				},
+				{
+					Name = "E_META_DYE_PINK",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_PANE_BROWN",
+				},
+				{
+					Name = "E_META_NEWLEAVES_DARK_OAK_NO_DECAY",
+				},
+				{
+					Name = "E_META_DOUBLE_STONE_SLAB_SMOOTH_STONE",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_RABBIT",
+				},
+				{
+					Name = "E_META_SAND_RED",
+				},
+				{
+					Name = "E_META_CARPET_ORANGE",
+				},
+				{
+					Name = "E_META_FLOWER_POPPY",
+				},
+				{
+					Name = "E_META_PRISMARINE_BLOCK_DARK",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_WITHER",
+				},
+				{
+					Name = "E_META_LEAVES_JUNGLE_CHECK_DECAY",
+				},
+				{
+					Name = "E_META_NEWLOG_DARK_OAK_UP_DOWN",
+				},
+				{
+					Name = "E_META_SAPLING_APPLE",
+				},
+				{
+					Name = "E_META_NEWLOG_DARK_OAK_X",
+				},
+				{
+					Name = "E_META_LOG_BIRCH_Z",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_LIGHTGREEN",
+				},
+				{
+					Name = "E_META_WOODEN_DOUBLE_SLAB_SPRUCE",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_SPIDER",
+				},
+				{
+					Name = "E_META_PISTON_ZP",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_RED",
+				},
+				{
+					Name = "E_META_WOODEN_SLAB_OAK",
+				},
+				{
+					Name = "E_META_DOUBLE_STONE_SLAB_WOODEN",
+				},
+				{
+					Name = "E_META_DROPSPENSER_FACING_XP",
+				},
+				{
+					Name = "E_META_LOG_CONIFER",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_MOOSHROOM",
+				},
+				{
+					Name = "E_META_STONE_GRANITE",
+				},
+				{
+					Name = "E_META_STONE_SLAB_STONE",
+				},
+				{
+					Name = "E_META_STAINED_CLAY_PINK",
+				},
+				{
+					Name = "E_META_TORCH_XP",
+				},
+				{
+					Name = "E_META_BIG_FLOWER_ROSE_BUSH",
+				},
+				{
+					Name = "E_META_TORCH_SOUTH",
+				},
+				{
+					Name = "E_META_STONE_SLAB_STONE_BRICK",
+				},
+				{
+					Name = "E_META_LOG_JUNGLE_Z",
+				},
+				{
+					Name = "E_META_CARPET_YELLOW",
+				},
+				{
+					Name = "E_META_SNOW_LAYER_EIGHT",
+				},
+				{
+					Name = "E_META_LOG_SPRUCE_UP_DOWN",
+				},
+				{
+					Name = "E_META_JUKEBOX_OFF",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_ITEM_FRAME",
+				},
+				{
+					Name = "E_META_DIRT_NORMAL",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_PANE_RED",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_PURPLE",
+				},
+				{
+					Name = "E_META_RAIL_CURVED_ZM_XM",
+				},
+				{
+					Name = "E_META_CARPET_PURPLE",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_SKELETON",
+				},
+				{
+					Name = "E_META_WOODEN_SLAB_SPRUCE",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_FALLING_BLOCK",
+				},
+				{
+					Name = "E_META_CARPET_RED",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_LIGHTGRAY",
+				},
+				{
+					Name = "E_META_LOG_APPLE",
+				},
+				{
+					Name = "E_META_PRESSURE_PLATE_RAISED",
+				},
+				{
+					Name = "E_META_CHEST_FACING_XM",
+				},
+				{
+					Name = "E_META_RAW_FISH_PUFFERFISH",
+				},
+				{
+					Name = "E_META_DYE_MAGENTA",
+				},
+				{
+					Name = "E_META_STAINED_CLAY_RED",
+				},
+				{
+					Name = "E_META_WOODEN_DOUBLE_SLAB_OAK",
+				},
+				{
+					Name = "E_META_FLOWER_ALLIUM",
+				},
+				{
+					Name = "E_META_PISTON_U",
+				},
+				{
+					Name = "E_META_STAINED_CLAY_LIGHTBLUE",
+				},
+				{
+					Name = "E_META_WOODEN_DOUBLE_SLAB_JUNGLE",
+				},
+				{
+					Name = "E_META_WOODEN_SLAB_ACACIA",
+				},
+				{
+					Name = "E_META_CARPET_GRAY",
+				},
+				{
+					Name = "E_META_HEAD_CREEPER",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_ENDER_CRYSTAL",
+				},
+				{
+					Name = "E_META_STONE_SLAB_COBBLESTONE",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_GREEN",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_PANE_MAGENTA",
+				},
+				{
+					Name = "E_META_DIRT_COARSE",
+				},
+				{
+					Name = "E_META_GOLDEN_APPLE_ENCHANTED",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_CYAN",
+				},
+				{
+					Name = "E_META_DROPSPENSER_FACING_ZP",
+				},
+				{
+					Name = "E_META_SANDSTONE_ORNAMENT",
+				},
+				{
+					Name = "E_META_RED_SANDSTONE_SMOOTH",
+				},
+				{
+					Name = "E_META_BREWING_STAND_FILLED_SLOT_XP",
+				},
+				{
+					Name = "E_META_DYE_GREEN",
+				},
+				{
+					Name = "E_META_WOOL_PINK",
+				},
+				{
+					Name = "E_META_BANNER_BLUE",
+				},
+				{
+					Name = "E_META_BANNER_LIGHTBLUE",
+				},
+				{
+					Name = "E_META_WOOL_BLUE",
+				},
+				{
+					Name = "E_META_PLANKS_ACACIA",
+				},
+				{
+					Name = "E_META_DOUBLE_STONE_SLAB_STONE_BRICK",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_FIREBALL",
+				},
+				{
+					Name = "E_META_RED_SANDSTONE_NORMAL",
+				},
+				{
+					Name = "E_META_STONE_ANDESITE",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_MAGMA_CUBE",
+				},
+				{
+					Name = "E_META_STAINED_CLAY_ORANGE",
+				},
+				{
+					Name = "E_META_HEAD_WITHER",
+				},
+				{
+					Name = "E_META_BREWING_STAND_FILLED_SLOT_XM_ZP",
+				},
+				{
+					Name = "E_META_LOG_SPRUCE_Z",
+				},
+				{
+					Name = "E_META_CHEST_FACING_ZM",
+				},
+				{
+					Name = "E_META_STAINED_CLAY_CYAN",
+				},
+				{
+					Name = "E_META_NEWLEAVES_ACACIA",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_SNOWBALL",
+				},
+				{
+					Name = "E_META_TORCH_EAST",
+				},
+				{
+					Name = "E_META_WOODEN_SLAB_DARK_OAK",
+				},
+				{
+					Name = "E_META_DYE_BROWN",
+				},
+				{
+					Name = "E_META_DOUBLE_STONE_SLAB_NETHER_BRICK",
+				},
+				{
+					Name = "E_META_SNOW_LAYER_SIX",
+				},
+				{
+					Name = "E_META_DYE_BLACK",
+				},
+				{
+					Name = "E_META_WOOL_LIGHTBLUE",
+				},
+				{
+					Name = "E_META_WOOL_CYAN",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_CAVE_SPIDER",
+				},
+				{
+					Name = "E_META_LOG_OAK_Z",
+				},
+				{
+					Name = "E_META_DOUBLE_STONE_SLAB_STONE",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_ENDERMAN",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_GUARDIAN",
+				},
+				{
+					Name = "E_META_BANNER_LIGHTGRAY",
+				},
+				{
+					Name = "E_META_BANNER_LIGHTGREEN",
+				},
+				{
+					Name = "E_META_DOUBLE_STONE_SLAB_TILE_QUARTZ",
+				},
+				{
+					Name = "E_META_JUKEBOX_ON",
+				},
+				{
+					Name = "E_META_DYE_YELLOW",
+				},
+				{
+					Name = "E_META_DYE_LIGHTBLUE",
+				},
+				{
+					Name = "E_META_CARPET_GREEN",
+				},
+				{
+					Name = "E_META_DROPSPENSER_FACING_XM",
+				},
+				{
+					Name = "E_META_HOPPER_FACING_YM",
+				},
+				{
+					Name = "E_META_HOPPER_FACING_ZM",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_ZOMBIE",
+				},
+				{
+					Name = "E_META_LEAVES_CONIFER_CHECK_DECAY",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_SNOW_GOLEM",
+				},
+				{
+					Name = "E_META_SANDSTONE_SMOOTH",
+				},
+				{
+					Name = "E_META_BIG_FLOWER_LARGE_FERN",
+				},
+				{
+					Name = "E_META_DROPSPENSER_FACING_MASK",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_EXP_BOTTLE",
+				},
+				{
+					Name = "E_META_SAND_NORMAL",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_SILVERFISH",
+				},
+				{
+					Name = "E_META_LEAVES_APPLE_CHECK_DECAY",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_PANE_GREEN",
+				},
+				{
+					Name = "E_META_PISTON_XM",
+				},
+				{
+					Name = "E_META_PLANKS_JUNGLE",
+				},
+				{
+					Name = "E_META_STAINED_CLAY_GRAY",
+				},
+				{
+					Name = "E_META_PLANKS_DARK_OAK",
+				},
+				{
+					Name = "E_META_SANDSTONE_NORMAL",
+				},
+				{
+					Name = "E_META_SNOW_LAYER_FIVE",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_WOLF",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_CHICKEN",
+				},
+				{
+					Name = "E_META_STAINED_CLAY_GREEN",
+				},
+				{
+					Name = "E_META_STAINED_CLAY_LIGHTGREEN",
+				},
+				{
+					Name = "E_META_STAINED_CLAY_BROWN",
+				},
+				{
+					Name = "E_META_STAINED_CLAY_LIGHTGRAY",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_PICKUP",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_WHITE",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_MAGENTA",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_PANE_ORANGE",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_PANE_YELLOW",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_PANE_BLUE",
+				},
+				{
+					Name = "E_META_STONE_STONE",
+				},
+				{
+					Name = "E_META_PLANKS_BIRCH",
+				},
+				{
+					Name = "E_META_STONE_POLISHED_ANDESITE",
+				},
+				{
+					Name = "E_META_TORCH_WEST",
+				},
+				{
+					Name = "E_META_COOKED_FISH_FISH",
+				},
+				{
+					Name = "E_META_LOG_BIRCH_X",
+				},
+				{
+					Name = "E_META_CARPET_LIGHTGREEN",
+				},
+				{
+					Name = "E_META_WOOL_LIGHTGREEN",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_IRON_GOLEM",
+				},
+				{
+					Name = "E_META_RAIL_ASCEND_XP",
+				},
+				{
+					Name = "E_META_PISTON_HEAD_STICKY",
+				},
+				{
+					Name = "E_META_NEWLEAVES_ACACIA_CHECK_DECAY",
+				},
+				{
+					Name = "E_META_WOOL_BROWN",
+				},
+				{
+					Name = "E_META_PISTON_ZM",
+				},
+				{
+					Name = "E_META_BANNER_BROWN",
+				},
+				{
+					Name = "E_META_BANNER_YELLOW",
+				},
+				{
+					Name = "E_META_TALL_GRASS_BIOME",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_ORANGE",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_MINECART_CHEST",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_BOAT",
+				},
+				{
+					Name = "E_META_DOUBLE_STONE_SLAB_COBBLESTONE",
+				},
+				{
+					Name = "E_META_LOG_OAK_X",
+				},
+				{
+					Name = "E_META_BANNER_ORANGE",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_FIREWORK",
+				},
+				{
+					Name = "E_META_DYE_RED",
+				},
+				{
+					Name = "E_META_LOG_BIRCH_BARK_ONLY",
+				},
+				{
+					Name = "E_META_QUARTZ_CHISELLED",
+				},
+				{
+					Name = "E_META_LEAVES_JUNGLE_NO_DECAY",
+				},
+				{
+					Name = "E_META_STAINED_CLAY_BLUE",
+				},
+				{
+					Name = "E_META_DYE_PURPLE",
+				},
+				{
+					Name = "E_META_BANNER_BLACK",
+				},
+				{
+					Name = "E_META_DYE_CYAN",
+				},
+				{
+					Name = "E_META_HOPPER_FACING_XP",
+				},
+				{
+					Name = "E_META_LEAVES_CONIFER_NO_DECAY",
+				},
+				{
+					Name = "E_META_NEWLEAVES_DARK_OAK_CHECK_DECAY",
+				},
+				{
+					Name = "E_META_DYE_GRAY",
+				},
+				{
+					Name = "E_META_BIG_FLOWER_DOUBLE_TALL_GRASS",
+				},
+				{
+					Name = "E_META_DYE_LIGHTGREEN",
+				},
+				{
+					Name = "E_META_LEAVES_BIRCH_CHECK_DECAY",
+				},
+				{
+					Name = "E_META_SILVERFISH_EGG_STONE",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_EXPERIENCE_ORB",
+				},
+				{
+					Name = "E_META_GOLDEN_APPLE_NORMAL",
+				},
+				{
+					Name = "E_META_BANNER_PURPLE",
+				},
+				{
+					Name = "E_META_SILVERFISH_EGG_COBBLESTONE",
+				},
+				{
+					Name = "E_META_TORCH_ZP",
+				},
+				{
+					Name = "E_META_STONE_SLAB_QUARTZ",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_ZOMBIE_PIGMAN",
+				},
+				{
+					Name = "E_META_LEAVES_CONIFER",
+				},
+				{
+					Name = "E_META_WOOL_PURPLE",
+				},
+				{
+					Name = "E_META_RAW_FISH_CLOWNFISH",
+				},
+				{
+					Name = "E_META_CARPET_BLUE",
+				},
+				{
+					Name = "E_META_TALL_GRASS_FERN",
+				},
+				{
+					Name = "E_META_WOOL_BLACK",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_WITCH",
+				},
+				{
+					Name = "E_META_CARPET_LIGHTBLUE",
+				},
+				{
+					Name = "E_META_LEAVES_APPLE",
+				},
+				{
+					Name = "E_META_DOUBLE_STONE_SLAB_SANDSTON",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_ENDER_DRAGON",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_BROWN",
+				},
+				{
+					Name = "E_META_BANNER_WHITE",
+				},
+				{
+					Name = "E_META_DOUBLE_STONE_SLAB_QUARTZ",
+				},
+				{
+					Name = "E_META_DIRT_PODZOL",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_BLACK",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_ARROW",
+				},
+				{
+					Name = "E_META_BANNER_RED",
+				},
+				{
+					Name = "E_META_BIG_FLOWER_SUNFLOWER",
+				},
+				{
+					Name = "E_META_LOG_JUNGLE_BARK_ONLY",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_PANE_BLACK",
+				},
+				{
+					Name = "E_META_COOKED_FISH_SALMON",
+				},
+				{
+					Name = "E_META_RAIL_ASCEND_XM",
+				},
+				{
+					Name = "E_META_RAIL_CURVED_ZP_XP",
+				},
+				{
+					Name = "E_META_LOG_JUNGLE",
+				},
+				{
+					Name = "E_META_PRISMARINE_BLOCK_ROUGH",
+				},
+				{
+					Name = "E_META_CHEST_FACING_XP",
+				},
+				{
+					Name = "E_META_QUARTZ_NORMAL",
+				},
+				{
+					Name = "E_META_SNOW_LAYER_THREE",
+				},
+				{
+					Name = "E_META_LOG_BIRCH_UP_DOWN",
+				},
+				{
+					Name = "E_META_RAW_FISH_SALMON",
+				},
+				{
+					Name = "E_META_LOG_OAK_BARK_ONLY",
+				},
+				{
+					Name = "E_META_STONE_SLAB_SANDSTONE",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_MINECART",
+				},
+				{
+					Name = "E_META_RAW_FISH_FISH",
+				},
+				{
+					Name = "E_META_FLOWER_OXEYE_DAISY",
+				},
+				{
+					Name = "E_META_NEWLOG_DARK_OAK_BARK_ONLY",
+				},
+				{
+					Name = "E_META_STONE_BRICK_NORMAL",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_YELLOW",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_MINECART_TNT",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_BLAZE",
+				},
+				{
+					Name = "E_META_DYE_BLUE",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_CREEPER",
+				},
+				{
+					Name = "E_META_DYE_ORANGE",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_SLIME",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_GIANT",
+				},
+				{
+					Name = "E_META_NEW_LOG_ACACIA_WOOD",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_BAT",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_SHEEP",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_SQUID",
+				},
+				{
+					Name = "E_META_BANNER_MAGENTA",
+				},
+				{
+					Name = "E_META_WOOL_RED",
+				},
+				{
+					Name = "E_META_RAIL_ZM_ZP",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_LIGHTBLUE",
+				},
+				{
+					Name = "E_META_PISTON_EXTENDED",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_PANE_WHITE",
+				},
+				{
+					Name = "E_META_BREWING_STAND_FILLED_SLOT_XM_ZM",
+				},
+				{
+					Name = "E_META_STAINED_GLASS_PANE_PINK",
+				},
+				{
+					Name = "E_META_NEWLOG_DARK_OAK_Z",
+				},
+				{
+					Name = "E_META_NEWLEAVES_DARK_OAK",
+				},
+				{
+					Name = "E_META_DROPSPENSER_ACTIVATED",
+				},
+				{
+					Name = "E_META_SNOW_LAYER_FOUR",
+				},
+				{
+					Name = "E_META_LEAVES_BIRCH_NO_DECAY",
+				},
+				{
+					Name = "E_META_LOG_OAK_UP_DOWN",
+				},
+				{
+					Name = "E_META_BIG_FLOWER_PEONY",
+				},
+				{
+					Name = "E_META_BANNER_PINK",
+				},
+				{
+					Name = "E_META_FLOWER_BLUE_ORCHID",
+				},
+				{
+					Name = "E_META_DROPSPENSER_FACING_ZM",
+				},
+				{
+					Name = "E_META_CARPET_WHITE",
+				},
+				{
+					Name = "E_META_COAL_CHARCOAL",
+				},
+				{
+					Name = "E_META_STAINED_CLAY_YELLOW",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_PIG",
+				},
+				{
+					Name = "E_META_NEWLEAVES_ACACIA_NO_DECAY",
+				},
+				{
+					Name = "E_META_STAINED_CLAY_WHITE",
+				},
+				{
+					Name = "E_META_SPAWN_EGG_HORSE",
+				},
+			},
+			eBlockFace =
+			{
+				{
+					Name = "BLOCK_FACE_SOUTH",
+				},
+				{
+					Name = "BLOCK_FACE_NORTH",
+				},
+				{
+					Name = "BLOCK_FACE_YP",
+				},
+				{
+					Name = "BLOCK_FACE_EAST",
+				},
+				{
+					Name = "BLOCK_FACE_XM",
+				},
+				{
+					Name = "BLOCK_FACE_TOP",
+				},
+				{
+					Name = "BLOCK_FACE_XP",
+				},
+				{
+					Name = "BLOCK_FACE_ZP",
+				},
+				{
+					Name = "BLOCK_FACE_WEST",
+				},
+				{
+					Name = "BLOCK_FACE_NONE",
+				},
+				{
+					Name = "BLOCK_FACE_MIN",
+				},
+				{
+					Name = "BLOCK_FACE_ZM",
+				},
+				{
+					Name = "BLOCK_FACE_BOTTOM",
+				},
+				{
+					Name = "BLOCK_FACE_YM",
+				},
+				{
+					Name = "BLOCK_FACE_MAX",
+				},
+			},
+			eBlockType =
+			{
+				{
+					Name = "E_BLOCK_GOLD_BLOCK",
+				},
+				{
+					Name = "E_BLOCK_JACK_O_LANTERN",
+				},
+				{
+					Name = "E_BLOCK_SUGARCANE",
+				},
+				{
+					Name = "E_BLOCK_JUNGLE_DOOR",
+				},
+				{
+					Name = "E_BLOCK_COBBLESTONE",
+				},
+				{
+					Name = "E_BLOCK_WATER",
+				},
+				{
+					Name = "E_BLOCK_PRISMARINE_BLOCK",
+				},
+				{
+					Name = "E_BLOCK_NEW_LEAVES",
+				},
+				{
+					Name = "E_BLOCK_DARK_OAK_WOOD_STAIRS",
+				},
+				{
+					Name = "E_BLOCK_GLOWSTONE",
+				},
+				{
+					Name = "E_BLOCK_SANDSTONE",
+				},
+				{
+					Name = "E_BLOCK_GRAVEL",
+				},
+				{
+					Name = "E_BLOCK_OAK_WOOD_STAIRS",
+				},
+				{
+					Name = "E_BLOCK_NUMBER_OF_TYPES",
+				},
+				{
+					Name = "E_BLOCK_TRAPPED_CHEST",
+				},
+				{
+					Name = "E_BLOCK_COMMAND_BLOCK",
+				},
+				{
+					Name = "E_BLOCK_LAPIS_ORE",
+				},
+				{
+					Name = "E_BLOCK_END_PORTAL_FRAME",
+				},
+				{
+					Name = "E_BLOCK_BED",
+				},
+				{
+					Name = "E_BLOCK_ENDER_CHEST",
+				},
+				{
+					Name = "E_BLOCK_STONE",
+				},
+				{
+					Name = "E_BLOCK_CARROTS",
+				},
+				{
+					Name = "E_BLOCK_DEAD_BUSH",
+				},
+				{
+					Name = "E_BLOCK_REDSTONE_ORE_GLOWING",
+				},
+				{
+					Name = "E_BLOCK_BED_BED_HEAD",
+				},
+				{
+					Name = "E_BLOCK_BUTTON_ZP",
+				},
+				{
+					Name = "E_BLOCK_WOODEN_PRESSURE_PLATE",
+				},
+				{
+					Name = "E_BLOCK_STAIRS_XM",
+				},
+				{
+					Name = "E_BLOCK_BUTTON_XP",
+				},
+				{
+					Name = "E_BLOCK_CARPET",
+				},
+				{
+					Name = "E_BLOCK_LIT_FURNACE",
+				},
+				{
+					Name = "E_BLOCK_RED_MUSHROOM",
+				},
+				{
+					Name = "E_BLOCK_DAYLIGHT_SENSOR",
+				},
+				{
+					Name = "E_BLOCK_BROWN_MUSHROOM",
+				},
+				{
+					Name = "E_BLOCK_STONE_BRICKS",
+				},
+				{
+					Name = "E_BLOCK_MINECART_TRACKS",
+				},
+				{
+					Name = "E_BLOCK_RED_SANDSTONE_SLAB",
+				},
+				{
+					Name = "E_BLOCK_NETHER_QUARTZ_ORE",
+				},
+				{
+					Name = "E_BLOCK_CROPS",
+				},
+				{
+					Name = "E_BLOCK_NETHER_WART",
+				},
+				{
+					Name = "E_BLOCK_DARK_OAK_FENCE_GATE",
+				},
+				{
+					Name = "E_BLOCK_REDSTONE_ORE",
+				},
+				{
+					Name = "E_BLOCK_SLIME_BLOCK",
+				},
+				{
+					Name = "E_BLOCK_SPONGE",
+				},
+				{
+					Name = "E_BLOCK_TALL_GRASS",
+				},
+				{
+					Name = "E_BLOCK_FENCE_GATE",
+				},
+				{
+					Name = "E_BLOCK_HEAVY_WEIGHTED_PRESSURE_PLATE",
+				},
+				{
+					Name = "E_BLOCK_CAULDRON",
+				},
+				{
+					Name = "E_BLOCK_ACACIA_DOOR",
+				},
+				{
+					Name = "E_BLOCK_PISTON_EXTENSION",
+				},
+				{
+					Name = "E_BLOCK_LIGHT_WEIGHTED_PRESSURE_PLATE",
+				},
+				{
+					Name = "E_BLOCK_DOUBLE_WOODEN_SLAB",
+				},
+				{
+					Name = "E_BLOCK_HAY_BALE",
+				},
+				{
+					Name = "E_BLOCK_CRAFTING_TABLE",
+				},
+				{
+					Name = "E_BLOCK_REDSTONE_LAMP_ON",
+				},
+				{
+					Name = "E_BLOCK_AIR",
+				},
+				{
+					Name = "E_BLOCK_STONE_BUTTON",
+				},
+				{
+					Name = "E_BLOCK_BURNING_FURNACE",
+				},
+				{
+					Name = "E_BLOCK_GLASS",
+				},
+				{
+					Name = "E_BLOCK_HEAD",
+				},
+				{
+					Name = "E_BLOCK_STICKY_PISTON",
+				},
+				{
+					Name = "E_BLOCK_TNT",
+				},
+				{
+					Name = "E_BLOCK_REDSTONE_TORCH_OFF",
+				},
+				{
+					Name = "E_BLOCK_BED_XP",
+				},
+				{
+					Name = "E_BLOCK_FENCE",
+				},
+				{
+					Name = "E_BLOCK_GRASS",
+				},
+				{
+					Name = "E_BLOCK_BRICK",
+				},
+				{
+					Name = "E_BLOCK_CHEST",
+				},
+				{
+					Name = "E_BLOCK_RED_SANDSTONE_STAIRS",
+				},
+				{
+					Name = "E_BLOCK_DIAMOND_BLOCK",
+				},
+				{
+					Name = "E_BLOCK_BIRCH_FENCE",
+				},
+				{
+					Name = "E_BLOCK_BARRIER",
+				},
+				{
+					Name = "E_BLOCK_BED_OCCUPIED",
+				},
+				{
+					Name = "E_BLOCK_BOOKCASE",
+				},
+				{
+					Name = "E_BLOCK_DARK_OAK_FENCE",
+				},
+				{
+					Name = "E_BLOCK_WALL_BANNER",
+				},
+				{
+					Name = "E_BLOCK_PUMPKIN_STEM",
+				},
+				{
+					Name = "E_BLOCK_BED_ZM",
+				},
+				{
+					Name = "E_BLOCK_EMERALD_BLOCK",
+				},
+				{
+					Name = "E_BLOCK_FLOWER_POT",
+				},
+				{
+					Name = "E_BLOCK_BUTTON_PRESSED",
+				},
+				{
+					Name = "E_BLOCK_COBBLESTONE_STAIRS",
+				},
+				{
+					Name = "E_BLOCK_LEVER",
+				},
+				{
+					Name = "E_BLOCK_BIG_FLOWER",
+				},
+				{
+					Name = "E_BLOCK_PUMPKIN",
+				},
+				{
+					Name = "E_BLOCK_JUNGLE_FENCE_GATE",
+				},
+				{
+					Name = "E_BLOCK_END_PORTAL",
+				},
+				{
+					Name = "E_BLOCK_DARK_OAK_DOOR",
+				},
+				{
+					Name = "E_BLOCK_DANDELION",
+				},
+				{
+					Name = "E_BLOCK_TRIPWIRE_HOOK",
+				},
+				{
+					Name = "E_BLOCK_WOODEN_DOOR",
+				},
+				{
+					Name = "E_BLOCK_ANVIL_HIGH_DAMAGE",
+				},
+				{
+					Name = "E_BLOCK_COBBLESTONE_WALL",
+				},
+				{
+					Name = "E_BLOCK_RED_SANDSTONE",
+				},
+				{
+					Name = "E_BLOCK_YELLOW_FLOWER",
+				},
+				{
+					Name = "E_BLOCK_PISTON_MOVED_BLOCK",
+				},
+				{
+					Name = "E_BLOCK_BIRCH_DOOR",
+				},
+				{
+					Name = "E_BLOCK_BREWING_STAND",
+				},
+				{
+					Name = "E_BLOCK_EMERALD_ORE",
+				},
+				{
+					Name = "E_BLOCK_CLAY",
+				},
+				{
+					Name = "E_BLOCK_ACACIA_WOOD_STAIRS",
+				},
+				{
+					Name = "E_BLOCK_VINES",
+				},
+				{
+					Name = "E_BLOCK_BIRCH_FENCE_GATE",
+				},
+				{
+					Name = "E_BLOCK_SANDSTONE_STAIRS",
+				},
+				{
+					Name = "E_BLOCK_SPRUCE_FENCE_GATE",
+				},
+				{
+					Name = "E_BLOCK_GOLD_ORE",
+				},
+				{
+					Name = "E_BLOCK_HUGE_RED_MUSHROOM",
+				},
+				{
+					Name = "E_BLOCK_QUARTZ_STAIRS",
+				},
+				{
+					Name = "E_BLOCK_STAIRS_UPSIDE_DOWN",
+				},
+				{
+					Name = "E_BLOCK_ANVIL_X",
+				},
+				{
+					Name = "E_BLOCK_STONE_PRESSURE_PLATE",
+				},
+				{
+					Name = "E_BLOCK_STAIRS_ZM",
+				},
+				{
+					Name = "E_BLOCK_POWERED_RAIL",
+				},
+				{
+					Name = "E_BLOCK_STAINED_GLASS",
+				},
+				{
+					Name = "E_BLOCK_BEACON",
+				},
+				{
+					Name = "E_BLOCK_WOODEN_STAIRS",
+				},
+				{
+					Name = "E_BLOCK_LOG",
+				},
+				{
+					Name = "E_BLOCK_SPRUCE_FENCE",
+				},
+				{
+					Name = "E_BLOCK_DOUBLE_STONE_SLAB",
+				},
+				{
+					Name = "E_BLOCK_BUTTON_ZM",
+				},
+				{
+					Name = "E_BLOCK_DISPENSER",
+				},
+				{
+					Name = "E_BLOCK_WOODEN_BUTTON",
+				},
+				{
+					Name = "E_BLOCK_STATIONARY_WATER",
+				},
+				{
+					Name = "E_BLOCK_JUNGLE_FENCE",
+				},
+				{
+					Name = "E_BLOCK_BEDROCK",
+				},
+				{
+					Name = "E_BLOCK_MOB_SPAWNER",
+				},
+				{
+					Name = "E_BLOCK_ANVIL_Z",
+				},
+				{
+					Name = "E_BLOCK_HOPPER",
+				},
+				{
+					Name = "E_BLOCK_BLOCK_OF_COAL",
+				},
+				{
+					Name = "E_BLOCK_DETECTOR_RAIL",
+				},
+				{
+					Name = "E_BLOCK_BED_XM",
+				},
+				{
+					Name = "E_BLOCK_INACTIVE_COMPARATOR",
+				},
+				{
+					Name = "E_BLOCK_QUARTZ_BLOCK",
+				},
+				{
+					Name = "E_BLOCK_SILVERFISH_EGG",
+				},
+				{
+					Name = "E_BLOCK_NETHER_BRICK",
+				},
+				{
+					Name = "E_BLOCK_IRON_ORE",
+				},
+				{
+					Name = "E_BLOCK_ANVIL_NO_DAMAGE",
+				},
+				{
+					Name = "E_BLOCK_HUGE_BROWN_MUSHROOM",
+				},
+				{
+					Name = "E_BLOCK_BUTTON_YP",
+				},
+				{
+					Name = "E_BLOCK_STANDING_BANNER",
+				},
+				{
+					Name = "E_BLOCK_WALLSIGN",
+				},
+				{
+					Name = "E_BLOCK_ENCHANTMENT_TABLE",
+				},
+				{
+					Name = "E_BLOCK_IRON_BARS",
+				},
+				{
+					Name = "E_BLOCK_MELON",
+				},
+				{
+					Name = "E_BLOCK_LADDER",
+				},
+				{
+					Name = "E_BLOCK_NEW_LOG",
+				},
+				{
+					Name = "E_BLOCK_MYCELIUM",
+				},
+				{
+					Name = "E_BLOCK_NETHER_BRICK_STAIRS",
+				},
+				{
+					Name = "E_BLOCK_STAIRS_ZP",
+				},
+				{
+					Name = "E_BLOCK_END_STONE",
+				},
+				{
+					Name = "E_BLOCK_ACTIVE_COMPARATOR",
+				},
+				{
+					Name = "E_BLOCK_ANVIL",
+				},
+				{
+					Name = "E_BLOCK_WOODEN_SLAB",
+				},
+				{
+					Name = "E_BLOCK_LAPIS_BLOCK",
+				},
+				{
+					Name = "E_BLOCK_ACACIA_FENCE_GATE",
+				},
+				{
+					Name = "E_BLOCK_ANVIL_LOW_DAMAGE",
+				},
+				{
+					Name = "E_BLOCK_ICE",
+				},
+				{
+					Name = "E_BLOCK_SIGN_POST",
+				},
+				{
+					Name = "E_BLOCK_JUKEBOX",
+				},
+				{
+					Name = "E_BLOCK_DOUBLE_RED_SANDSTONE_SLAB",
+				},
+				{
+					Name = "E_BLOCK_COCOA_POD",
+				},
+				{
+					Name = "E_BLOCK_RED_ROSE",
+				},
+				{
+					Name = "E_BLOCK_LILY_PAD",
+				},
+				{
+					Name = "E_BLOCK_TRAPDOOR",
+				},
+				{
+					Name = "E_BLOCK_PACKED_ICE",
+				},
+				{
+					Name = "E_BLOCK_INVERTED_DAYLIGHT_SENSOR",
+				},
+				{
+					Name = "E_BLOCK_LEAVES",
+				},
+				{
+					Name = "E_BLOCK_REDSTONE_REPEATER_ON",
+				},
+				{
+					Name = "E_BLOCK_REEDS",
+				},
+				{
+					Name = "E_BLOCK_BUTTON_YM",
+				},
+				{
+					Name = "E_BLOCK_SNOW",
+				},
+				{
+					Name = "E_BLOCK_STONE_SLAB",
+				},
+				{
+					Name = "E_BLOCK_REDSTONE_TORCH_ON",
+				},
+				{
+					Name = "E_BLOCK_POTATOES",
+				},
+				{
+					Name = "E_BLOCK_STAIRS_XP",
+				},
+				{
+					Name = "E_BLOCK_ACACIA_FENCE",
+				},
+				{
+					Name = "E_BLOCK_WORKBENCH",
+				},
+				{
+					Name = "E_BLOCK_FURNACE",
+				},
+				{
+					Name = "E_BLOCK_DIRT",
+				},
+				{
+					Name = "E_BLOCK_PISTON",
+				},
+				{
+					Name = "E_BLOCK_MAX_TYPE_ID",
+				},
+				{
+					Name = "E_BLOCK_STAINED_GLASS_PANE",
+				},
+				{
+					Name = "E_BLOCK_BLOCK_OF_REDSTONE",
+				},
+				{
+					Name = "E_BLOCK_NETHER_PORTAL",
+				},
+				{
+					Name = "E_BLOCK_DRAGON_EGG",
+				},
+				{
+					Name = "E_BLOCK_SNOW_BLOCK",
+				},
+				{
+					Name = "E_BLOCK_IRON_BLOCK",
+				},
+				{
+					Name = "E_BLOCK_PLANKS",
+				},
+				{
+					Name = "E_BLOCK_JUNGLE_WOOD_STAIRS",
+				},
+				{
+					Name = "E_BLOCK_SAND",
+				},
+				{
+					Name = "E_BLOCK_FARMLAND",
+				},
+				{
+					Name = "E_BLOCK_RAIL",
+				},
+				{
+					Name = "E_BLOCK_HARDENED_CLAY",
+				},
+				{
+					Name = "E_BLOCK_COBWEB",
+				},
+				{
+					Name = "E_BLOCK_MOSSY_COBBLESTONE",
+				},
+				{
+					Name = "E_BLOCK_IRON_DOOR",
+				},
+				{
+					Name = "E_BLOCK_SEA_LANTERN",
+				},
+				{
+					Name = "E_BLOCK_DIAMOND_ORE",
+				},
+				{
+					Name = "E_BLOCK_CACTUS",
+				},
+				{
+					Name = "E_BLOCK_SOULSAND",
+				},
+				{
+					Name = "E_BLOCK_REDSTONE_LAMP_OFF",
+				},
+				{
+					Name = "E_BLOCK_COAL_ORE",
+				},
+				{
+					Name = "E_BLOCK_STATIONARY_LAVA",
+				},
+				{
+					Name = "E_BLOCK_STAINED_CLAY",
+				},
+				{
+					Name = "E_BLOCK_FLOWER",
+				},
+				{
+					Name = "E_BLOCK_NOTE_BLOCK",
+				},
+				{
+					Name = "E_BLOCK_NETHERRACK",
+				},
+				{
+					Name = "E_BLOCK_TRIPWIRE",
+				},
+				{
+					Name = "E_BLOCK_BED_ZP",
+				},
+				{
+					Name = "E_BLOCK_CAKE",
+				},
+				{
+					Name = "E_BLOCK_BRICK_STAIRS",
+				},
+				{
+					Name = "E_BLOCK_NETHER_BRICK_FENCE",
+				},
+				{
+					Name = "E_BLOCK_WOOL",
+				},
+				{
+					Name = "E_BLOCK_DROPPER",
+				},
+				{
+					Name = "E_BLOCK_ACTIVATOR_RAIL",
+				},
+				{
+					Name = "E_BLOCK_FIRE",
+				},
+				{
+					Name = "E_BLOCK_MELON_STEM",
+				},
+				{
+					Name = "E_BLOCK_OAK_FENCE_GATE",
+				},
+				{
+					Name = "E_BLOCK_IRON_TRAPDOOR",
+				},
+				{
+					Name = "E_BLOCK_BIRCH_WOOD_STAIRS",
+				},
+				{
+					Name = "E_BLOCK_TORCH",
+				},
+				{
+					Name = "E_BLOCK_LAVA",
+				},
+				{
+					Name = "E_BLOCK_REDSTONE_REPEATER_OFF",
+				},
+				{
+					Name = "E_BLOCK_SPRUCE_WOOD_STAIRS",
+				},
+				{
+					Name = "E_BLOCK_SPRUCE_DOOR",
+				},
+				{
+					Name = "E_BLOCK_OAK_DOOR",
+				},
+				{
+					Name = "E_BLOCK_SAPLING",
+				},
+				{
+					Name = "E_BLOCK_REDSTONE_WIRE",
+				},
+				{
+					Name = "E_BLOCK_BUTTON_XM",
+				},
+				{
+					Name = "E_BLOCK_OBSIDIAN",
+				},
+				{
+					Name = "E_BLOCK_STONE_BRICK_STAIRS",
+				},
+				{
+					Name = "E_BLOCK_GLASS_PANE",
+				},
+			},
+			eClickAction =
+			{
+				{
+					Name = "caNumber6",
+				},
+				{
+					Name = "caDropKey",
+				},
+				{
+					Name = "caShiftRightClick",
+				},
+				{
+					Name = "caRightClick",
+				},
+				{
+					Name = "caLeftPaintProgress",
+				},
+				{
+					Name = "caNumber5",
+				},
+				{
+					Name = "caNumber7",
+				},
+				{
+					Name = "caNumber8",
+				},
+				{
+					Name = "caLeftClickOutside",
+				},
+				{
+					Name = "caRightClickOutside",
+				},
+				{
+					Name = "caNumber4",
+				},
+				{
+					Name = "caNumber3",
+				},
+				{
+					Name = "caLeftPaintEnd",
+				},
+				{
+					Name = "caDblClick",
+				},
+				{
+					Name = "caMiddleClick",
+				},
+				{
+					Name = "caLeftPaintBegin",
+				},
+				{
+					Name = "caRightClickOutsideHoldNothing",
+				},
+				{
+					Name = "caNumber1",
+				},
+				{
+					Name = "caRightPaintProgress",
+				},
+				{
+					Name = "caRightPaintEnd",
+				},
+				{
+					Name = "caLeftClickOutsideHoldNothing",
+				},
+				{
+					Name = "caUnknown",
+				},
+				{
+					Name = "caCtrlDropKey",
+				},
+				{
+					Name = "caNumber2",
+				},
+				{
+					Name = "caLeftClick",
+				},
+				{
+					Name = "caRightPaintBegin",
+				},
+				{
+					Name = "caShiftLeftClick",
+				},
+				{
+					Name = "caNumber9",
+				},
+			},
+			eDamageType =
+			{
+				{
+					Name = "dtMob",
+				},
+				{
+					Name = "dtDrown",
+				},
+				{
+					Name = "dtSuffocation",
+				},
+				{
+					Name = "dtLightning",
+				},
+				{
+					Name = "dtDrowning",
+				},
+				{
+					Name = "dtStarvation",
+				},
+				{
+					Name = "dtArrow",
+				},
+				{
+					Name = "dtFalling",
+				},
+				{
+					Name = "dtArrowAttack",
+				},
+				{
+					Name = "dtLavaContact",
+				},
+				{
+					Name = "dtPlugin",
+				},
+				{
+					Name = "dtRangedAttack",
+				},
+				{
+					Name = "dtCactus",
+				},
+				{
+					Name = "dtEnderPearl",
+				},
+				{
+					Name = "dtLava",
+				},
+				{
+					Name = "dtProjectile",
+				},
+				{
+					Name = "dtStarving",
+				},
+				{
+					Name = "dtInFire",
+				},
+				{
+					Name = "dtHunger",
+				},
+				{
+					Name = "dtAdmin",
+				},
+				{
+					Name = "dtCactusContact",
+				},
+				{
+					Name = "dtCacti",
+				},
+				{
+					Name = "dtWither",
+				},
+				{
+					Name = "dtCactuses",
+				},
+				{
+					Name = "dtPotionOfHarming",
+				},
+				{
+					Name = "dtBurning",
+				},
+				{
+					Name = "dtPoisoning",
+				},
+				{
+					Name = "dtExplosion",
+				},
+				{
+					Name = "dtInVoid",
+				},
+				{
+					Name = "dtPoison",
+				},
+				{
+					Name = "dtFall",
+				},
+				{
+					Name = "dtFireContact",
+				},
+				{
+					Name = "dtWithering",
+				},
+				{
+					Name = "dtSuffocating",
+				},
+				{
+					Name = "dtOnFire",
+				},
+				{
+					Name = "dtEntityAttack",
+				},
+				{
+					Name = "dtMobAttack",
+				},
+				{
+					Name = "dtAttack",
+				},
+				{
+					Name = "dtPawnAttack",
+				},
+			},
+			eDimension =
+			{
+				{
+					Name = "dimNotSet",
+				},
+				{
+					Name = "dimNether",
+				},
+				{
+					Name = "dimEnd",
+				},
+				{
+					Name = "dimOverworld",
+				},
+			},
+			eExplosionSource =
+			{
+				{
+					Name = "esWitherBirth",
+				},
+				{
+					Name = "esWitherSkull",
+				},
+				{
+					Name = "esOther",
+				},
+				{
+					Name = "esEnderCrystal",
+				},
+				{
+					Name = "esPrimedTNT",
+				},
+				{
+					Name = "esGhastFireball",
+				},
+				{
+					Name = "esBed",
+				},
+				{
+					Name = "esMax",
+				},
+				{
+					Name = "esPlugin",
+				},
+				{
+					Name = "esMonster",
+				},
+			},
+			eGameMode =
+			{
+				{
+					Name = "eGameMode_Adventure",
+				},
+				{
+					Name = "gmAdventure",
+				},
+				{
+					Name = "gmSpectator",
+				},
+				{
+					Name = "gmCreative",
+				},
+				{
+					Name = "eGameMode_Creative",
+				},
+				{
+					Name = "eGameMode_Spectator",
+				},
+				{
+					Name = "eGameMode_Survival",
+				},
+				{
+					Name = "gmSurvival",
+				},
+				{
+					Name = "gmMin",
+				},
+				{
+					Name = "eGameMode_NotSet",
+				},
+				{
+					Name = "gmMax",
+				},
+				{
+					Name = "gmNotSet",
+				},
+			},
+			eMessageType =
+			{
+				{
+					Name = "mtFatal",
+				},
+				{
+					Name = "mtCustom",
+				},
+				{
+					Name = "mtPM",
+				},
+				{
+					Name = "mtFailure",
+				},
+				{
+					Name = "mtFailure",
+				},
+				{
+					Name = "mtSuccess",
+				},
+				{
+					Name = "mtDeath",
+				},
+				{
+					Name = "mtPrivateMessage",
+				},
+				{
+					Name = "mtMaxPlusOne",
+				},
+				{
+					Name = "mtWarning",
+				},
+				{
+					Name = "mtJoin",
+				},
+				{
+					Name = "mtLeave",
+				},
+				{
+					Name = "mtInfo",
+				},
+				{
+					Name = "mtInformation",
+				},
+				{
+					Name = "mtInformation",
+				},
+				{
+					Name = "mtError",
+				},
+				{
+					Name = "mtFail",
+				},
+			},
+			eMobHeadRotation =
+			{
+				{
+					Name = "SKULL_ROTATION_SOUTH",
+				},
+				{
+					Name = "SKULL_ROTATION_SOUTH_EAST",
+				},
+				{
+					Name = "SKULL_ROTATION_WEST_SOUTH_WEST",
+				},
+				{
+					Name = "SKULL_ROTATION_SOUTH_WEST",
+				},
+				{
+					Name = "SKULL_ROTATION_SOUTH_SOUTH_WEST",
+				},
+				{
+					Name = "SKULL_ROTATION_NORTH_EAST",
+				},
+				{
+					Name = "SKULL_ROTATION_SOUTH_SOUTH_EAST",
+				},
+				{
+					Name = "SKULL_ROTATION_NORTH_NORTH_EAST",
+				},
+				{
+					Name = "SKULL_ROTATION_EAST_SOUTH_EAST",
+				},
+				{
+					Name = "SKULL_ROTATION_EAST_NORTH_EAST",
+				},
+				{
+					Name = "SKULL_ROTATION_EAST",
+				},
+				{
+					Name = "SKULL_ROTATION_WEST",
+				},
+				{
+					Name = "SKULL_ROTATION_WEST_NORTH_WEST",
+				},
+				{
+					Name = "SKULL_ROTATION_NORTH",
+				},
+				{
+					Name = "SKULL_ROTATION_NORTH_NORTH_WEST",
+				},
+				{
+					Name = "SKULL_ROTATION_NORTH_WEST",
+				},
+			},
+			eMobHeadType =
+			{
+				{
+					Name = "SKULL_TYPE_WITHER",
+				},
+				{
+					Name = "SKULL_TYPE_PLAYER",
+				},
+				{
+					Name = "SKULL_TYPE_CREEPER",
+				},
+				{
+					Name = "SKULL_TYPE_SKELETON",
+				},
+				{
+					Name = "SKULL_TYPE_ZOMBIE",
+				},
+			},
+			eMonsterType =
+			{
+				{
+					Name = "mtSlime",
+				},
+				{
+					Name = "mtSheep",
+				},
+				{
+					Name = "mtMagmaCube",
+				},
+				{
+					Name = "mtWolf",
+				},
+				{
+					Name = "mtWitch",
+				},
+				{
+					Name = "mtChicken",
+				},
+				{
+					Name = "mtInvalidType",
+				},
+				{
+					Name = "mtZombie",
+				},
+				{
+					Name = "mtMaxPlusOne",
+				},
+				{
+					Name = "mtEnderDragon",
+				},
+				{
+					Name = "mtGhast",
+				},
+				{
+					Name = "mtCreeper",
+				},
+				{
+					Name = "mtVillager",
+				},
+				{
+					Name = "mtBat",
+				},
+				{
+					Name = "mtMax",
+				},
+				{
+					Name = "mtZombiePigman",
+				},
+				{
+					Name = "mtZombiePigman",
+				},
+				{
+					Name = "mtSpider",
+				},
+				{
+					Name = "mtSkeleton",
+				},
+				{
+					Name = "mtPig",
+				},
+				{
+					Name = "mtOcelot",
+				},
+				{
+					Name = "mtGuardian",
+				},
+				{
+					Name = "mtCaveSpider",
+				},
+				{
+					Name = "mtWither",
+				},
+				{
+					Name = "mtSnowGolem",
+				},
+				{
+					Name = "mtBlaze",
+				},
+				{
+					Name = "mtEnderman",
+				},
+				{
+					Name = "mtRabbit",
+				},
+				{
+					Name = "mtSquid",
+				},
+				{
+					Name = "mtHorse",
+				},
+				{
+					Name = "mtGiant",
+				},
+				{
+					Name = "mtCow",
+				},
+				{
+					Name = "mtIronGolem",
+				},
+				{
+					Name = "mtMooshroom",
+				},
+				{
+					Name = "mtSilverfish",
+				},
+			},
+			eShrapnelLevel =
+			{
+				{
+					Name = "slNone",
+				},
+				{
+					Name = "slGravityAffectedOnly",
+				},
+				{
+					Name = "slAll",
+				},
+			},
+			eSpreadSource =
+			{
+				{
+					Name = "ssVineSpread",
+				},
+				{
+					Name = "ssMycelSpread",
+				},
+				{
+					Name = "ssMushroomSpread",
+				},
+				{
+					Name = "ssGrassSpread",
+				},
+				{
+					Name = "ssFireSpread",
+				},
+			},
+			eWeather =
+			{
+				{
+					Name = "wRain",
+				},
+				{
+					Name = "wSunny",
+				},
+				{
+					Name = "eWeather_ThunderStorm",
+				},
+				{
+					Name = "wThunderstorm",
+				},
+				{
+					Name = "eWeather_Rain",
+				},
+				{
+					Name = "eWeather_Sunny",
+				},
+				{
+					Name = "wStorm",
+				},
+			},
+		},
 		Functions =
 		{
 			AddFaceDirection =
@@ -15321,7 +18775,7 @@ return
 					{
 						{
 							Name = "BiomeType",
-							Type = "Globals#BiomeTypes",
+							Type = "Globals#EMCSBiome",
 						},
 					},
 				},
@@ -15340,7 +18794,7 @@ return
 					{
 						{
 							Name = "DamageType",
-							Type = "Globals#DamageType",
+							Type = "Globals#eDamageType",
 						},
 					},
 				},
@@ -15359,7 +18813,7 @@ return
 					{
 						{
 							Name = "Dimension",
-							Type = "Globals#WorldDimension",
+							Type = "Globals#eDimension",
 						},
 					},
 				},
@@ -15400,7 +18854,7 @@ return
 					{
 						{
 							Name = "MobType",
-							Type = "Globals#MobType",
+							Type = "eMonsterType",
 						},
 					},
 				},
