@@ -8,6 +8,12 @@
 
 return
 {
+	["<static> cCompositeChat:constructor()"] = function(a_Simulator, a_SelfClass)
+		local res = a_Simulator:createInstance({Type = "cCompositeChat"})
+		getmetatable(res).simulatorInternal_Parts = { }
+		return res
+	end,
+
 	["<static> cCompositeChat:constructor(string, eMessageType)"] = function(a_Simulator, a_SelfClass, a_Text, a_MessageType)
 		local res = a_Simulator:createInstance({Type = "cCompositeChat"})
 		getmetatable(res).simulatorInternal_Parts = { {text = a_Text} }
