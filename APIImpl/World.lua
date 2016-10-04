@@ -9,6 +9,6 @@
 return
 {
 	["cWorld:GetName()"] = function(a_Simulator, a_Self)
-		return rawget(a_Self, "simulatorInternal_Name") or a_Simulator:createInstance({Type = "string"})
+		return rawget(getmetatable(a_Self), "simulatorInternal_Name") or a_Simulator:createInstance({Type = "string"})
 	end
 }

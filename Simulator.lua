@@ -130,11 +130,23 @@ end
 --- Called by the simulator after calling the callback, when the GCObjects is specified in the options
 -- a_Params is an array-table of the params that were given to the callback
 -- a_Returns is an array-table of the return values that the callback returned
-function Simulator:afterCallGCObjects(a_Params, a_Returns)
+function Simulator:afterCallGCObjects(a_Request, a_Params, a_Returns)
 	self.logger:trace("afterCallGCObjects:")
 	self.logger:trace("\ta_Params = %s", tostring(a_Params))
 	self.logger:trace("\ta_Returns = %s", tostring(a_Returns))
-	-- TODO
+
+	-- Remove the references to the parameters:
+	for idx, param in ipairs(a_Params) do
+		if (type(param) == "userdata") then
+			a_Params[idx] = nil
+		end
+	end
+
+	-- Collect garbage, check if all the parameter references have been cleared:
+	collectgarbage()
+	for idx, t in pairs(a_Request.uncollectedParams) do
+		self.logger:error("Plugin has stored an instance of param #%d (%s) from callback %q for later reuse.", idx, t, a_Request.Notes)
+	end
 end
 
 
@@ -155,10 +167,30 @@ end
 
 --- Called by the simulator before calling the callback, when the GCObjects is specified in the options
 -- a_Params is an array-table of the params that are to be given to the callback
-function Simulator:beforeCallGCObjects(a_Params)
-	self.logger:trace("beforeCallGCObjects:")
-	self.logger:trace("\ta_Params = %s", tostring(a_Params))
-	-- TODO
+function Simulator:beforeCallGCObjects(a_Request, a_Params)
+	-- We need to create a duplicate of the parameters, because they might still be stored somewhere below on the stack
+	-- which would interfere with the GC
+	a_Request.ParamValues = self:duplicateInstances(a_Params)
+	a_Params = a_Request.ParamValues
+
+	-- Make note of all the parameters and whether they are GCed:
+	a_Request.uncollectedParams = {}
+	for idx, param in ipairs(a_Params) do
+		local t = type(param)
+		if (t == "userdata") then
+			local paramType = self:typeOf(param)
+			a_Request.uncollectedParams[idx] = paramType
+			local mt = getmetatable(param)
+			local oldGC = mt.__gc
+			mt.__gc = function(...)
+				self.logger:trace("GCing param #%d (%s) of request %p", idx, paramType, a_Request.Notes)
+				a_Request.uncollectedParams[idx] = nil
+				if (oldGC) then
+					oldGC(...)
+				end
+			end
+		end
+	end
 end
 
 
@@ -198,41 +230,40 @@ function Simulator:checkClassFunctionSignature(a_FnSignature, a_Params, a_NumPar
 	local paramOffset = 0
 	if (a_ClassName) then
 		paramOffset = 1
-		if (type(a_Params[1]) ~= "table") then
-			return false, "The \"self\" parameter is not a class (table)"
-		end
 		if (a_FnSignature.IsStatic) then
 			-- For a static function, the first param should be the class itself:
+			if (type(a_Params[1]) ~= "table") then
+				return false, "The \"self\" parameter is not a class (table)"
+			end
 			local mt = getmetatable(a_Params[1])
 			if not(mt) then
 				return false, "The \"self\" parameter is not a class (metatable)"
 			end
-			if not(rawget(mt, "simulatorInternal_ClassName")) then
+			if not(rawget(a_Params[1], "simulatorInternal_ClassName")) then
 				return false, "The \"self\" parameter is not a Cuberite class"
 			end
-			if not(self:classInheritsFrom(mt.simulatorInternal_ClassName, a_ClassName)) then
+			if not(self:classInheritsFrom(a_Params[1].simulatorInternal_ClassName, a_ClassName)) then
 				return false, string.format(
 					"The \"self\" parameter is a different class. Expected %s, got %s.",
-					a_ClassName, mt.simulatorInternal_ClassName
+					a_ClassName, a_Params[1].simulatorInternal_ClassName
 				)
 			end
 		else
 			-- For a non-static function, the first param should be an instance of the class:
-			local mt = getmetatable(a_Params[1])
-			if not(mt) then
-				return false, "The \"self\" parameter is not a class instance (metatable)"
+			if (type(a_Params[1]) ~= "userdata") then
+				return false, "The \"self\" parameter is not a class (userdatum)"
 			end
-			local classMT = getmetatable(mt)
+			local classMT = getmetatable(a_Params[1])
 			if not(classMT) then
 				return false, "The \"self\" parameter is not a class instance (class metatable)"
 			end
-			if not(rawget(classMT, "simulatorInternal_ClassName")) then
+			if not(rawget(classMT.__index, "simulatorInternal_ClassName")) then
 				return false, "The \"self\" parameter is not a Cuberite class instance"
 			end
-			if not(self:classInheritsFrom(classMT.simulatorInternal_ClassName, a_ClassName)) then
+			if not(self:classInheritsFrom(classMT.__index.simulatorInternal_ClassName, a_ClassName)) then
 				return false, string.format(
 					"The \"self\" parameter is a different class instance. Expected %s, got %s.",
-					a_ClassName, classMT.simulatorInternal_ClassName
+					a_ClassName, classMT.__index.simulatorInternal_ClassName
 				)
 			end
 		end
@@ -289,8 +320,7 @@ function Simulator:classInheritsFrom(a_ChildName, a_ParentName)
 		self.logger:warning("Attempting to check inheritance for non-existent class \"%s\".", a_ChildName)
 		return false
 	end
-	local childMT = getmetatable(childClass) or {}
-	local childApi = childMT.simulatorInternal_ClassApi or {}
+	local childApi = childClass.simulatorInternal_ClassApi or {}
 	for _, parent in ipairs(childApi.Inherits or {}) do
 		if (self:classInheritsFrom(parent, a_ParentName)) then
 			return true
@@ -374,7 +404,7 @@ function Simulator:connectPlayer(a_PlayerDesc)
 
 	-- Call the hooks to simulate the player joining:
 	local client = self:createInstance({Type = "cClientHandle"})
-	client.simulatorInternal_PlayerName = playerName
+	getmetatable(client).simulatorInternal_PlayerName = playerName
 	if (self:executeHookCallback("HOOK_LOGIN", client, PROTOCOL_NUMBER, playerName)) then
 		self.logger:trace("Plugin refused player \"%s\" to connect.", playerName)
 		self.players[playerName] = nil  -- Remove the player
@@ -490,8 +520,6 @@ function Simulator:createClass(a_ClassName, a_ClassApi)
 			end
 			return endpoint
 		end,
-		simulatorInternal_ClassName = a_ClassName,
-		simulatorInternal_ClassApi = a_ClassApi,
 	}
 
 	-- If the class has a constructor, add it to the meta-table, because it doesn't go through the __index meta-method:
@@ -535,6 +563,8 @@ function Simulator:createClass(a_ClassName, a_ClassApi)
 
 	setmetatable(res, mt)
 	self.sandbox[a_ClassName] = res  -- Store the class for the next time (needed at least for operator_eq)
+	res.simulatorInternal_ClassName = a_ClassName
+	res.simulatorInternal_ClassApi = a_ClassApi
 	return res
 end
 
@@ -642,14 +672,21 @@ function Simulator:createInstance(a_TypeDef)
 		return true
 	end
 
+	-- If it is a known enum, return a number:
+	local enumDef = self.enums[t]
+	if (enumDef) then
+		-- TODO: Choose a proper value for the enum
+		return 1
+	end
+
 	-- If it is a class param, create a class instance:
 	local classTable = self.sandbox[t]
 	if not(classTable) then
 		self.logger:error("Requested an unknown param type for callback request: \"%s\".", t)
 	end
 	self.logger:trace("Created a new instance of %s", t)
-	local res = {}
-	setmetatable(res, classTable)
+	local res = newproxy(true)
+	getmetatable(res).__index = classTable
 	assert(classTable.__index == classTable)
 	return res
 end
@@ -709,7 +746,7 @@ function Simulator:createNewWorld(a_WorldDesc)
 
 	-- Call the hooks for the world creation:
 	local world = self:createInstance({Type = "cWorld"})
-	world.simulatorInternal_worldName = worldName
+	getmetatable(world).simulatorInternal_worldName = worldName
 	self:executeHookCallback("HOOK_WORLD_STARTED", world)
 end
 
@@ -731,6 +768,47 @@ function Simulator:dofile(a_FileName)
 	end
 	setfenv(res, self.sandbox)
 	return res()
+end
+
+
+
+
+
+--- Creates a duplicate of each given instance
+-- a_Instance is any instance
+-- Returns a copy of a_Instance
+-- Note that tables are not duplicated, they are returned as-is instead
+function Simulator:duplicateInstance(a_Instance)
+	local t = type(a_Instance)
+	if (t == "table") then
+		-- Do NOT duplicate tables
+		return a_Instance
+	elseif (t == "userdata") then
+		local res = newproxy(true)
+		local mt = getmetatable(res)
+		for k, v in pairs(getmetatable(a_Instance) or {}) do
+			mt[k] = v
+		end
+		return res
+	else
+		-- All the other types are value-types, no need to duplicate
+		return a_Instance
+	end
+end
+
+
+
+
+
+--- Creates a duplicate of each given instance
+-- a_Instances is an array-table of any instances
+-- Returns an array-table of copies of a_Instances
+function Simulator:duplicateInstances(a_Instances)
+	local res = {}
+	for k, v in pairs(a_Instances) do
+		res[k] = self:duplicateInstance(v)
+	end
+	return res
 end
 
 
@@ -928,7 +1006,7 @@ function Simulator:getPlayerByName(a_PlayerName)
 
 	-- Create a new instance and bind it:
 	local player = self:createInstance({Type = "cPlayer"})
-	player.simulatorInternal_Name = a_PlayerName
+	getmetatable(player).simulatorInternal_Name = a_PlayerName
 	return player
 end
 
@@ -945,7 +1023,7 @@ function Simulator:initializePlugin()
 	local res = self:processCallbackRequest(
 		{
 			Function = self.sandbox.Initialize,
-			Params = { self.sandbox.cPluginManager:Get():GetCurrentPlugin() },
+			ParamValues = { self.sandbox.cPluginManager:Get():GetCurrentPlugin() },
 			Notes = "Initialize()",
 		}
 	)
@@ -1001,6 +1079,7 @@ function Simulator:injectApi(a_ApiDesc)
 	end
 	for enumName, enumValues in pairs(a_ApiDesc.Globals.Enums or {}) do
 		self.enums[enumName] = enumValues
+		self.enums["Globals#" .. enumName] = enumValues  -- Store under Globals#eEnum too
 	end
 end
 
@@ -1176,14 +1255,14 @@ function Simulator:processCallbackRequest(a_Request)
 	self:callHooks(self.hooks.onBeginRound, a_Request)
 
 	-- Prepare the params:
-	local params = a_Request.ParamValues or self:createInstances(a_Request.ParamTypes or {})
-	self:callHooks(self.hooks.onBeforeCallCallback, a_Request, params)
+	a_Request.ParamValues = a_Request.ParamValues or self:createInstances(a_Request.ParamTypes or {})
+	self:callHooks(self.hooks.onBeforeCallCallback, a_Request, a_Request.ParamValues)
 
 	-- Call the callback:
-	local returns = { a_Request.Function(unpack(params)) }
+	local returns = { a_Request.Function(unpack(a_Request.ParamValues)) }
 
 	-- Process the returned values and finalize the params:
-	self:callHooks(self.hooks.onAfterCallCallback, a_Request, params, returns)
+	self:callHooks(self.hooks.onAfterCallCallback, a_Request, a_Request.ParamValues, returns)
 
 	self:callHooks(self.hooks.onEndRound, a_Request)
 	return returns
@@ -1312,32 +1391,38 @@ function Simulator:typeOf(a_Object)
 	assert(getmetatable(self) == Simulator)
 
 	local t = type(a_Object)
-	if (t ~= "table") then
-		-- Basic Lua type
-		return t
-	end
-
-	-- Check whether the object is a Cuberite class or class instance:
-	local mt = getmetatable(a_Object)
-	if not(mt) then
-		-- Basic Lua table
+	if (t == "userdata") then
+		-- Check whether the object is a Cuberite class instance:
+		local mt = getmetatable(a_Object)
+		if not(mt) then
+			-- Basic Lua userdatum
+			return "userdata"
+		end
+		if (rawget(mt.__index, "simulatorInternal_ClassName")) then
+			-- Cuberite class instance
+			return mt.__index.simulatorInternal_ClassName
+		end
+		return "userdata"
+	elseif (t == "table") then
+		-- Check whether the object is a Cuberite class:
+		local mt = getmetatable(a_Object)
+		if not(mt) then
+			-- Basic Lua table:
+			return "table"
+		end
+		local mtmt = mt.__index
+		if not(mtmt) then
+			-- Basic Lua table (with a metatable)
+			return "table"
+		end
+		if (rawget(mtmt, "simulatorInternal_ClassName")) then
+			-- Cuberite class instance
+			return mtmt.simulatorInternal_ClassName
+		end
+		-- Basic Lua table:
 		return "table"
 	end
-	if (rawget(mt, "simulatorInternal_ClassName")) then
-		-- Cuberite class
-		return mt.simulatorInternal_ClassName
-	end
-	local mtmt = getmetatable(mt)
-	if not(mtmt) then
-		-- Basic Lua table (with a metatable)
-		return "table"
-	end
-	if (rawget(mtmt, "simulatorInternal_ClassName")) then
-		-- Cuberite class instance
-		return mtmt.simulatorInternal_ClassName
-	end
-	-- Basic Lua table (with dual metatable)
-	return "table"
+	return t
 end
 
 

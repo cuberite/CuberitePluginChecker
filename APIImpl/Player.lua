@@ -9,14 +9,14 @@
 return
 {
 	["cPlayer:GetName()"] = function(a_Simulator, a_Self)
-		return rawget(a_Self, "simulatorInternal_Name") or a_Simulator:createInstance({Type = "string"})
+		return rawget(getmetatable(a_Self), "simulatorInternal_Name") or a_Simulator:createInstance({Type = "string"})
 	end,
 
 	["cEntity:GetWorld()"] = function(a_Simulator, a_Self)
 		local res = a_Simulator:createInstance({Type = "cWorld"})
-		local playerName = rawget(a_Self, "simulatorInternal_Name")
+		local playerName = rawget(getmetatable(a_Self), "simulatorInternal_Name")
 		if (playerName) then
-			res.simulatorInternal_Name = a_Simulator.players[playerName].worldName
+			getmetatable(res).simulatorInternal_Name = a_Simulator.players[playerName].worldName
 		end
 		return res
 	end,

@@ -43,7 +43,7 @@ return
 	["cPluginManager:GetCurrentPlugin()"] = function (a_Simulator, a_Self)
 		local res = a_Simulator:createInstance({Type = "cPluginLua"})
 		-- Override the plugin to act as "self":
-		res.GetLocalFolder = function(a_Self)
+		getmetatable(res).__index.GetLocalFolder = function(a_Self)
 			if not(a_Self == res) then
 				error("Bad cPlugin:GetLocalFolder() usage, the first parameter is not \"self\".")
 			end

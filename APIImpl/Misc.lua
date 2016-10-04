@@ -37,7 +37,7 @@ return
 	["cRoot:ForEachWorld(function)"] = function(a_Simulator, a_Root, a_Callback)
 		for worldName, _ in pairs(a_Simulator.worlds) do
 			local world = a_Simulator:createInstance({Type = "cWorld"})
-			world.simulatorInternal_Name = worldName
+			getmetatable(world).simulatorInternal_Name = worldName
 			a_Callback(world)
 		end
 	end,
