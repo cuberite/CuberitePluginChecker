@@ -41,7 +41,7 @@ return
 	["cPluginManager:BindCommand(string, string, function, string)"] = BindCommand,
 
 	["cPluginManager:GetCurrentPlugin()"] = function (a_Simulator, a_Self)
-		local res = a_Simulator:createInstance({Type = "cPlugin"})
+		local res = a_Simulator:createInstance({Type = "cPluginLua"})
 		-- Override the plugin to act as "self":
 		res.GetLocalFolder = function(a_Self)
 			if not(a_Self == res) then
