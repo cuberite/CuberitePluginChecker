@@ -284,11 +284,13 @@ function Simulator:checkClassFunctionSignature(a_FnSignature, a_Params, a_NumPar
 			return false, string.format("There are more parameters (%d) than in the signature (%d)", a_NumParams - paramOffset, idx - paramOffset - 1)
 		end
 		local param = a_Params[idx]
-		local paramType = self:typeOf(param)
-		if not(self:paramTypesMatch(paramType, signatureParam.Type)) then
-			return false, string.format("Param #%d doesn't match, expected %s, got %s",
-				idx - paramOffset, signatureParam.Type, paramType
-			)
+		if ((param ~= nil) or not(signatureParam.IsOptional)) then  -- Optional param always matches a nil
+			local paramType = self:typeOf(param)
+			if not(self:paramTypesMatch(paramType, signatureParam.Type)) then
+				return false, string.format("Param #%d doesn't match, expected %s, got %s",
+					idx - paramOffset, signatureParam.Type, paramType
+				)
+			end
 		end
 	end
 
@@ -692,7 +694,7 @@ function Simulator:createInstance(a_TypeDef)
 	-- If it is a class param, create a class instance:
 	local classTable = self.sandbox[t]
 	if not(classTable) then
-		self.logger:error(1, "Requested an unknown param type for callback request: \"%s\".", t)
+		self.logger:error(2, "Requested an unknown param type for callback request: \"%s\".", t)
 	end
 	self.logger:trace("Created a new instance of %s", t)
 	local res = newproxy(true)
@@ -1183,7 +1185,10 @@ end
 
 --- Compares the type of a parameter to the type in the signature
 -- Returns true if the param type is compatible with the signature
--- Compatibility is either being equal, or the ParamType being a number and SignatureType being an enum
+-- Compatibility is:
+--  - both are exactly equal
+--  - ParamType is a number and SignatureType being an enum
+--  - ParamType is nil and SignatureType is a class
 function Simulator:paramTypesMatch(a_ParamType, a_SignatureType)
 	-- Check params:
 	assert(type(a_ParamType) == "string")
@@ -1195,9 +1200,14 @@ function Simulator:paramTypesMatch(a_ParamType, a_SignatureType)
 		return true
 	end
 
-	-- If the types are equal, return "compatible":
+	-- If the types are exactly equal, return "compatible":
 	if (a_ParamType == a_SignatureType) then
 		return true
+	end
+
+	-- If the param is nil, it is compatible with any class:
+	if (a_ParamType == "nil") then
+		return not(not(self.sandbox[a_SignatureType]))
 	end
 
 	-- If the signature says an enum and the param is a number, return "compatible":
@@ -1224,8 +1234,21 @@ function Simulator:prettyPrintSignature(a_Signature)
 	assert(type(a_Signature.Params) == "table")
 	assert(type(a_Signature.Returns) == "table")
 
+	-- Output the qualifiers:
+	local res = ""
+	local qualifiers = {}
+	if (a_Signature.IsStatic) then
+		qualifiers[1] = "static"
+	end
+	if (a_Signature.IsGlobal) then
+		qualifiers[#qualifiers + 1] = "global"
+	end
+	if (qualifiers[1]) then
+		res = "<" .. table.concat(qualifiers, ", ") .. "> "
+	end
+
 	-- Output the params:
-	local res = "("
+	res = res .. "("
 	for idx, param in ipairs(a_Signature.Params) do
 		if (idx > 1) then
 			res = res .. ", "
