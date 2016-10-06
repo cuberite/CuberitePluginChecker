@@ -678,6 +678,8 @@ function Simulator:createInstance(a_TypeDef)
 		return self.testNumber
 	elseif (t == "boolean") then
 		return true
+	elseif (t == "table") then
+		return { "testTable", testTable = "testTable" }
 	end
 
 	-- If it is a known enum, return a number:
@@ -695,7 +697,7 @@ function Simulator:createInstance(a_TypeDef)
 	self.logger:trace("Created a new instance of %s", t)
 	local res = newproxy(true)
 	getmetatable(res).__index = classTable
-	assert(classTable.__index == classTable)
+	assert(classTable.__index == classTable, string.format("Class %s is not properly injected", t))
 	return res
 end
 
