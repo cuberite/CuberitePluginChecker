@@ -26,7 +26,7 @@ local simulator = Simulator.create(options, logger)
 local api = ApiLoader.load(options, logger)
 simulator:injectApi(api)
 simulator:run(options)
-logger:trace("Simulator has finished running")
+logger:info("Simulator has finished running")
 
 
 

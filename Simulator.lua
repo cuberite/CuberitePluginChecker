@@ -131,9 +131,9 @@ end
 -- a_Params is an array-table of the params that were given to the callback
 -- a_Returns is an array-table of the return values that the callback returned
 function Simulator:afterCallGCObjects(a_Request, a_Params, a_Returns)
-	self.logger:trace("afterCallGCObjects:")
-	self.logger:trace("\ta_Params = %s", tostring(a_Params))
-	self.logger:trace("\ta_Returns = %s", tostring(a_Returns))
+	-- Check params:
+	assert(self)
+	assert(a_Params)
 
 	-- Remove the references to the parameters:
 	for idx, param in ipairs(a_Params) do
