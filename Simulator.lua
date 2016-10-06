@@ -116,11 +116,20 @@ end
 --- Called by the simulator after calling the callback, when the ClearObjects is specified in the options
 -- a_Params is an array-table of the params that were given to the callback
 -- a_Returns is an array-table of the return values that the callback returned
-function Simulator:afterCallClearObjects(a_Params, a_Returns)
-	self.logger:trace("afterCallClearObjects:")
-	self.logger:trace("\ta_Params = %s", tostring(a_Params))
-	self.logger:trace("\ta_Returns = %s", tostring(a_Returns))
-	-- TODO
+function Simulator:afterCallClearObjects(a_Request, a_Params, a_Returns)
+	-- Check params:
+	assert(self)
+	assert(a_Params)
+
+	-- Change the objects in parameters so that any access to them results in an error:
+	local requestNotes = a_Request.Notes
+	for idx, param in ipairs(a_Params) do
+		if (type(param) == "userdata") then
+			getmetatable(param).__index = function()
+				self.logger:error(3, "Attempting to use an object that has been stored from a callback %q.", requestNotes)
+			end
+		end
+	end
 end
 
 
@@ -145,7 +154,7 @@ function Simulator:afterCallGCObjects(a_Request, a_Params, a_Returns)
 	-- Collect garbage, check if all the parameter references have been cleared:
 	collectgarbage()
 	for idx, t in pairs(a_Request.uncollectedParams) do
-		self.logger:error("Plugin has stored an instance of param #%d (%s) from callback %q for later reuse.", idx, t, a_Request.Notes)
+		self.logger:error(1, "Plugin has stored an instance of param #%d (%s) from callback %q for later reuse.", idx, t, a_Request.Notes)
 	end
 end
 
@@ -154,11 +163,10 @@ end
 
 
 --- Called by the simulator after calling the callback, when the ClearObjects is specified in the options
+-- a_Request is a table describing the entire callback request
 -- a_Params is an array-table of the params that are to be given to the callback
-function Simulator:beforeCallClearObjects(a_Params)
-	self.logger:trace("beforeCallClearObjects:")
-	self.logger:trace("\ta_Params = %s", tostring(a_Params))
-	-- TODO
+function Simulator:beforeCallClearObjects(a_Request, a_Params)
+	-- Nothing needed
 end
 
 
@@ -516,7 +524,7 @@ function Simulator:createClass(a_ClassName, a_ClassApi)
 			self.logger:trace("Creating an API endpoint \"%s.%s\".", a_ClassName, a_SymbolName)
 			local endpoint = self:createApiEndpoint(a_ClassApi, a_SymbolName, a_ClassName)
 			if not(endpoint) then
-				self.logger:error("Attempting to use a non-existent API: \"%s.%s\".", a_ClassName, a_SymbolName)
+				self.logger:error(3, "Attempting to use a non-existent API: \"%s.%s\".", a_ClassName, a_SymbolName)
 			end
 			return endpoint
 		end,
@@ -528,7 +536,7 @@ function Simulator:createClass(a_ClassName, a_ClassApi)
 			self.logger:trace("Creating constructor for class %s.", a_ClassName)
 			local endpoint = self:createApiEndpoint(a_ClassApi, "new", a_ClassName)
 			if not(endpoint) then
-				self.logger:error("Attempting to use a constructor for class %s that doesn't have one.", a_ClassName)
+				self.logger:error(3, "Attempting to use a constructor for class %s that doesn't have one.", a_ClassName)
 			end
 			return endpoint(...)
 		end
@@ -538,7 +546,7 @@ function Simulator:createClass(a_ClassName, a_ClassApi)
 			self.logger:trace("Creating constructor for class %s.", a_ClassName)
 			local endpoint = self:createApiEndpoint(a_ClassApi, "constructor", a_ClassName)
 			if not(endpoint) then
-				self.logger:error("Attempting to use a constructor for class %s that doesn't have one.", a_ClassName)
+				self.logger:error(3, "Attempting to use a constructor for class %s that doesn't have one.", a_ClassName)
 			end
 			return endpoint(...)
 		end
@@ -554,7 +562,7 @@ function Simulator:createClass(a_ClassName, a_ClassApi)
 				self.logger:trace("Creating %s for class %s", op.logName, a_ClassName)
 				local endpoint = self:createApiEndpoint(a_ClassApi, op.docName, a_ClassName)
 				if not(endpoint) then
-					self.logger:error("Attempting to use %s for class %s that doesn't have one.", op.logName, a_ClassName)
+					self.logger:error(3, "Attempting to use %s for class %s that doesn't have one.", op.logName, a_ClassName)
 				end
 				return endpoint(...)
 			end
@@ -588,7 +596,7 @@ function Simulator:createClassConstant(a_ConstDesc, a_ConstName, a_ClassName)
 
 	-- Synthesize a dummy value of the proper type:
 	if not(a_ConstDesc.Type) then
-		self.logger:error("Simulator error: API description for constant %s.%s doesn't provide value nor type", a_ClassName, a_ConstName)
+		self.logger:error(1, "Simulator error: API description for constant %s.%s doesn't provide value nor type", a_ClassName, a_ConstName)
 	end
 	return self:createInstance(a_ConstDesc)
 end
@@ -632,7 +640,7 @@ function Simulator:createClassFunction(a_FnDesc, a_FnName, a_ClassName)
 		self:callHooks(self.hooks.onApiFunctionCall, a_ClassName, a_FnName, params)
 		local signature, msgs = self:findClassFunctionSignatureFromParams(a_FnDesc, params, a_ClassName)
 		if not(signature) then
-			self.logger:error(
+			self.logger:error(2,
 				"Function %s.%s used with wrong parameters, there is no overload that can take these:\n\t%s\nMatcher messages:\n\t%s",
 				a_ClassName, a_FnName,
 				table.concat(self:listParamTypes(params), "\n\t"),
@@ -682,7 +690,7 @@ function Simulator:createInstance(a_TypeDef)
 	-- If it is a class param, create a class instance:
 	local classTable = self.sandbox[t]
 	if not(classTable) then
-		self.logger:error("Requested an unknown param type for callback request: \"%s\".", t)
+		self.logger:error(1, "Requested an unknown param type for callback request: \"%s\".", t)
 	end
 	self.logger:trace("Created a new instance of %s", t)
 	local res = newproxy(true)
@@ -732,7 +740,7 @@ function Simulator:createNewWorld(a_WorldDesc)
 	-- Check if such a world already present:
 	local worldName = a_WorldDesc.name
 	if (self.worlds[worldName]) then
-		self.logger:error("Cannot create world, a world with name \"%s\" already exists.", worldName)
+		self.logger:error(2, "Cannot create world, a world with name \"%s\" already exists.", worldName)
 	end
 
 	-- Create the world:
@@ -764,7 +772,7 @@ function Simulator:dofile(a_FileName)
 	self.logger:trace("Executing file \"%s\".", a_FileName)
 	local res, msg = loadfile(a_FileName)
 	if not(res) then
-		self.logger:error("Error while executing file \"%s\": %s", a_FileName, msg)
+		self.logger:error(3, "Error while executing file \"%s\": %s", a_FileName, msg)
 	end
 	setfenv(res, self.sandbox)
 	return res()
@@ -1028,7 +1036,7 @@ function Simulator:initializePlugin()
 		}
 	)
 	if not(res[1]) then
-		self.logger:error("The plugin initialization failed")
+		self.logger:error(2, "The plugin initialization failed")
 	end
 end
 
@@ -1485,7 +1493,7 @@ local function createSimulator(a_Options, a_Logger)
 				difftime = os.difftime,
 				execute = os.execute,
 				exit = function(...)
-					res.logger:error("The os.exit() function should never be used in a Cuberite plugin!")
+					res.logger:error(2, "The os.exit() function should never be used in a Cuberite plugin!")
 				end,
 				getenv = os.getenv,
 				remove = function(a_FileName, ...)

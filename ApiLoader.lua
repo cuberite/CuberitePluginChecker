@@ -225,7 +225,7 @@ local function setApiImplementation(a_Api, a_FnFullName, a_Fn, a_Logger)
 		apiFnDesc = a_Api.Globals.Functions[functionName]
 	end
 	if not(apiFnDesc) then
-		a_Logger:error("Cannot add custom implementation for function \"%s\", it is not present in the API at all.",
+		a_Logger:error(1, "Cannot add custom implementation for function \"%s\", it is not present in the API at all.",
 			a_FnFullName
 		)
 	end
@@ -263,7 +263,7 @@ local function setApiImplementation(a_Api, a_FnFullName, a_Fn, a_Logger)
 		end
 		s[idxS] = props .. fnName .. "(" .. table.concat(params, ", ") .. ")"
 	end
-	a_Logger:error("Cannot add custom implementation for function \"%s\", such a parameter combination is not present in the API. Available signatures:\n\t%s",
+	a_Logger:error(1, "Cannot add custom implementation for function \"%s\", such a parameter combination is not present in the API. Available signatures:\n\t%s",
 		a_FnFullName, table.concat(s, "\n\t")
 	)
 end
@@ -327,7 +327,7 @@ local function loadAutoApi(a_Options, a_Api, a_Logger)
 	local fileListFNam = apiPath .. "/_files.lua"
 	local isSuccess, fileList = pcall(dofile, fileListFNam)
 	if not(isSuccess) then
-		a_Logger:error("Failed to load the AutoAPI filelist from file %s: %s",
+		a_Logger:error(1, "Failed to load the AutoAPI filelist from file %s: %s",
 			fileListFNam, tostring(fileList)
 		)
 	end

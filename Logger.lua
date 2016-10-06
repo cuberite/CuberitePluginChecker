@@ -71,10 +71,13 @@ end
 
 --- Logs the message with an ERROR level and calls global "error" with the same message
 -- Usually this terminates the program
-function Logger:error(...)
+function Logger:error(a_Level, a_Fmt, ...)
 	assert(self)
-	self:log(Logger.ERROR, ...)
-	error(string.format(...), 2)
+	assert(type(a_Level) == "number")
+	assert(type(a_Fmt) == "string")
+
+	self:log(Logger.ERROR, a_Fmt, ...)
+	error(string.format(a_Fmt, ...), a_Level)
 end
 
 
