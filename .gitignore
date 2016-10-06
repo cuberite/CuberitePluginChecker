@@ -3,3 +3,4 @@ AutoAPI/
 *.sqlite
 tests/ManualAPI header.txt
 tests/updateManualAPI.cmd
+tests/CommandLines.txt
