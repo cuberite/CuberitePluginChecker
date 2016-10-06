@@ -640,7 +640,7 @@ function Simulator:createClassFunction(a_FnDesc, a_FnName, a_ClassName)
 		self:callHooks(self.hooks.onApiFunctionCall, a_ClassName, a_FnName, params)
 		local signature, msgs = self:findClassFunctionSignatureFromParams(a_FnDesc, params, a_ClassName)
 		if not(signature) then
-			self.logger:error(2,
+			self.logger:error(3,
 				"Function %s.%s used with wrong parameters, there is no overload that can take these:\n\t%s\nMatcher messages:\n\t%s",
 				a_ClassName, a_FnName,
 				table.concat(self:listParamTypes(params), "\n\t"),
