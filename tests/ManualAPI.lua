@@ -5487,6 +5487,21 @@ return
 							},
 						},
 					},
+					{
+						Params =
+						{
+							{
+								Name = "CallbackFn",
+								Type = "function",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "boolean",
+							},
+						},
+					},
 				},
 				GetAllPlugins =
 				{
@@ -7658,10 +7673,12 @@ return
 								Type = "table",
 							},
 							{
+								IsOptional = true,
 								Name = "OnChunkAvailable",
 								Type = "function",
 							},
 							{
+								IsOptional = true,
 								Name = "OnAllChunksAvailable",
 								Type = "function",
 							},

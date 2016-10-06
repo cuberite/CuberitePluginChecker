@@ -67,6 +67,7 @@ local g_CTypeToLuaType =
 	float = "number",
 	ForEachChunkProvider = "cWorld",
 	int = "number",
+	long = "number",
 	size_t = "number",
 	unsigned = "number",
 	["const AString"] = "string",
