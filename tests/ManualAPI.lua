@@ -5657,6 +5657,7 @@ return
 				AddGroup =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -5669,6 +5670,7 @@ return
 				AddGroupToRank =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -5691,6 +5693,7 @@ return
 				AddPermissionToGroup =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -5713,6 +5716,7 @@ return
 				AddRank =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -5734,9 +5738,39 @@ return
 						},
 					},
 				},
+				AddRestrictionToGroup =
+				{
+					{
+						IsStatic = true,
+						Params =
+						{
+							{
+								Name = "Permission",
+								Type = "string",
+							},
+							{
+								Name = "GroupName",
+								Type = "string",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "boolean",
+							},
+						},
+					},
+				},
+				ClearPlayerRanks =
+				{
+					{
+						IsStatic = true,
+					},
+				},
 				GetAllGroups =
 				{
 					{
+						IsStatic = true,
 						Returns =
 						{
 							{
@@ -5748,6 +5782,19 @@ return
 				GetAllPermissions =
 				{
 					{
+						IsStatic = true,
+						Returns =
+						{
+							{
+								Type = "table",
+							},
+						},
+					},
+				},
+				GetAllPermissionsRestrictions =
+				{
+					{
+						IsStatic = true,
 						Returns =
 						{
 							{
@@ -5759,6 +5806,7 @@ return
 				GetAllPlayerUUIDs =
 				{
 					{
+						IsStatic = true,
 						Returns =
 						{
 							{
@@ -5770,6 +5818,19 @@ return
 				GetAllRanks =
 				{
 					{
+						IsStatic = true,
+						Returns =
+						{
+							{
+								Type = "table",
+							},
+						},
+					},
+				},
+				GetAllRestrictions =
+				{
+					{
+						IsStatic = true,
 						Returns =
 						{
 							{
@@ -5781,6 +5842,7 @@ return
 				GetDefaultRank =
 				{
 					{
+						IsStatic = true,
 						Returns =
 						{
 							{
@@ -5792,6 +5854,26 @@ return
 				GetGroupPermissions =
 				{
 					{
+						IsStatic = true,
+						Params =
+						{
+							{
+								Name = "GroupName",
+								Type = "string",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "table",
+							},
+						},
+					},
+				},
+				GetGroupRestrictions =
+				{
+					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -5810,6 +5892,7 @@ return
 				GetPlayerGroups =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -5828,6 +5911,7 @@ return
 				GetPlayerMsgVisuals =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -5855,6 +5939,7 @@ return
 				GetPlayerName =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -5874,6 +5959,7 @@ return
 				GetPlayerPermissions =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -5892,6 +5978,7 @@ return
 				GetPlayerRankName =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -5911,6 +5998,7 @@ return
 				GetRankGroups =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -5929,6 +6017,26 @@ return
 				GetRankPermissions =
 				{
 					{
+						IsStatic = true,
+						Params =
+						{
+							{
+								Name = "RankName",
+								Type = "string",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "table",
+							},
+						},
+					},
+				},
+				GetRankRestrictions =
+				{
+					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -5947,6 +6055,7 @@ return
 				GetRankVisuals =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -5974,6 +6083,7 @@ return
 				GroupExists =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -5992,6 +6102,7 @@ return
 				IsGroupInRank =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -6014,6 +6125,7 @@ return
 				IsPermissionInGroup =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -6036,6 +6148,7 @@ return
 				IsPlayerRankSet =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -6051,9 +6164,33 @@ return
 						},
 					},
 				},
+				IsRestrictionInGroup =
+				{
+					{
+						IsStatic = true,
+						Params =
+						{
+							{
+								Name = "Restriction",
+								Type = "string",
+							},
+							{
+								Name = "GroupName",
+								Type = "string",
+							},
+						},
+						Returns =
+						{
+							{
+								Type = "boolean",
+							},
+						},
+					},
+				},
 				RankExists =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -6072,6 +6209,7 @@ return
 				RemoveGroup =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -6084,6 +6222,7 @@ return
 				RemoveGroupFromRank =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -6100,6 +6239,7 @@ return
 				RemovePermissionFromGroup =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -6116,6 +6256,7 @@ return
 				RemovePlayerRank =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -6128,6 +6269,7 @@ return
 				RemoveRank =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -6145,6 +6287,7 @@ return
 				RenameGroup =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -6161,6 +6304,7 @@ return
 				RenameRank =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -6177,6 +6321,7 @@ return
 				SetDefaultRank =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -6195,6 +6340,7 @@ return
 				SetPlayerRank =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
@@ -6215,6 +6361,7 @@ return
 				SetRankVisuals =
 				{
 					{
+						IsStatic = true,
 						Params =
 						{
 							{
