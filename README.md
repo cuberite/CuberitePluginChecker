@@ -33,7 +33,7 @@ To sum up, before running you need these:
 - ManualAPI file
 - CuberitePluginChecker
 - One or more Scenario files specific for your plugin
-- Lua interpreter
+- Lua interpreter, with `luafilesystem` and `lsqlite3` modules installed (LuaRocks preferred)
 
 To run the Checker, execute it in your Lua interpreter, while in the Checker's folder:
 ```
