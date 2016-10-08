@@ -286,9 +286,15 @@ function Scenario:new(a_FileName, a_Logger)
 			local t = type(action)
 			if (t == "table") then
 				if (action.isInitializePlugin) then
+					if (hasInitialization) then
+						error(string.format("Error in scenario file %s: element #%d is plugin initialization, but the plugin is already initialized before.", a_FileName, idx)
+					end
 					hasInitialization = true
 					hasLoading = true
 				elseif (action.isLoadPluginFiles) then
+					if (hasLoading) then
+						error(string.format("Error in scenario file %s: element #%d is plugin load, but the plugin has already been loaded before.", a_FileName, idx)
+					end
 					hasLoading = true
 				end
 			elseif (t ~= "function") then
