@@ -18,21 +18,6 @@ local g_IsOSWindows = (package.cpath:match("%.dll"))
 
 
 
---- Recursively deletes all contents of a specified folder
-local function deleteFolderContents(a_Path)
-	for fnam in lfs.dir(a_Path) do
-		local fullName = a_Path .. "/" .. fnam
-		if (lfs.attributes(fullName, "mode") == "directory") then
-			deleteFolderContents(fullName)
-		end
-		os.remove(fullName)
-	end
-end
-
-
-
-
-
 return
 {
 	["<static> cFile:Copy(string, string)"] = function(a_Simulator, a_ThisClass, a_SrcFileName, a_DstFileName)
@@ -46,21 +31,11 @@ return
 		a_DstFileName = a_Simulator:redirectPath(a_DstFileName)
 		assert(a_SrcFileName ~= "")
 		assert(a_DstFileName ~= "")
-		local fIn, msg = io.open(a_SrcFileName, "rb")
-		if not(fIn) then
-			a_Simulator.logger:debug("cFile:Copy(): failed to open src file %q: %s", a_SrcFileName, msg)
-			return false
+		local isSuccess, msg = util.copyFile(a_SrcFileName, a_DstFileName)
+		if not(isSuccess) then
+			a_Simulator.logger.debug("cFile:Copy failed: %s", msg)
 		end
-		local contents = fIn:read("*a")
-		fIn:close()
-		local fOut, msg2 = io.open(a_DstFileName, "wb")
-		if not(fOut) then
-			a_Simulator.logger:debug("cFile:Copy(): failed to open dst file %q: %s", a_DstFileName, msg2)
-			return false
-		end
-		fOut:write(contents)
-		fOut:close()
-		return true
+		return isSuccess
 	end,
 
 	["<static> cFile:CreateFolder(string)"] = function(a_Simulator, a_ThisClass, a_Folder)
@@ -70,14 +45,7 @@ return
 
 	["<static> cFile:CreateFolderRecursive(string)"] = function(a_Simulator, a_ThisClass, a_Folder)
 		a_Folder = a_Simulator:redirectPath(a_Folder)
-		local pathSoFar = {}
-		a_Folder:gsub("[^/]*",
-			function(a_Match)
-				table.insert(pathSoFar, a_Match)
-				lfs.mkdir(table.concat(pathSoFar, "/"))
-			end
-		)
-		return (lfs.attributes(a_Folder, "mode") == "directory")
+		return (utils.createFolderRecursive(a_Folder))
 	end,
 
 	["<static> cFile:Delete(string)"] = function(a_Simulator, a_ThisClass, a_Path)

@@ -101,3 +101,24 @@ b b b
 Takes a dictionary table as its parameter. The `playerName` value specifies the player to impersonate for the commands. The `choices` specifies an array of strings that are used for the parameters. The 'maxLen' specifies the maximum number of parameters, the optional `minLen` (default: 0) specifies the minimum number of parameters. 
 
 If, at the time the action is executed, the specified player is not connected, the Checker aborts with an error message.
+
+## fsCreateFile
+Creates a file and, optionally, fills it with data. Takes a dictionary table as its parameter. The `fileName` specifies the file to create. Note that redirection is NOT performed on this filename. The optional `contents` value specifies the contents to write into the new file.
+
+## fsCopyFile
+Copies a file. Takes a dictionary table as its parameter. The `srcFileName` value specifies the file to copy, the `dstFileName` value specifies the destination where to copy the file. Note that the destination folder must exist, this action doesn't create folders. Note that redirection is NOT performed on either of the filenames.
+
+## fsRenameFile
+Renames a file. Takes a dictionary table as its parameter. The `oldFileName` value specifies the file to rename, the `newFileName` value specifies the new filename. Note that the path to `newFileName` must exist, fsRenameFile doesn't create folders. Also note that if `oldFileName` specifies a folder, the action will succeed, too (Lua's os.rename() doesn't distinguish between files and folders). Note that redirection is NOT performed on either of the filenames.
+
+## fsDeleteFile
+Deletes a file. Takes a dictionary table as its parameter. The `fileName` value specifies the file to delete. Note that if `fileName` specifies an empty folder, the action will succeed, to (Lua's os.remove() doesn't distinguish between files and folders). Note that redirection is NOT performed on the filename.
+
+## fsCreateFolder
+Creates a folder, recursively. Takes a dictionary table as its parameter. The `path` value specifies the folder to create. It works recursively - it creates any parent folders that are needed for the final folder to be created. Performs no action if the folder already exists. Note that redirection is NOT performed on the path.
+
+## fsRenameFolder
+Renames a folder. Takes a dictionary table as its parameter. The `oldPath` value specifies the folder to rename, the `newPath` value specifies the new name for the folder. Note that if `oldPath` specifies a file, the action will rename the file successfully (Lua's os.rename() doesn't distinguish between files and folders). Note that redirection is not performed on either of the paths.
+
+## fsDeleteFolder
+Deletes a folder, recursively. Takes a dictionary table as its parameter. The `path` value specifies the folder to delete. The action first recursively deletes the contents of the folder, then deletes the folder itself. It may fail if `path` points to a file (depends on LuaFileSystem's handling of lfs.dir() for files). Note that redirection is NOT performed on the path.

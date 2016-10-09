@@ -16,6 +16,13 @@ Actions:
 	- playerConnect     -- Simulates a new player connecting to the server
 	- playerCommand     -- Simulates a player executing a command
 	- fuzzAllCommands   -- Simulates a player executing each command with a wide range of parameters (fuzzing)
+	- fsCreateFile      -- Creates a file, possibly with content
+	- fsCopyFile        -- Copies a file
+	- fsRenameFile      -- Renames a file
+	- fsDeleteFile      -- Deletes a file
+	- fsCreateFolder    -- Creates a new folder (recursive)
+	- fsRenameFolder    -- Renames an existing folder
+	- fsDeleteFolder    -- Deletes a folder (optionally recursive
 
 Example scenario file:
 scenario
@@ -241,18 +248,168 @@ end
 
 
 
+--- Sandbox handler of the "fsCreateFile" keyword.
+-- Creates a file and, if specified, fills it with content
+local function sandboxFsCreateFile(a_Table)
+	-- Check params:
+	if (type(a_Table.fileName) ~= "string") then
+		error("Error in scenario file, fsCreateFile is missing the required \"fileName\" attribute.", 2)
+	end
+
+	-- Return the action implementation:
+	return function(a_Simulator)
+		a_Simulator.logger:trace("Scenario: Creating file %s", a_Table.fileName)
+		local f = assert(io.open(a_Table.fileName, "wb"))
+		if (a_Table.contents) then
+			f:write(a_Table.contents)
+		end
+		f:close()
+	end
+end
+
+
+
+
+
+--- Sandbox handler of the "fs" keyword.
+local function sandboxFsCopyFile(a_Table)
+	-- Check params:
+	if (type(a_Table.srcFileName) ~= "string") then
+		error("Error in scenario file, fsCopyFile is missing the required \"srcFileName\" attribute.", 2)
+	end
+	if (type(a_Table.dstFileName) ~= "string") then
+		error("Error in scenario file, fsCopyFile is missing the required \"dstFileName\" attribute.", 2)
+	end
+
+	-- Return the action implementation:
+	return function(a_Simulator)
+		a_Simulator.logger:trace("Scenario: Copying file %s to %s", a_Table.srcFileName, a_Table.dstFileName)
+		assert(utils.copyFile(a_Table.srcFileName, a_Table.dstFileName))
+	end
+end
+
+
+
+
+
+--- Sandbox handler of the "fs" keyword.
+local function sandboxFsRenameFile(a_Table)
+	-- Check params:
+	if (type(a_Table.oldFileName) ~= "string") then
+		error("Error in scenario file, fsRenameFile is missing the required \"oldFileName\" attribute.", 2)
+	end
+	if (type(a_Table.newFileName) ~= "string") then
+		error("Error in scenario file, fsRenameFile is missing the required \"newFileName\" attribute.", 2)
+	end
+
+	-- Return the action implementation:
+	return function(a_Simulator)
+		a_Simulator.logger:trace("Scenario: Renaming file %s to %s", a_Table.oldFileName, a_Table.newFileName)
+		assert(os.rename(a_Table.oldFileName, a_Table.newFileName))
+	end
+end
+
+
+
+
+
+--- Sandbox handler of the "fs" keyword.
+local function sandboxFsDeleteFile(a_Table)
+	-- Check params:
+	if (type(a_Table.fileName) ~= "string") then
+		error("Error in scenario file, fsDeleteFile is missing the required \"fileName\" attribute.", 2)
+	end
+
+	-- Return the action implementation:
+	return function(a_Simulator)
+		a_Simulator.logger.trace("Scenario: Deleting file %s", a_Table.fileName)
+		assert(os.remove(a_Table.fileName))
+	end
+end
+
+
+
+
+
+--- Sandbox handler of the "fs" keyword.
+local function sandboxFsCreateFolder(a_Table)
+	-- Check params:
+	if (type(a_Table.path) ~= "string") then
+		error("Error in scenario file, fsCreateFolder is missing the required \"path\" attribute.", 2)
+	end
+
+	-- Return the implementation:
+	return function(a_Simulator)
+		a_Simulator.logger.trace("Scenario: Creating folder %s", a_Table.path)
+		assert(utils.createFolderRecursive(a_Table.path), string.format("Cannot create folder %s", a_Table.path))
+	end
+end
+
+
+
+
+
+--- Sandbox handler of the "fs" keyword.
+local function sandboxFsRenameFolder(a_Table)
+	-- Check params:
+	if (type(a_Table.oldPath) ~= "string") then
+		error("Error in scenario file, fsRenameFolder is missing the required \"oldPath\" attribute.", 2)
+	end
+	if (type(a_Table.newPath) ~= "string") then
+		error("Error in scenario file, fsRenameFolder is missing the required \"newPath\" attribute.", 2)
+	end
+
+	-- Return the implementation:
+	return function(a_Simulator)
+		a_Simulator.logger:trace("Scenario: Renaming folder %s to %s", a_Table.oldPath, a_Table.newPath)
+		assert(os.rename(a_Table.oldPath, a_Table.newPath))
+	end
+end
+
+
+
+
+
+--- Sandbox handler of the "fs" keyword.
+local function sandboxFsDeleteFolder(a_Table)
+	-- Check params:
+	if (type(a_Table.path) ~= "string") then
+		error("Error in scenario file, fsDeleteFolder is missing the required \"path\" attribute.", 2)
+	end
+
+	-- Return the action implementation:
+	return function(a_Simulator)
+		a_Simulator.logger.trace("Scenario: Deleting folder %s", a_Table.path)
+		assert(utils.deleteFolderContents(a_Table.path))
+		assert(os.remove(a_Table.path))
+	end
+end
+
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------
 --- The sandbox used for scenario files
 -- Provides only the scenario functions
 local scenarioSandbox =
 {
-	scenario = nil,  -- Will be explicitly modified for each file being loaded
-	redirect = sandboxRedirect,
-	world = sandboxWorld,
-	connectPlayer = sandboxConnectPlayer,
-	playerCommand = sandboxPlayerCommand,
-	fuzzAllCommands = sandboxFuzzAllCommands,
-	initializePlugin = sandboxInitializePlugin,
-	loadPluginFiles = sandboxLoadPluginFiles,
+	scenario          = nil,  -- Will be explicitly modified for each file being loaded
+	redirect          = sandboxRedirect,
+	world             = sandboxWorld,
+	connectPlayer     = sandboxConnectPlayer,
+	playerCommand     = sandboxPlayerCommand,
+	fuzzAllCommands   = sandboxFuzzAllCommands,
+	initializePlugin  = sandboxInitializePlugin,
+	loadPluginFiles   = sandboxLoadPluginFiles,
+	fsCreateFile      = sandboxFsCreateFile,
+	fsCopyFile        = sandboxFsCopyFile,
+	fsRenameFile      = sandboxFsRenameFile,
+	fsDeleteFile      = sandboxFsDeleteFile,
+	fsCreateFolder    = sandboxFsCreateFolder,
+	fsRenameFolder    = sandboxFsRenameFolder,
+	fsDeleteFolder    = sandboxFsDeleteFolder,
 }
 
 
