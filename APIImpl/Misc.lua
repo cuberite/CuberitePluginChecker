@@ -41,4 +41,8 @@ return
 			a_Callback(world)
 		end
 	end,
+
+	["cEntity:GetUniqueID()"] = function(a_Simulator, a_Self)
+		return rawget(getmetatable(a_Self), "simulatorInternal_UniqueID")
+	end,
 }

@@ -410,6 +410,7 @@ function Simulator:connectPlayer(a_PlayerDesc)
 
 	-- Create the player, with some reasonable defaults:
 	a_PlayerDesc.worldName = a_PlayerDesc.worldName or self.defaultWorldName
+	a_PlayerDesc.uniqueID = self:getNextUniqueID()
 	self.players[playerName] = a_PlayerDesc
 
 	-- Call the hooks to simulate the player joining:
@@ -1004,6 +1005,19 @@ end
 
 
 
+--- Returns a new UniqueID for an entity
+function Simulator:getNextUniqueID()
+	-- Check params:
+	assert(self)
+
+	self.currUniqueID = (self.currUniqueID or 0) + 1
+	return self.currUniqueID
+end
+
+
+
+
+
 --- Returns a cPlayer instance that is bound to the specified player
 -- If the player is not in the list of players, returns nil
 function Simulator:getPlayerByName(a_PlayerName)
@@ -1018,7 +1032,9 @@ function Simulator:getPlayerByName(a_PlayerName)
 
 	-- Create a new instance and bind it:
 	local player = self:createInstance({Type = "cPlayer"})
-	getmetatable(player).simulatorInternal_Name = a_PlayerName
+	local mt = getmetatable(player)
+	mt.simulatorInternal_Name = a_PlayerName
+	mt.simulatorInternal_UniqueID = self.players[a_PlayerName].uniqueID
 	return player
 end
 

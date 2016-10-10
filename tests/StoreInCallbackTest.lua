@@ -18,10 +18,16 @@ scenario
 	{
 		name = "player1",
 		worldName = "world",
+		uuid = "uuid-player1",
 	},
 	playerCommand
 	{
 		playerName = "player1",
-		command = "test",
+		command = "uselater",
+	},
+	playerCommand
+	{
+		playerName = "player1",
+		command = "storeglobally",
 	},
 }
