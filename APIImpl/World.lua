@@ -341,6 +341,11 @@ return
 	end,
 
 
+	["cWorld:GetTimeOfDay()"] = function(a_Simulator, a_Self)
+		return getmetatable(a_Self).simulatorInternal_TimeOfDay or 0
+	end,
+
+
 	["cWorld:PrepareChunk(number, number, function)"] = function(a_Simulator, a_Self, a_ChunkX, a_ChunkZ, a_Callback)
 		a_Simulator:processCallbackRequest({
 			Function = a_Callback,
@@ -358,7 +363,7 @@ return
 		})
 	end,
 
-	["cWorld:ScheduleTask(number, function)"] = function(a_Simulator, a_Self, a_Task)
+	["cWorld:ScheduleTask(number, function)"] = function(a_Simulator, a_Self, a_NumTicks, a_Task)
 		a_Simulator:processCallbackRequest({
 			Function = a_Task,
 			ParamValues = { a_Self },
@@ -366,4 +371,7 @@ return
 		})
 	end,
 
+	["cWorld:SetTimeOfDay(number)"] = function(a_Simulator, a_Self, a_Time)
+		getmetatable(a_Self).simulatorInternal_TimeOfDay = a_Time
+	end,
 }
