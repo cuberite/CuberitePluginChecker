@@ -124,7 +124,7 @@ return
 	["<static> cFile:ReadWholeFile(string)"] = function(a_Simulator, a_ThisClass, a_Path)
 		local f = io.open(a_Simulator:redirectPath(a_Path), "rb")
 		if not(f) then
-			return
+			return ""
 		end
 		local res = f:read("*all")
 		f:close()
