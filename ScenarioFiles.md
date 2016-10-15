@@ -17,7 +17,7 @@ scenario
 		name = "worldName",
 	},
 	initializePlugin(),
-	playerConnect
+	connectPlayer
 	{
 		name = "playerName",
 	},
