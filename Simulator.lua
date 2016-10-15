@@ -1627,7 +1627,8 @@ local function createSimulator(a_Options, a_Logger)
 		worlds = {},
 		players = {},
 	}
-
+	res.sandbox._G = res.sandbox;
+	
 	setmetatable(res, Simulator)
 	return res
 end
