@@ -7,6 +7,13 @@ Usage:
 	-- Possibly use sim as an upvalue in special API function implementations
 	-- Extend the simulator's sandbox etc.
 	sim:run(options, api)
+
+The simulator keeps a sandbox for the plugin files, lists of registered objects (hooks, command handlers,
+simulated players and worlds etc.) and a queue of requests to call the plugin's methods. It can also directly
+call any callback in the plugin. The Scenario uses this functionality to implement the various actions.
+Use the processCallbackRequest() function to call into the plugin.
+Use the queueCallbackRequest() function to add a call into the plugin into a queue.
+Use the processAllQueuedCallbackRequests() function to process the callback queue until it is empty.
 --]]
 
 
@@ -154,7 +161,19 @@ function Simulator:afterCallGCObjects(a_Request, a_Params, a_Returns)
 	-- Collect garbage, check if all the parameter references have been cleared:
 	collectgarbage()
 	for idx, t in pairs(a_Request.uncollectedParams) do
-		self.logger:error(1, "Plugin has stored an instance of param #%d (%s) from callback %q for later reuse.", idx, t, a_Request.Notes)
+		local info = debug.getinfo(a_Request.Function, "S")
+		if (info.source and string.sub(info.source, 1, 1) == "@") then
+			self.logger:error(1,
+				"Plugin has stored an instance of param #%d (%s) from callback %q for later reuse. Function defined in %s, lines %s - %s",
+				idx, t, a_Request.Notes,
+				string.sub(info.source, 2), info.linedefined or "<unknown>", info.lastlinedefined or "<unknown>"
+			)
+		else
+			self.logger:error(1,
+				"Plugin has stored an instance of param #%d (%s) from callback %q for later reuse. Function definition not found.",
+				idx, t, a_Request.Notes
+			)
+		end
 	end
 end
 
@@ -1287,6 +1306,28 @@ end
 
 
 
+--- Keeps dequeueing the callback requests from the internal queue and calling them, until the queue is empty
+-- It is safe to queue more callback requests while it is executing
+function Simulator:processAllQueuedCallbackRequests()
+	-- Check params:
+	assert(self)
+
+	-- Process the callback requests one by one.
+	-- Don't delete the processed ones, just remember the last executed index, terminate when it reaches the last queued callback:
+	local idx = 1
+	while (idx <= self.callbackRequests.n) do
+		self:processCallbackRequest(self.callbackRequests[idx])
+		idx = idx + 1
+	end
+
+	-- Reset the queue, everything has been processed, so just assign an empty one:
+	self.callbackRequests = { n = 0 }
+end
+
+
+
+
+
 --- Processes a single callback request
 -- Prepares the params and calls the function
 -- Calls the appropriate simulator hooks
@@ -1315,6 +1356,24 @@ function Simulator:processCallbackRequest(a_Request)
 
 	self:callHooks(self.hooks.onEndRound, a_Request)
 	return returns
+end
+
+
+
+
+
+--- Adds a callback request into the internal queue of callbacks to be made later on
+-- a_Request is a table describing the callback, as used in the processCallbackRequest() function
+function Simulator:queueCallbackRequest(a_Request)
+	-- Check params:
+	assert(self)
+	assert(type(a_Request) == "table")
+	assert(a_Request.Function)
+
+	-- Add the request in the queue:
+	local n = self.callbackRequests.n + 1
+	self.callbackRequests[n] = a_Request
+	self.callbackRequests.n = n
 end
 
 
