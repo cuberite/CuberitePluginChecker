@@ -56,7 +56,9 @@ return
 		-- Call the OnChunkAvailable for each chunk:
 		if (a_OnChunkAvailable) then
 			for _, chunkCoords in ipairs(a_ChunkCoords) do
-				a_Simulator:processCallbackRequest({
+				assert(type(chunkCoords[1]) == "number")
+				assert(type(chunkCoords[2]) == "number")
+				a_Simulator:queueCallbackRequest({
 					Function = a_OnChunkAvailable,
 					ParamValues = { chunkCoords[1], chunkCoords[2] },
 					Notes = string.format("cWorld:ChunkStay(): OnChunkAvailable(%d, %d)", chunkCoords[1], chunkCoords[2]),
@@ -66,7 +68,7 @@ return
 
 		-- Call the OnAllChunksAvailable:
 		if (a_OnAllChunksAvailable) then
-			a_Simulator:processCallbackRequest({
+			a_Simulator:queueCallbackRequest({
 				Function = a_OnAllChunksAvailable,
 				ParamValues = { },
 				Notes = "cWorld:ChunkStay(): OnAllChunksAvailable",
@@ -347,7 +349,7 @@ return
 
 
 	["cWorld:PrepareChunk(number, number, function)"] = function(a_Simulator, a_Self, a_ChunkX, a_ChunkZ, a_Callback)
-		a_Simulator:processCallbackRequest({
+		a_Simulator:queueCallbackRequest({
 			Function = a_Callback,
 			ParamValues = { a_ChunkX, a_ChunkZ },
 			Notes = string.format("cWorld:PrepareChunk callback(%d, %d)", a_ChunkX, a_ChunkZ),
@@ -356,7 +358,7 @@ return
 
 
 	["cWorld:QueueTask(function)"] = function(a_Simulator, a_Self, a_Task)
-		a_Simulator:processCallbackRequest({
+		a_Simulator:queueCallbackRequest({
 			Function = a_Task,
 			ParamValues = { a_Self },
 			Notes = "cWorld:QueueTask callback",
@@ -364,7 +366,7 @@ return
 	end,
 
 	["cWorld:ScheduleTask(number, function)"] = function(a_Simulator, a_Self, a_NumTicks, a_Task)
-		a_Simulator:processCallbackRequest({
+		a_Simulator:queueCallbackRequest({
 			Function = a_Task,
 			ParamValues = { a_Self },
 			Notes = "cWorld:ScheduleTask callback",

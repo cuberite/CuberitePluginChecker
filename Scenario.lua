@@ -154,6 +154,8 @@ local function fuzzCommand(a_Simulator, a_Command, a_PlayerName, a_Choices, a_Mi
 			-- We've built the whole command, serialize the params into a string and execute it:
 			a_Simulator.logger:info("Scenario: fuzzing command \"%s\".", a_Command .. " " .. table.concat(a_Split, " "))
 			a_Simulator:executePlayerCommand(a_PlayerName, a_Command .. " " .. table.concat(a_Split, " "))
+			-- Process all queued callbacks:
+			a_Simulator:processAllQueuedCallbackRequests()
 			return
 		end
 
@@ -510,6 +512,9 @@ function Scenario:execute(a_Simulator)
 		else
 			assert(false, "Unknown scenario action runtime")
 		end
+
+		-- After executing the action, execute any callbacks queued in the simulator:
+		a_Simulator:processAllQueuedCallbackRequests()
 	end
 end
 
