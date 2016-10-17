@@ -76,7 +76,25 @@ local g_CTypeToLuaType =
 	["Vector3<int>"]    = "Vector3i",
 	["Vector3<float>"]  = "Vector3f",
 	["Vector3<double>"] = "Vector3d",
+	["const Vector3<int>"]    = "Vector3i",
+	["const Vector3<float>"]  = "Vector3f",
+	["const Vector3<double>"] = "Vector3d",
 }
+
+
+
+
+
+--- Converts C++ types to their Lua counterparts.
+-- Modifies a_Types directly, but also returns it afterwards.
+-- a_Types is a table (dict or array) containing type descriptions: { Type = "..." }
+local function convertTypes(a_Types)
+	-- We can't use ipairs because variables don't use arrays in the APIDesc
+	for _, var in pairs(a_Types) do
+		var.Type = g_CTypeToLuaType[var.Type] or var.Type
+	end
+	return a_Types
+end
 
 
 
@@ -86,16 +104,10 @@ local g_CTypeToLuaType =
 -- Modifies a_FnSignature directly
 local function convertParamTypes(a_FnSignature)
 	-- Convert params:
-	a_FnSignature.Params = a_FnSignature.Params or {}
-	for _, param in ipairs(a_FnSignature.Params) do
-		param.Type = g_CTypeToLuaType[param.Type] or param.Type
-	end
+	a_FnSignature.Params = convertTypes(a_FnSignature.Params or {})
 
 	-- Convert returns:
-	a_FnSignature.Returns = a_FnSignature.Returns or {}
-	for _, ret in ipairs(a_FnSignature.Returns) do
-		ret.Type = g_CTypeToLuaType[ret.Type] or ret.Type
-	end
+	a_FnSignature.Returns = convertTypes(a_FnSignature.Returns or {})
 end
 
 
@@ -137,8 +149,8 @@ local function normalizeClass(a_Class)
 		end
 	end
 	a_Class.Functions = fns
-	a_Class.Constants = a_Class.Constants or {}
-	a_Class.Variables = a_Class.Variables or {}
+	a_Class.Constants = convertTypes(a_Class.Constants or {})
+	a_Class.Variables = convertTypes(a_Class.Variables or {})
 end
 
 

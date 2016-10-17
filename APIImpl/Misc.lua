@@ -45,4 +45,13 @@ return
 	["cEntity:GetUniqueID()"] = function(a_Simulator, a_Self)
 		return rawget(getmetatable(a_Self), "simulatorInternal_UniqueID")
 	end,
+	
+	["StringSplit(string, string)"] = function (a_Simulator, a_Text, a_Splitter)
+		local res, i = {}, 1
+		for split in a_Text:gmatch("([^" .. a_Splitter .. "]+)") do
+			res[i] = split
+			i = i + 1
+		end
+		return res
+	end,
 }

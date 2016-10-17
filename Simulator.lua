@@ -1552,6 +1552,7 @@ local function createSimulator(a_Options, a_Logger)
 				type = io.type,
 				write = io.write,
 			},
+			debug = debug,
 			math = math,
 			os =
 			{
