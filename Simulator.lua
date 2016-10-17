@@ -1321,39 +1321,6 @@ end
 
 
 
---- Called when the callback request queue is empty, to fill it with the next scenario, if available
-function Simulator:queueNextScenario()
-	-- Check params:
-	assert(self)
-
-	-- If there is a scenario left, execute it until it queues a callback request or has no work left:
-	local scenario = self.scenarios[1]
-	while(true) do
-		if not(scenario) then
-			-- No more scenarios to execute
-			return
-		end
-		if (scenario:execute(self)) then
-			-- The scenario has finished, remove it and go to the next one:
-			table.remove(self.scenarios, 1)
-			scenario = self.scenarios[1]
-			if not(scenario) then
-				-- No more scenarios to execute
-				return
-			end
-		end
-		if (self.callbackRequests.n > 0) then
-			-- The scenario has produced a callback request, execute it:
-			return
-		end
-		-- The scenario has advanced but doesn't have work for us to do, execute it again in the next loop
-	end
-end
-
-
-
-
-
 --- Returns a path to use, while checking for redirection
 function Simulator:redirectPath(a_Path)
 	-- Check params:
@@ -1617,9 +1584,6 @@ local function createSimulator(a_Options, a_Logger)
 		-- Store the logger for later use:
 		logger = a_Logger,
 
-		-- Array-table of scenarios that should be executed once the plugin is initialized
-		scenarios = {},
-
 		-- A dictionary of file / folder redirections. Maps the original path to the new path.
 		redirects = {},
 
@@ -1627,8 +1591,8 @@ local function createSimulator(a_Options, a_Logger)
 		worlds = {},
 		players = {},
 	}
-	res.sandbox._G = res.sandbox;
-	
+	res.sandbox._G = res.sandbox
+
 	setmetatable(res, Simulator)
 	return res
 end
