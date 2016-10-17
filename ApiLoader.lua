@@ -418,7 +418,7 @@ local function loadExtraApi(a_Options, a_Api, a_Logger)
 		a_Logger:debug("Loading ExtraAPI file \"%s\".", fnam)
 		local f, msg = loadfile(fnam)
 		if not(f) then
-			a_Logger:error(
+			a_Logger:error(1,
 				"Error loading the extra API description file %s: %s",
 				fnam, msg or "<no message>"
 			)
