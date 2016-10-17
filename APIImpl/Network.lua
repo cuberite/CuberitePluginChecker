@@ -6,9 +6,9 @@
 
 
 
-local socket = require 'socket'
-local http = require 'socket.http'
-local https = require 'ssl.https'
+local socket = require("socket")
+local http = require("socket.http")
+local https = require("ssl.https")
 local ltn12 = require("ltn12")
 
 
@@ -28,7 +28,7 @@ local function MakeRequest(a_Method, a_Url)
 	if (success) then
 		status = nil
 	end
-	
+
 	return success ~= nil, status, respbody, headers
 end
 
