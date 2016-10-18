@@ -45,7 +45,7 @@ return
 	["cEntity:GetUniqueID()"] = function(a_Simulator, a_Self)
 		return rawget(getmetatable(a_Self), "simulatorInternal_UniqueID")
 	end,
-	
+
 	["StringSplit(string, string)"] = function (a_Simulator, a_Text, a_Splitter)
 		local res, i = {}, 1
 		for split in a_Text:gmatch("([^" .. a_Splitter .. "]+)") do
@@ -54,4 +54,13 @@ return
 		end
 		return res
 	end,
+
+	["ItemTypeToString(number)"] = function(a_Simulator, a_ItemType)
+		for key, value in pairs(a_Simulator.sandbox) do
+			if (key:match("^E_") and (value == a_ItemType)) then
+				local name = key:match("^E_.-_(.*)"):gsub("_", ""):lower()
+				return name
+			end
+		end
+	end
 }

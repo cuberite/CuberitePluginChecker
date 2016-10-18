@@ -1096,16 +1096,19 @@ function Simulator:injectApi(a_ApiDesc)
 		sandboxMT = {}
 		setmetatable(self.sandbox, sandboxMT)
 	end
+
 	local prevIndex = sandboxMT.__index
 	sandboxMT.__index = function(a_Table, a_SymbolName)
 		-- If a class is requested, create it:
 		if (a_ApiDesc.Classes[a_SymbolName]) then
-			return self:createClass(a_SymbolName, a_ApiDesc.Classes[a_SymbolName])
+			a_Table[a_SymbolName] = self:createClass(a_SymbolName, a_ApiDesc.Classes[a_SymbolName])
+			return a_Table[a_SymbolName]
 		end
 
 		-- If a global API symbol is requested, create it:
 		local endpoint = self:createApiEndpoint(a_ApiDesc.Globals, a_SymbolName, "Globals")
 		if (endpoint) then
+			a_Table[a_SymbolName] = endpoint
 			return endpoint
 		end
 
@@ -1118,6 +1121,8 @@ function Simulator:injectApi(a_ApiDesc)
 		return prevIndex(a_Table, a_SymbolName)
 	end
 
+	self:prefillApi(a_ApiDesc)
+
 	-- Store all enum definitions in a separate table:
 	for className, cls in pairs(a_ApiDesc.Classes) do
 		for enumName, enumValues in pairs(cls.Enums or {}) do
@@ -1127,6 +1132,45 @@ function Simulator:injectApi(a_ApiDesc)
 	for enumName, enumValues in pairs(a_ApiDesc.Globals.Enums or {}) do
 		self.enums[enumName] = enumValues
 		self.enums["Globals#" .. enumName] = enumValues  -- Store under Globals#eEnum too
+	end
+end
+
+
+
+
+
+-- Puts APIEndpoints in the sandbox if one of all provided patterns match it.
+function Simulator:prefillApi(a_ApiDesc)
+	-- Returns true if the provided string matches any of the prefillSymbolPatterns
+	local function matchesAnyPattern(a_Target)
+		for _, pattern in pairs(self.options.prefillSymbolPatterns) do
+			if (a_Target:match(pattern)) then
+				return true
+			end
+		end
+		return false;
+	end
+
+	local function fillApi(a_ApiDesc, a_SymbolName, a_Sandbox)
+		assert(type(a_ApiDesc) == "table")
+		assert(type(a_SymbolName) == "string")
+		assert(type(a_Sandbox) == "table")
+		for functionName, functionDesc in pairs(a_ApiDesc.Functions) do
+			if (matchesAnyPattern(a_SymbolName .. ":" .. functionName)) then
+				a_Sandbox[functionName] = self:createClassFunction(functionDesc, functionName, a_SymbolName)
+			end
+		end
+		for constantName, constantDesc in pairs(a_ApiDesc.Constants) do
+			if (constantDesc.Value and matchesAnyPattern(a_SymbolName .. "." .. constantName)) then
+				a_Sandbox[constantName] = self:createClassConstant(constantDesc, constantName, a_SymbolName);
+			end
+		end
+		return a_Sandbox
+	end
+
+	fillApi(a_ApiDesc.Globals, "Globals", self.sandbox)
+	for className, classDesc in pairs(a_ApiDesc.Classes) do
+		self.sandbox[className] = fillApi(classDesc, className, self.sandbox[className])
 	end
 end
 

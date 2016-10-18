@@ -8,7 +8,7 @@ The commandline options understood by the framework:
 	-a <path>      -- Path to the AutoAPI description files (by Cuberite's BindingsProcessor)
 	-c             -- Check by clearing each API object after each callback
 	-e <filename>  -- Load file as extra API description (ManualAPI.lua by ManualApiDump plugin)
-	-f             -- Fuzz command handlers (send various garbate to them to test their user-input resilience)
+	-f <pattern>   -- Prefills the sandbox with API symbols matching the specified pattern, instead of creating them as-needed (#20).
 	-g             -- Check by running garbage-collector after each callback
 	-i <filename>  -- Load special API implementation from the file (files in APIImpl folder)
 	-l <loglevel>  -- Use the specified loglevel (1 = trace, 2 = debug, 3 = info, 4 = warning, 5 = error)
@@ -25,6 +25,7 @@ The options object contains the following fields:
 	scenarioFileName       - filename to load as scenario file
 	shouldClearObjects     - bool specifying whether API objects should be cleared after each callback (thus detecting potential use-after-callback)
 	shouldGCObjects        - bool specifying whether API objects should be GC-ed after each callback (thus detecting storage-after-callback)
+	prefillSymbolPatterns  - array-table of patterns used to fill the sandbox of the plugin
 --]]
 
 
@@ -66,9 +67,15 @@ local optionProcessor =
 		return a_Idx + 2
 	end,
 
-	-- "-f" specifies to do command fuzzing
+	-- -f <pattern> -- Loads all symbols matching the pattern into the sandbox.
 	["-f"] = function (a_Args, a_Idx, a_Options)
-		a_Options.shouldFuzzCommands = true
+		local pattern = a_Args[a_Idx + 1]
+		local isValidPattern, errorMsg = pcall(function() string.match("TEST_STRING", pattern) end)
+		if (not isValidPattern) then
+			error(string.format("Invalid pattern '%s': %s", pattern, errorMsg))
+		end
+		table.insert(a_Options.prefillSymbolPatterns, pattern)
+		return a_Idx + 2
 	end,
 
 	-- "-g" specified to GC API objects after each callback
@@ -154,6 +161,7 @@ local options =
 	apiImplementationFiles = {},
 	extraApiFiles = {},
 	pluginFiles = {},
+	prefillSymbolPatterns = {},
 }
 
 
