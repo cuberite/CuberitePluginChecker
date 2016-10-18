@@ -691,6 +691,9 @@ function Simulator:createInstance(a_TypeDef)
 	local t = a_TypeDef.Type
 	assert(t)
 
+	-- Remove modifiers:
+	t = t:gsub("const ", "")
+
 	-- If it is a built-in type, create it directly:
 	if (t == "string") then
 		self.testStringIndex = (self.testStringIndex + 1) % 5  -- Repeat the same string every 5 calls
@@ -1183,22 +1186,7 @@ end
 function Simulator:listParamTypes(a_Params)
 	local res = {}
 	for idx, param in ipairs(a_Params) do
-		local pt = type(param)
-		local t = pt
-		if (pt == "table") then  -- Could be a class or a class instance
-			local mt = getmetatable(param)
-			if (mt and rawget(mt, "simulatorInternal_ClassName")) then
-				-- class
-				t = mt.simulatorInternal_ClassName .. " (class)"
-			else
-				local classMT = getmetatable(mt)
-				if (classMT and rawget(classMT, "simulatorInternal_ClassName")) then
-					-- class instance
-					t = classMT.simulatorInternal_ClassName .. " (instance)"
-				end
-			end
-		end
-		res[idx] = t
+		res[idx] = self:typeOf(param)
 	end
 	return res
 end
@@ -1268,6 +1256,7 @@ end
 --  - both are exactly equal
 --  - ParamType is a number and SignatureType being an enum
 --  - ParamType is nil and SignatureType is a class
+--  - ParamType is a class that is a descendant of the SignatureType class
 function Simulator:paramTypesMatch(a_ParamType, a_SignatureType)
 	-- Check params:
 	assert(type(a_ParamType) == "string")
@@ -1296,6 +1285,10 @@ function Simulator:paramTypesMatch(a_ParamType, a_SignatureType)
 		end
 	end
 
+	-- If both types are classes and the param is a descendant of signature, return "compatible":
+	if (self:classInheritsFrom(a_ParamType, a_SignatureType)) then
+		return true
+	end
 
 	return false
 end
