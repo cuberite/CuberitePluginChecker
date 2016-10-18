@@ -34,12 +34,62 @@ return
 		return a_Simulator:typeOf(a_Object)
 	end,
 
+	["cRoot:DoWithPlayerByUUID(string, function)"] = function(a_Simulator, a_Root, a_PlayerUUID, a_Callback)
+		for playerName, player in pairs(a_Simulator.players) do
+			if (player.uuid == a_Uuid) then
+				local res = a_Simulator:processCallbackRequest({
+					Function = a_Callback,
+					ParamValues = { a_Simulator:getPlayerByName(playerName) },
+					Notes = string.format("cRoot:DoWithPlayerByUUID() for player %s", playerName),
+				})
+				return true
+			end
+		end
+		return false  -- player not found
+	end,
+
+	["cRoot:FindAndDoWithPlayer(string, function)"] = function(a_Simulator, a_Root, a_PlayerName, a_Callback)
+		local player = a_Simulator:getPlayerByName(a_PlayerName)
+		if not(player) then
+			return false
+		end
+		a_Simulator:processCallbackRequest({
+			Function = a_Callback,
+			ParamValues = { player },
+			Notes = string.format("cRoot:FindAndDoWithPlayer() callback for player %s", a_PlayerName),
+		})
+		return true
+	end,
+
+	["cRoot:ForEachPlayer(function)"] = function(a_Simulator, a_Root, a_Callback)
+		for playerName, _ in pairs(a_Simulator.players) do
+			local player = a_Simulator:getPlayerByName(playerName)
+			local res = a_Simulator:processCallbackRequest({
+				Function = a_Callback,
+				ParamValues = { player },
+				Notes = string.format("cRoot:ForEachPlayer() callback for player %s", playerName),
+			})
+			if not(res and res[1]) then
+				return false
+			end
+		end
+		return true
+	end,
+
 	["cRoot:ForEachWorld(function)"] = function(a_Simulator, a_Root, a_Callback)
 		for worldName, _ in pairs(a_Simulator.worlds) do
 			local world = a_Simulator:createInstance({Type = "cWorld"})
 			getmetatable(world).simulatorInternal_Name = worldName
-			a_Callback(world)
+			local res = a_Simulator:processCallbackRequest({
+				Function = a_Callback,
+				ParamValues = { world },
+				Notes = string.format("cRoot:ForEachWorld() callback for world %s", worldName),
+			})
+			if not(res and res[1]) then
+				return false
+			end
 		end
+		return true
 	end,
 
 	["cEntity:GetUniqueID()"] = function(a_Simulator, a_Self)
