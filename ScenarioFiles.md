@@ -36,7 +36,7 @@ Adds redirection for files and folders. Any Cuberite API that takes a file or fo
 
 Path used by plugin | Path actually used | Notes
 --------------------|--------------------|------
-z.txt               | z.txt              | Partial matches are ignored
+a.txt               | a.txt              | Partial matches are ignored
 a/b.txt             | a/b.txt            | Not matching the full redirect path
 a/b/z.txt           | c/d/z.txt          | Redirect performed
 c/a/b/z.txt         | c/a/b/z.txt        | Not matching the *beginning* of the path
