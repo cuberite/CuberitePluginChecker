@@ -42,18 +42,16 @@ return
 
 	["cPluginManager:GetCurrentPlugin()"] = function (a_Simulator, a_Self)
 		local res = a_Simulator:createInstance({Type = "cPluginLua"})
-		-- Override the plugin to act as "self":
-		getmetatable(res).__index.GetLocalFolder = function(a_Self)
-			if not(a_Self == res) then
-				error("Bad cPlugin:GetLocalFolder() usage, the first parameter is not \"self\".")
-			end
-			return a_Simulator.options.pluginPath
-		end
+		-- Save the path to the plugin folder in the self variable
+		getmetatable(res).simulatorInternal_pluginPath = a_Simulator.options.pluginPath
 		return res
 	end,
 
 	["<static> cPluginManager:GetPluginsPath()"] = function (a_Simulator)
 		return a_Simulator.options.pluginPath .. "/.."
 	end,
-
+	
+	["cPlugin:GetLocalFolder()"] = function(a_Simulator, a_Self)
+		return getmetatable(a_Self).simulatorInternal_pluginPath or a_Simulator:createInstance({Type = "string"})
+	end,
 }
