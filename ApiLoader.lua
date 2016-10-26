@@ -91,7 +91,9 @@ local g_CTypeToLuaType =
 local function convertTypes(a_Types)
 	-- We can't use ipairs because variables don't use arrays in the APIDesc
 	for _, var in pairs(a_Types) do
-		var.Type = g_CTypeToLuaType[var.Type] or var.Type
+		if (var.Type) then
+			var.Type = g_CTypeToLuaType[var.Type] or (var.Type:gsub("::", "#"))  -- convert "cClass::eEnum" into "cClass#eEnum"
+		end
 	end
 	return a_Types
 end
@@ -103,10 +105,7 @@ end
 --- Converts C++ types (AString, int) in a function signature to their Lua counterparts:
 -- Modifies a_FnSignature directly
 local function convertParamTypes(a_FnSignature)
-	-- Convert params:
 	a_FnSignature.Params = convertTypes(a_FnSignature.Params or {})
-
-	-- Convert returns:
 	a_FnSignature.Returns = convertTypes(a_FnSignature.Returns or {})
 end
 
@@ -458,6 +457,57 @@ end
 
 
 
+--- Outputs to file "unimplementedCallbacks.txt" a list of all API functions that take a "function" as a parameter and don't have a specific implementation
+-- a_API is the complete API description, with implementations already loaded
+local function listUnimplementedCallbacks(a_API)
+	-- Check params:
+	assert(type(a_API) == "table")
+	assert(type(a_API.Classes) == "table")
+
+	-- Checker function that processes a single class:
+	local res = {}
+	local function checkFunctions(a_ClassName, a_ClassApi)
+		for fnName, fnDesc in pairs(a_ClassApi.Functions or {}) do
+			local desc = fnDesc
+			if not(desc[1]) then
+				desc = { desc }  -- normalize the description to always be an array
+			end
+			for _, signature in ipairs(desc) do
+				if not(signature.Implementation) then
+					local hasFunctionParam = false
+					for _, param in ipairs(signature.Params or {}) do
+						if (param.Type == "function") then
+							hasFunctionParam = true
+							break
+						end
+					end
+					if (hasFunctionParam) then
+						table.insert(res, util.prettyPrintFunctionSignature(signature, a_ClassName .. ":" .. fnName))
+					end
+				end
+			end  -- for signature
+		end  -- for fnName, fnDesc
+	end
+
+	-- Check each class:
+	for clsName, cls in pairs(a_API.Classes) do
+		checkFunctions(clsName, cls)
+	end
+	checkFunctions("Globals", a_API.Globals)
+
+	-- If any results, output to a file:
+	if (res[1]) then
+		table.sort(res)
+		local f = assert(io.open("unimplementedCallbacks.txt", "w"))
+		f:write(table.concat(res, "\n"))
+		f:close()
+	end
+end
+
+
+
+
+
 --- Loads the API description files, based on the commandline options
 -- a_Options is the Options object that can be queried for global options
 -- a_Logger is the Logger object used for logging
@@ -490,6 +540,9 @@ local function loadApi(a_Options, a_Logger)
 			signature.IsGlobal = true
 		end
 	end
+
+	-- DEBUG: Output a list of all API functions that take a function as a parameter (presumably a callback) and don't have a special implementation:
+	listUnimplementedCallbacks(api)
 
 	return api
 end
