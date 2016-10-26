@@ -1615,10 +1615,14 @@ local function createSimulator(a_Options, a_Logger)
 		registeredCommandHandlers = {},
 
 		-- The console command handlers registered by the plugin
-		-- A dictionary od Command -> { callback = <>, helpString = <> }
+		-- A dictionary of Command -> { callback = <>, helpString = <> }
 		registeredConsoleCommandHandlers = {},
 
-		-- The LIFO of requests for calling back
+		-- The webtabs registered via cWebAdmin:AddWebTab() or cPluginLua:AddWebTab()
+		-- A dictionary of UrlPart -> { title = <>, callback = <> }
+		registeredWebTabs = {},
+
+		-- The FIFO of requests for calling back
 		-- Array of { Function = <fn>, ParamTypes = { <ParamTypes> }, ParamValues = { <OptionalParamValues> }, Notes = <optional-string> }
 		-- ParamTypes is an array of strings describing the param types
 		-- Param values is an optional array of param values to use. If present, ParamTypes is ignored
