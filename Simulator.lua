@@ -964,7 +964,7 @@ function Simulator:findClassFunctionSignatureFromParams(a_FnDesc, a_Params, a_Cl
 		if (doesMatch) then
 			return signature
 		end
-		table.insert(msgs, (msg or "<no message>") .. " (signature: " .. self:prettyPrintSignature(signature) .. ")")
+		table.insert(msgs, (msg or "<no message>") .. " (signature: " .. util.prettyPrintFunctionSignature(signature) .. ")")
 	end
 
 	-- None of the signatures matched the params, report an error:
@@ -1297,52 +1297,6 @@ end
 
 
 
---- Pretty-prints the function signature for display to the user
--- a_Signature is a single APIDesc signature of the function
-function Simulator:prettyPrintSignature(a_Signature)
-	-- Check params:
-	assert(self)
-	assert(type(a_Signature) == "table")
-	assert(type(a_Signature.Params) == "table")
-	assert(type(a_Signature.Returns) == "table")
-
-	-- Output the qualifiers:
-	local res = ""
-	local qualifiers = {}
-	if (a_Signature.IsStatic) then
-		qualifiers[1] = "static"
-	end
-	if (a_Signature.IsGlobal) then
-		qualifiers[#qualifiers + 1] = "global"
-	end
-	if (qualifiers[1]) then
-		res = "<" .. table.concat(qualifiers, ", ") .. "> "
-	end
-
-	-- Output the params:
-	res = res .. "("
-	for idx, param in ipairs(a_Signature.Params) do
-		if (idx > 1) then
-			res = res .. ", "
-		end
-		res = res .. param.Type
-	end
-	res = res .. ") -> ("
-
-	-- Output the returns:
-	for idx, ret in ipairs(a_Signature.Returns) do
-		if (idx > 1) then
-			res = res .. ", "
-		end
-		res = res .. ret.Type
-	end
-	return res .. ")"
-end
-
-
-
-
-
 --- Keeps dequeueing the callback requests from the internal queue and calling them, until the queue is empty
 -- It is safe to queue more callback requests while it is executing
 function Simulator:processAllQueuedCallbackRequests()
@@ -1657,8 +1611,12 @@ local function createSimulator(a_Options, a_Logger)
 		registeredHooks = {},
 
 		-- The command handlers registered by the plugin
-		-- A dictionary of Command -> { permission, callback, helpString }
+		-- A dictionary of Command -> { permission = <>, callback = <>, helpString = <> }
 		registeredCommandHandlers = {},
+
+		-- The console command handlers registered by the plugin
+		-- A dictionary od Command -> { callback = <>, helpString = <> }
+		registeredConsoleCommandHandlers = {},
 
 		-- The LIFO of requests for calling back
 		-- Array of { Function = <fn>, ParamTypes = { <ParamTypes> }, ParamValues = { <OptionalParamValues> }, Notes = <optional-string> }

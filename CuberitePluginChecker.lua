@@ -7,12 +7,11 @@
 
 
 -- Load the libraries:
+dofile("Utils.lua")
 local Options   = dofile("Options.lua")
 local ApiLoader = dofile("ApiLoader.lua")
 local Simulator = dofile("Simulator.lua")
 local Logger    = dofile("Logger.lua")
-
-dofile("Utils.lua")
 
 
 
