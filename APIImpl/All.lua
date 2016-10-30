@@ -12,10 +12,11 @@ local filenames =
 	"APIImpl/CompositeChat.lua",
 	"APIImpl/File.lua",
 	"APIImpl/Misc.lua",
+	"APIImpl/Network.lua",
 	"APIImpl/Player.lua",
 	"APIImpl/PluginManager.lua",
+	"APIImpl/UI.lua",
 	"APIImpl/World.lua",
-	"APIImpl/Network.lua",
 }
 
 
