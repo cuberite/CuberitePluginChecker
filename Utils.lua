@@ -6,7 +6,7 @@
 
 
 
-util =
+utils =
 {
 	--- Copies the file contents
 	-- Returns true on success, false and message on failure
@@ -51,7 +51,7 @@ util =
 		for fnam in lfs.dir(a_Path) do
 			local fullName = a_Path .. "/" .. fnam
 			if (lfs.attributes(fullName, "mode") == "directory") then
-				deleteFolderContents(fullName)
+				utils.deleteFolderContents(fullName)
 			end
 			os.remove(fullName)
 		end

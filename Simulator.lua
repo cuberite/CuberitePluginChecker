@@ -964,7 +964,7 @@ function Simulator:findClassFunctionSignatureFromParams(a_FnDesc, a_Params, a_Cl
 		if (doesMatch) then
 			return signature
 		end
-		table.insert(msgs, (msg or "<no message>") .. " (signature: " .. util.prettyPrintFunctionSignature(signature) .. ")")
+		table.insert(msgs, (msg or "<no message>") .. " (signature: " .. utils.prettyPrintFunctionSignature(signature) .. ")")
 	end
 
 	-- None of the signatures matched the params, report an error:

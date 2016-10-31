@@ -31,7 +31,7 @@ return
 		a_DstFileName = a_Simulator:redirectPath(a_DstFileName)
 		assert(a_SrcFileName ~= "")
 		assert(a_DstFileName ~= "")
-		local isSuccess, msg = util.copyFile(a_SrcFileName, a_DstFileName)
+		local isSuccess, msg = utils.copyFile(a_SrcFileName, a_DstFileName)
 		if not(isSuccess) then
 			a_Simulator.logger.debug("cFile:Copy failed: %s", msg)
 		end

@@ -482,7 +482,7 @@ local function listUnimplementedCallbacks(a_API)
 						end
 					end
 					if (hasFunctionParam) then
-						table.insert(res, util.prettyPrintFunctionSignature(signature, a_ClassName .. ":" .. fnName))
+						table.insert(res, utils.prettyPrintFunctionSignature(signature, a_ClassName .. ":" .. fnName))
 					end
 				end
 			end  -- for signature
