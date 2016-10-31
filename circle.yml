@@ -9,10 +9,8 @@ dependencies:
   - sudo luarocks install lsqlite3
   - sudo luarocks install luasocket
   - sudo luarocks install luasec OPENSSL_LIBDIR=/usr/lib/x86_64-linux-gnu
-  - mkdir ~/Gallery
-  - wget -O ~/gallery.zip https://github.com/cuberite/gallery/archive/master.zip
+  - git clone --depth=1 https://github.com/cuberite/gallery ~/Gallery
   - wget -O ~/InfoReg.lua https://raw.githubusercontent.com/cuberite/cuberite/master/Server/Plugins/InfoReg.lua
-  - unzip -j -d ~/Gallery ~/gallery.zip
   - mkdir ~/AutoAPI
   - wget -O ~/AutoAPI.zip https://builds.cuberite.org/job/Cuberite%20Windows%20x64%20Master/lastSuccessfulBuild/artifact/AutoAPI.zip
   - unzip ~/AutoAPI.zip -d ~/AutoAPI
