@@ -33,7 +33,7 @@ return
 		assert(a_DstFileName ~= "")
 		local isSuccess, msg = utils.copyFile(a_SrcFileName, a_DstFileName)
 		if not(isSuccess) then
-			a_Simulator.logger.debug("cFile:Copy failed: %s", msg)
+			a_Simulator.logger:debug("cFile:Copy failed: %s", msg)
 		end
 		return isSuccess
 	end,

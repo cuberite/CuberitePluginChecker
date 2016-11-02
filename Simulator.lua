@@ -1382,7 +1382,9 @@ function Simulator:redirectPath(a_Path)
 	-- If there is a matching entry in the redirects, use it:
 	local match = self.redirects[a_Path]
 	if (match) then
-		return match
+		local res = self.options.scenarioPath .. match
+		self.logger:trace(string.format("Redirecting \"%s\" to \"%s\".", a_Path, res))
+		return res
 	end
 
 	-- If there is a full foldername match, use it:
@@ -1391,13 +1393,17 @@ function Simulator:redirectPath(a_Path)
 	while (true) do
 		idx = a_Path:find("/", idx + 1)  -- find the next slash
 		if not(idx) then
+			-- No redirection match
 			return a_Path
 		end
 		local match = self.redirects[a_Path:sub(1, idx)]  -- check the path up to the current slash for redirects:
 		if (match) then
-			return match .. a_Path.sub(idx + 1)
+			local res = self.options.scenarioPath .. match .. a_Path.sub(idx + 1)
+			self.logger:trace(string.format("Redirecting \"%s\" to \"%s\".", a_Path, res))
+			return res
 		end
 	end
+	assert(false, "Should never get here, the above is an infinite loop with return points")
 end
 
 
