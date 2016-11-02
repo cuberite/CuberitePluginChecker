@@ -23,6 +23,7 @@ The options object contains the following fields:
 	pluginFiles            - array-table of filenames for all plugin files to check. Each item already includes pluginPath
 	pluginPath             - path to the plugin's files
 	scenarioFileName       - filename to load as scenario file
+	scenarioPath           - path to the scenario file (used for relative FS redirection)
 	shouldClearObjects     - bool specifying whether API objects should be cleared after each callback (thus detecting potential use-after-callback)
 	shouldGCObjects        - bool specifying whether API objects should be GC-ed after each callback (thus detecting storage-after-callback)
 	prefillSymbolPatterns  - array-table of patterns used to fill the sandbox of the plugin
@@ -145,6 +146,12 @@ local optionProcessor =
 			)
 		end
 		a_Options.scenarioFileName = a_Args[a_Idx + 1]
+		local idxLastSlash = string.find(a_Options.scenarioFileName, "/[^/]*$")
+		if (idxLastSlash) then
+			a_Options.scenarioPath = string.sub(a_Options.scenarioFileName, 1, idxLastSlash)
+		else
+			a_Options.scenarioPath = ""
+		end
 		if not(a_Options.scenarioFileName) then
 			error(string.format("Invalid option \"-s\" (%d), expected a scenario filename following it.", a_Idx))
 		end

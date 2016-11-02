@@ -32,15 +32,15 @@ Note that the scenario needs to explicitly specify when to load / initialize the
 The following actions can be used in a scenario:
 
 ## redirect
-Adds redirection for files and folders. Any Cuberite API that takes a file or folder first checks if there's any redirection for the path. If the beginning of a path to be used matches any of the redirects given, the appropriate part of the path will be replaced. For example, consider a redirect of `["a/b/"] = "c/d/"`, the following table sums up the redirection performed:
+Adds redirection for files and folders. Any Cuberite API that takes a file or folder first checks if there's any redirection for the path. If the beginning of a path to be used matches any of the redirects given, the appropriate part of the path will be replaced. The redirected paths are relative to the scenario file's folder. For example, consider a redirect of `["a/b/"] = "c/d/"` and the scenario file being used is `tests/scenario.lua`, the following table sums up the redirection performed:
 
 Path used by plugin | Path actually used | Notes
 --------------------|--------------------|------
 a.txt               | a.txt              | Partial matches are ignored
 a/b.txt             | a/b.txt            | Not matching the full redirect path
-a/b/z.txt           | c/d/z.txt          | Redirect performed
+a/b/z.txt           | tests/c/d/z.txt    | Redirect performed
 c/a/b/z.txt         | c/a/b/z.txt        | Not matching the *beginning* of the path
-c/../a/b/z.txt      | c/d/z.txt          | Redirect takes into account relative paths
+e/../a/b/z.txt      | tests/c/d/z.txt    | Redirect takes into account collapsed relative paths
 c/d/../a/b/z.txt    | c/a/b/z.txt        | Relative path collapsed, but not matching the *beginning* of the path
 
 Takes a dictionary table which maps old paths to new paths as its parameter. Note that paths always use a slash, even on Windows! Also note that most paths cannot be used in the simple Lua table key format, but will need to use the brackets instead:
@@ -98,7 +98,7 @@ b b a
 b b b
 ```
 
-Takes a dictionary table as its parameter. The `playerName` value specifies the player to impersonate for the commands. The `choices` specifies an array of strings that are used for the parameters. The 'maxLen' specifies the maximum number of parameters, the optional `minLen` (default: 0) specifies the minimum number of parameters. 
+Takes a dictionary table as its parameter. The `playerName` value specifies the player to impersonate for the commands. The `choices` specifies an array of strings that are used for the parameters. The 'maxLen' specifies the maximum number of parameters, the optional `minLen` (default: 0) specifies the minimum number of parameters.
 
 If, at the time the action is executed, the specified player is not connected, the Checker aborts with an error message.
 
