@@ -14,6 +14,13 @@ call any callback in the plugin. The Scenario uses this functionality to impleme
 Use the processCallbackRequest() function to call into the plugin.
 Use the queueCallbackRequest() function to add a call into the plugin into a queue.
 Use the processAllQueuedCallbackRequests() function to process the callback queue until it is empty.
+
+The callback request is a table containing the following members:
+ - Function    - function in the plugin to call
+ - ParamValues - array of values that get passed as parameters. If not present, ParamTypes is used instead.
+ - ParamTypes  - array of type descriptions (tables with {Type = <>}) from which the parameters are synthesized. Only used if ParamValues not present.
+ - Notes       - string description of the callback (used for logging)
+ - AllowsStore - optional dictionary of index -> true, parameters at specified indices may be stored by the callback
 --]]
 
 
@@ -131,7 +138,7 @@ function Simulator:afterCallClearObjects(a_Request, a_Params, a_Returns)
 	-- Change the objects in parameters so that any access to them results in an error:
 	local requestNotes = a_Request.Notes
 	for idx, param in ipairs(a_Params) do
-		if (type(param) == "userdata") then
+		if ((type(param) == "userdata") and not(a_Request.AllowsStore[idx])) then
 			getmetatable(param).__index = function()
 				self.logger:error(3, "Attempting to use an object that has been stored from a callback %q.", requestNotes)
 			end
@@ -204,7 +211,7 @@ function Simulator:beforeCallGCObjects(a_Request, a_Params)
 	a_Request.uncollectedParams = {}
 	for idx, param in ipairs(a_Params) do
 		local t = type(param)
-		if (t == "userdata") then
+		if ((t == "userdata") and not (a_Request.AllowsStore[idx])) then
 			local paramType = self:typeOf(param)
 			a_Request.uncollectedParams[idx] = paramType
 			local mt = getmetatable(param)
@@ -1075,6 +1082,7 @@ function Simulator:initializePlugin()
 			Function = self.sandbox.Initialize,
 			ParamValues = { self.sandbox.cPluginManager:Get():GetCurrentPlugin() },
 			Notes = "Initialize()",
+			AllowsStore = {[1] = true},
 		}
 	)
 	if not(res[1]) then
@@ -1328,6 +1336,7 @@ function Simulator:processCallbackRequest(a_Request)
 	assert(self)
 	assert(a_Request)
 	assert(a_Request.Function)
+	a_Request.AllowsStore = a_Request.AllowsStore or {}
 
 	if (a_Request.Notes) then
 		self.logger:debug("Calling request \"%s\".", a_Request.Notes)
