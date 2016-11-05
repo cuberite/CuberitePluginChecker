@@ -857,6 +857,45 @@ end
 
 
 
+--- Executes a callback request simulating the admin executing the specified console command
+-- Calls the command execution hooks and if they allow, the command handler itself
+-- Returns true if the command was executed, false if not.
+function Simulator:executeConsoleCommand(a_CommandString)
+	-- Check params:
+	assert(self)
+	assert(type(a_CommandString) == "string")
+
+	-- Call the command execution hook:
+	local split = self:splitCommandString(a_CommandString)
+	if (self:executeHookCallback("HOOK_EXECUTE_COMMAND", nil, split, a_CommandString)) then
+		self.logger:trace("Plugin hook refused to execute console command \"%s\".", a_CommandString)
+		return false
+	end
+
+	-- Call the command handler:
+	split = self:splitCommandString(a_CommandString)  -- Re-split, in case the hooks changed it
+	local cmdReg = self.registeredConsoleCommandHandlers[split[1]]
+	if not(cmdReg) then
+		self.logger:warning("Trying to execute console command \"%s\" for which there's no registered handler.", split[1])
+		return false
+	end
+	local res = self:processCallbackRequest(
+		{
+			Function = cmdReg.callback,
+			ParamValues = { split, a_CommandString },
+			Notes = "Console command " .. a_CommandString,
+		}
+	)
+	if ((type(res) == "table") and (type(res[2]) == "string")) then
+		self.logger:info("Console command \"%s\" returned string \"%s\".", a_CommandString, res[2])
+	end
+	return true
+end
+
+
+
+
+
 --- Executes a callback request simulating the specified hook type
 -- a_HookTypeStr is the string name of the hook ("HOOK_PLAYER_DISCONNECTING" etc.)
 -- All the rest of the params are given to the hook as-is
@@ -922,7 +961,7 @@ function Simulator:executePlayerCommand(a_PlayerName, a_CommandString)
 	local cmdReg = self.registeredCommandHandlers[split[1]]
 	if not(cmdReg) then
 		self.logger:warning("Trying to execute command \"%s\" for which there's no registered handler.", split[1])
-		return
+		return false
 	end
 	self:processCallbackRequest(
 		{
@@ -931,6 +970,7 @@ function Simulator:executePlayerCommand(a_PlayerName, a_CommandString)
 			Notes = "Command " .. a_CommandString,
 		}
 	)
+	return true
 end
 
 

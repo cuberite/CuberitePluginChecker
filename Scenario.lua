@@ -136,6 +136,29 @@ end
 
 
 
+--- Sandbox handler of the "consoleCommand" keyword.
+-- Simulates an admin executing a console command
+local function sandboxConsoleCommand(a_Table)
+	-- Check the attributes:
+	local command = a_Table.command
+	if not(command) then
+		error("Error in scenario file, consoleCommand doesn't have the required \"command\" attribute", 2)
+	end
+
+	-- Return the action implementation:
+	return function(a_Simulator)
+		a_Simulator.logger:trace(
+			"Scenario: processing action \"consoleCommand\", command \"%s\".",
+			command
+		)
+		a_Simulator:executeConsoleCommand(command)
+	end
+end
+
+
+
+
+
 --- Fuzzes a single command
 -- a_Simulator is the simulator instance on which to fuzz the commands
 -- a_Command is the registered command (string) being fuzzed
@@ -176,6 +199,45 @@ end
 
 
 
+--- Fuzzes a single console command
+-- a_Simulator is the simulator instance on which to fuzz the commands
+-- a_Command is the registered command (string) being fuzzed
+-- a_Choices is the array-table of choices for the command parameters
+-- a_MinLen is the minimum length of the fuzzed command parameter array
+-- a_MaxLen is the maximum length of the fuzzed command parameter array
+local function fuzzConsoleCommand(a_Simulator, a_Command, a_Choices, a_MinLen, a_MaxLen)
+	-- Recursively fuzzes a single console command
+	-- a_CurrentIndex is the index into the a_Split array specifying the index that this recursion level should modify
+	-- a_Split is the command params split array
+	-- The recursion is called "backwards", the last param is chosen first and then the previous param is recursed
+	-- When a_CurrentIndex is zero, the actual command handlers are invoked
+	local function fuzzSingleCommand(a_Simulator, a_Command, a_Choices, a_NumChoices, a_CurrentIndex, a_Split)
+		if (a_CurrentIndex == 0) then
+			-- We've built the whole command, serialize the params into a string and execute it:
+			a_Simulator.logger:info("Scenario: fuzzing console command \"%s\".", a_Command .. " " .. table.concat(a_Split, " "))
+			a_Simulator:executeConsoleCommand(a_Command .. " " .. table.concat(a_Split, " "))
+			-- Process all queued callbacks:
+			a_Simulator:processAllQueuedCallbackRequests()
+			return
+		end
+
+		-- Try all choices on position <a_CurrentIndex> and recurse:
+		for ch = 1, a_NumChoices do
+			a_Split[a_CurrentIndex] = a_Choices[ch]
+			fuzzSingleCommand(a_Simulator, a_Command, a_Choices, a_NumChoices, a_CurrentIndex - 1, a_Split)
+		end
+	end
+
+	-- Start the fuzzing:
+	for len = a_MinLen, a_MaxLen do
+		fuzzSingleCommand(a_Simulator, a_Command, a_Choices, #a_Choices, len, {})
+	end  -- for len - number of chosen params
+end
+
+
+
+
+
 --- Sandbox handler of the "fuzzAllCommands" keyword.
 -- Simulates a player executing each registered command with all kinds of parameters
 local function sandboxFuzzAllCommands(a_Table)
@@ -205,6 +267,64 @@ local function sandboxFuzzAllCommands(a_Table)
 		end
 		for cmd, cmdReg in pairs(a_Simulator.registeredCommandHandlers) do
 			fuzzCommand(a_Simulator, cmd, a_Table.playerName, a_Table.choices, a_Table.minLen, a_Table.maxLen)
+		end
+	end
+end
+
+
+
+
+
+--- Sandbox handler of the "fuzzConsoleCommand" keyword.
+-- Simulates an admin executing a registered console command with all kinds of parameters
+local function sandboxFuzzConsoleCommand(a_Table)
+	-- Check the attributes:
+	local choices = a_Table.choices
+	if (not(choices) or (type(choices) ~= "table") or not(choices[1])) then
+		error("Error in scenario file, fuzzConsoleCommand doesn't have the required \"choices\" array-table attribute", 2)
+	end
+	local cmd = a_Table.command
+	if not(cmd) then
+		error("Error in scenario file, fuzzConsoleCommand doesn't have the required \"command\" string attribute", 2)
+	end
+	local maxLen = tonumber(a_Table.maxLen)
+	if not(maxLen) then
+		error("Error in scenario file, fuzzConsoleCommand doesn't have the required \"maxLen\" number attribute", 2)
+	end
+	a_Table.maxLen = maxLen
+	a_Table.minLen = a_Table.minLen or 0
+
+	-- Return the action implementation:
+	return function(a_Simulator)
+		a_Simulator.logger:trace("Scenario: processing action \"fuzzConsoleCommand(\"%s\")\".", cmd)
+		fuzzConsoleCommand(a_Simulator, cmd, a_Table.choices, a_Table.minLen, a_Table.maxLen)
+	end
+end
+
+
+
+
+
+--- Sandbox handler of the "fuzzAllConsoleCommands" keyword.
+-- Simulates an admin executing each registered console command with all kinds of parameters
+local function sandboxFuzzAllConsoleCommands(a_Table)
+	-- Check the attributes:
+	local choices = a_Table.choices
+	if (not(choices) or (type(choices) ~= "table") or not(choices[1])) then
+		error("Error in scenario file, fuzzAllConsoleCommands doesn't have the required \"choices\" array-table attribute", 2)
+	end
+	local maxLen = tonumber(a_Table.maxLen)
+	if not(maxLen) then
+		error("Error in scenario file, fuzzAllConsoleCommands doesn't have the required \"maxLen\" number attribute", 2)
+	end
+	a_Table.maxLen = maxLen
+	a_Table.minLen = a_Table.minLen or 0
+
+	-- Return the action implementation:
+	return function(a_Simulator)
+		a_Simulator.logger:trace("Scenario: processing action \"fuzzAllConsoleCommands\".")
+		for cmd, cmdReg in pairs(a_Simulator.registeredConsoleCommandHandlers) do
+			fuzzConsoleCommand(a_Simulator, cmd, a_Table.choices, a_Table.minLen, a_Table.maxLen)
 		end
 	end
 end
@@ -397,21 +517,24 @@ end
 -- Provides only the scenario functions
 local scenarioSandbox =
 {
-	scenario          = nil,  -- Will be explicitly modified for each file being loaded
-	redirect          = sandboxRedirect,
-	world             = sandboxWorld,
-	connectPlayer     = sandboxConnectPlayer,
-	playerCommand     = sandboxPlayerCommand,
-	fuzzAllCommands   = sandboxFuzzAllCommands,
-	initializePlugin  = sandboxInitializePlugin,
-	loadPluginFiles   = sandboxLoadPluginFiles,
-	fsCreateFile      = sandboxFsCreateFile,
-	fsCopyFile        = sandboxFsCopyFile,
-	fsRenameFile      = sandboxFsRenameFile,
-	fsDeleteFile      = sandboxFsDeleteFile,
-	fsCreateFolder    = sandboxFsCreateFolder,
-	fsRenameFolder    = sandboxFsRenameFolder,
-	fsDeleteFolder    = sandboxFsDeleteFolder,
+	scenario               = nil,  -- Will be explicitly modified for each file being loaded
+	redirect               = sandboxRedirect,
+	world                  = sandboxWorld,
+	connectPlayer          = sandboxConnectPlayer,
+	playerCommand          = sandboxPlayerCommand,
+	fuzzAllCommands        = sandboxFuzzAllCommands,
+	consoleCommand         = sandboxConsoleCommand,
+	fuzzConsoleCommand     = sandboxFuzzConsoleCommand,
+	fuzzAllConsoleCommands = sandboxFuzzAllConsoleCommands,
+	initializePlugin       = sandboxInitializePlugin,
+	loadPluginFiles        = sandboxLoadPluginFiles,
+	fsCreateFile           = sandboxFsCreateFile,
+	fsCopyFile             = sandboxFsCopyFile,
+	fsRenameFile           = sandboxFsRenameFile,
+	fsDeleteFile           = sandboxFsDeleteFile,
+	fsCreateFolder         = sandboxFsCreateFolder,
+	fsRenameFolder         = sandboxFsRenameFolder,
+	fsDeleteFolder         = sandboxFsDeleteFolder,
 }
 
 
