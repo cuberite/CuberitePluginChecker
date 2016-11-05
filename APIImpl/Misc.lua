@@ -18,12 +18,16 @@ return
 		a_Simulator.logger:info("LOG: %s", a_Text)
 	end,
 
-	["LOGWARNING(string)"] = function (a_Simulator, a_Text)
-		a_Simulator.logger:warning("LOGWARNING: %s", a_Text)
-	end,
-
 	["LOGERROR(string)"] = function (a_Simulator, a_Text)
 		a_Simulator.logger:warning("LOGERROR: %s", a_Text)
+	end,
+
+	["LOGINFO(string)"] = function (a_Simulator, a_Text)
+		a_Simulator.logger:info("LOGINFO: %s", a_Text)
+	end,
+
+	["LOGWARNING(string)"] = function (a_Simulator, a_Text)
+		a_Simulator.logger:warning("LOGWARNING: %s", a_Text)
 	end,
 
 	["<static, global> sqlite3:open(string)"] = function (a_Simulator, a_FileName)

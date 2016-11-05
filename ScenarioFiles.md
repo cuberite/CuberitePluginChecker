@@ -79,7 +79,7 @@ Takes a dictionary table as its parameter. The `playerName` value specifies the 
 If, at the time the action is executed, the specified player is not connected, the Checker aborts with an error message.
 
 ## fuzzAllCommands
-Simulates a player executing each and every command with combinations of command parameters. It takes an array of strings and builds commands with parameters picked from this array, and a minimum / maximum number of parameters; then it executes each command with all combinations of parameters from the array between the max and min. For example, given the array `{"a", "b"}`, maximum length of 3 and minimum length of 0, it tests each command with the following parameters:
+Simulates a player executing each registered command with combinations of command parameters. It takes an array of strings and builds commands with parameters picked from this array, and a minimum / maximum number of parameters; then it executes each command with all combinations of parameters from the array between the max and min. For example, given the array `{"a", "b"}`, maximum length of 3 and minimum length of 0, it tests each command with the following parameters:
 ```
 <none>
 a
@@ -101,6 +101,55 @@ b b b
 Takes a dictionary table as its parameter. The `playerName` value specifies the player to impersonate for the commands. The `choices` specifies an array of strings that are used for the parameters. The 'maxLen' specifies the maximum number of parameters, the optional `minLen` (default: 0) specifies the minimum number of parameters.
 
 If, at the time the action is executed, the specified player is not connected, the Checker aborts with an error message.
+
+## consoleCommand
+Simulates an admin executing a console command. The `HOOK_EXECUTE_COMMAND` hook is fired and its return value is respected. Then the command handler is invoked.
+
+Takes a dictionary table as its parameter. The `command` value specifies the entire command to execute.
+
+## fuzzConsoleCommand
+Simulates an admin executing a console command with combinations of command parameters. It takes an array of strings and builds console commands with parameters picked from this array, and a minimum / maximum number of parameters; then it executes the console command with all combinations of parameters from the array between the max and min. For example, given the array `{"a", "b"}`, maximum length of 3 and minimum length of 0, it tests the console command with the following parameters:
+```
+<none>
+a
+b
+a a
+a b
+b a
+b b
+a a a
+a a b
+a b a
+a b b
+b a a
+b a b
+b b a
+b b b
+```
+
+Takes a dictionary table as its parameter. The `command` specifies the base console command to test. The `choices` specifies an array of strings that are used for the parameters. The 'maxLen' specifies the maximum number of parameters, the optional `minLen` (default: 0) specifies the minimum number of parameters.
+
+## fuzzAllConsoleCommands
+Simulates an admin executing each registered console command with combinations of command parameters. It takes an array of strings and builds console commands with parameters picked from this array, and a minimum / maximum number of parameters; then it executes each console command with all combinations of parameters from the array between the max and min. For example, given the array `{"a", "b"}`, maximum length of 3 and minimum length of 0, it tests each console command with the following parameters:
+```
+<none>
+a
+b
+a a
+a b
+b a
+b b
+a a a
+a a b
+a b a
+a b b
+b a a
+b a b
+b b a
+b b b
+```
+
+Takes a dictionary table as its parameter. The `choices` specifies an array of strings that are used for the parameters. The 'maxLen' specifies the maximum number of parameters, the optional `minLen` (default: 0) specifies the minimum number of parameters.
 
 ## fsCreateFile
 Creates a file and, optionally, fills it with data. Takes a dictionary table as its parameter. The `fileName` specifies the file to create. Note that redirection is NOT performed on this filename. The optional `contents` value specifies the contents to write into the new file.

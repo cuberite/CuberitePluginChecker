@@ -20,6 +20,17 @@ scenario
 		name = "world",
 	},
 	initializePlugin(),
+	fuzzAllConsoleCommands
+	{
+		-- command = "gallery",
+		choices =
+		{
+			"checkindices",
+			"fix",
+			"-force",
+		},
+		maxLen = 2,
+	},
 	connectPlayer  -- Simulate a player connection
 	{
 		name = "player1",
