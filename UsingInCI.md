@@ -12,7 +12,7 @@ The following sections provide an example of the config files for the CI provide
 
 
 ## CircleCI
-CircleCI provides a clean machine with sudo access. There are no problems getting everything to work. Typical times for a CricleCI check is 2 minutes machine setup and 3 seconds Checker run.
+CircleCI provides a clean machine with sudo access. There are no problems getting everything to work. Typical times for a CircleCI check is 2 minutes machine setup and 3 seconds Checker run.
 
 The circle.yml file should look something like this:
 ```
@@ -21,9 +21,9 @@ dependencies:
   - sudo apt-get install lua5.1 luarocks libssl-dev
   - sudo luarocks install luafilesystem
   - sudo luarocks install lsqlite3
-  - sudo luarocks install luasocket
   - sudo luarocks install luasec OPENSSL_LIBDIR=/usr/lib/x86_64-linux-gnu
-  - git clone https://github.com/madmaxoft/CuberitePluginChecker ~/Checker
+  - sudo luarocks install luasocket
+  - git clone https://github.com/cuberite/CuberitePluginChecker ~/Checker
   - wget -O ~/InfoReg.lua https://raw.githubusercontent.com/cuberite/cuberite/master/Server/Plugins/InfoReg.lua
   - mkdir ~/AutoAPI
   - wget -O ~/AutoAPI.zip https://builds.cuberite.org/job/Cuberite%20Windows%20x64%20Master/lastSuccessfulBuild/artifact/AutoAPI.zip
