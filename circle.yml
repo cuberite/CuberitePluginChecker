@@ -9,6 +9,7 @@ dependencies:
   - sudo luarocks install lsqlite3
   - sudo luarocks install luasec OPENSSL_LIBDIR=/usr/lib/x86_64-linux-gnu
   - sudo luarocks install luasocket
+  - sudo luarocks install luacheck
   - git clone --depth=1 https://github.com/cuberite/gallery ~/Gallery
   - wget -O ~/InfoReg.lua https://raw.githubusercontent.com/cuberite/cuberite/master/Server/Plugins/InfoReg.lua
   - mkdir ~/AutoAPI
@@ -20,3 +21,4 @@ dependencies:
 test:
  override:
   - lua CuberitePluginChecker.lua -p ~/Gallery -a ~/AutoAPI -e ~/ManualAPI.lua -i APIImpl/All.lua -s tests/Gallery/FuzzCommands.lua
+  - luacheck -q .
