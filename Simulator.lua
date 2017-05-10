@@ -1047,7 +1047,7 @@ function Simulator:fuzzCommandHandlers()
 
 	-- Add the fuzzing request for the next command handler into the queue:
 	local test = self.currentFuzzedCommandTest
-	local cmd = splitCommandString(self.commandsToFuzz[1])
+	local cmd = self:splitCommandString(self.commandsToFuzz[1])
 	local desc = self.registeredCommandHandlers[cmd[1]]
 	if (test == 1) then
 		self:addCommandCallbackRequest(desc.callback, cmd)

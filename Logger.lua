@@ -9,15 +9,15 @@
 local Logger =
 {
 	-- The various log levels:
-	ERROR   = 9,  -- Emitting this log also terminates the entire program
+	ERROR   = 9,  -- Emitting this log also prints stacktrace and terminates the entire program
 	WARNING = 5,
 	INFO    = 4,
 	DEBUG   = 3,
 	TRACE   = 1,
-
-	-- If currentLogLevel is higher than message's loglevel, the message won't be output
-	currentLogLevel = DEBUG,
 }
+
+-- If currentLogLevel is higher than message's loglevel, the message won't be output
+Logger.currentLogLevel = Logger.DEBUG
 
 
 

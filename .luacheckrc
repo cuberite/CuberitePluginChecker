@@ -10,15 +10,20 @@ allow_defined = true
 -- Ignore files / directories
 exclude_files =
 {
-	"tests/",  -- CuberitePluginChecker
+	"tests/",
+
+	-- Not present in git, but used locally for on-the-fly checking:
+	"InfoReg.lua",
+	"AutoAPI/",
 }
 
 -- Ignore variables, warning codes
 ignore =
 {
-	"113",  -- Accessing an undefined global variable.
+	"143",  -- Accessing undefined field of a table
 	"211",  -- Unused local variable.
 	"421",  -- Shadowing a local variable.
 	"432",  -- Shadowing an upvalue argument.
 	"511",  -- Unreachable code.
+	"631",  -- Line too long.
 }

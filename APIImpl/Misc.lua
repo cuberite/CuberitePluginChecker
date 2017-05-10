@@ -40,7 +40,7 @@ return
 
 	["cRoot:DoWithPlayerByUUID(string, function)"] = function(a_Simulator, a_Root, a_PlayerUUID, a_Callback)
 		for playerName, player in pairs(a_Simulator.players) do
-			if (player.uuid == a_Uuid) then
+			if (player.uuid == a_PlayerUUID) then
 				local res = a_Simulator:processCallbackRequest({
 					Function = a_Callback,
 					ParamValues = { a_Simulator:getPlayerByName(playerName) },

@@ -19,6 +19,18 @@ end
 
 
 
+--- Returns a cPluginLua instance that acts as the current plugin
+local function getCurrentPlugin(a_Simulator, a_Self)
+		local res = a_Simulator:createInstance({Type = "cPluginLua"})
+		-- Save the path to the plugin folder in the self variable
+		getmetatable(res).simulatorInternal_pluginPath = a_Simulator.options.pluginPath
+		return res
+end
+
+
+
+
+
 --- Implementation of the cPluginManager:BindCommand function
 -- There are two separate API endpoints for the same implementation, so the implementation is pulled into a common function
 local function BindCommand(a_Simulator, a_Self, a_Command, a_Permission, a_Callback, a_HelpString)
@@ -106,7 +118,7 @@ return
 
 	["<static> cPluginManager:DoWithPlugin(string, function) -> (boolean)"] = function(a_Simulator, a_Class, a_PluginName, a_Callback)
 		-- The currently tested plugin is the only one present, if the name matches, call with "self":
-		local currPlugin = cPluginManager:GetCurrentPlugin()
+		local currPlugin = getCurrentPlugin(a_Simulator)
 		if (a_PluginName == currPlugin:GetName()) then
 			local res = a_Simulator:processCallbackRequest({
 				Function = a_Callback,
@@ -154,12 +166,7 @@ return
 
 	["cPluginManager:ForEachPlugin(function) -> (boolean)"] = ForEachPlugin,
 
-	["cPluginManager:GetCurrentPlugin()"] = function (a_Simulator, a_Self)
-		local res = a_Simulator:createInstance({Type = "cPluginLua"})
-		-- Save the path to the plugin folder in the self variable
-		getmetatable(res).simulatorInternal_pluginPath = a_Simulator.options.pluginPath
-		return res
-	end,
+	["cPluginManager:GetCurrentPlugin()"] = getCurrentPlugin,
 
 	["<static> cPluginManager:GetPluginsPath()"] = function (a_Simulator)
 		return a_Simulator.options.pluginPath .. "/.."
