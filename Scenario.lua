@@ -159,6 +159,33 @@ end
 
 
 
+--- Recursively fuzzes a single command
+-- To be used only inside fuzzCommand!
+-- a_CurrentIndex is the index into the a_Split array specifying the index that this recursion level should modify
+-- a_Split is the command params split array
+-- The recursion is called "backwards", the last param is chosen first and then the previous param is recursed
+-- When a_CurrentIndex is zero, the actual command handlers are invoked
+local function fuzzSingleCommand(a_Simulator, a_Command, a_PlayerName, a_Choices, a_NumChoices, a_CurrentIndex, a_Split)
+	if (a_CurrentIndex == 0) then
+		-- We've built the whole command, serialize the params into a string and execute it:
+		a_Simulator.logger:info("Scenario: fuzzing command \"%s\".", a_Command .. " " .. table.concat(a_Split, " "))
+		a_Simulator:executePlayerCommand(a_PlayerName, a_Command .. " " .. table.concat(a_Split, " "))
+		-- Process all queued callbacks:
+		a_Simulator:processAllQueuedCallbackRequests()
+		return
+	end
+
+	-- Try all choices on position <a_CurrentIndex> and recurse:
+	for ch = 1, a_NumChoices do
+		a_Split[a_CurrentIndex] = a_Choices[ch]
+		fuzzSingleCommand(a_Simulator, a_Command, a_PlayerName, a_Choices, a_NumChoices, a_CurrentIndex - 1, a_Split)
+	end
+end
+
+
+
+
+
 --- Fuzzes a single command
 -- a_Simulator is the simulator instance on which to fuzz the commands
 -- a_Command is the registered command (string) being fuzzed
@@ -167,32 +194,37 @@ end
 -- a_MinLen is the minimum length of the fuzzed command parameter array
 -- a_MaxLen is the maximum length of the fuzzed command parameter array
 local function fuzzCommand(a_Simulator, a_Command, a_PlayerName, a_Choices, a_MinLen, a_MaxLen)
-	-- Recursively fuzzes a single command
-	-- a_CurrentIndex is the index into the a_Split array specifying the index that this recursion level should modify
-	-- a_Split is the command params split array
-	-- The recursion is called "backwards", the last param is chosen first and then the previous param is recursed
-	-- When a_CurrentIndex is zero, the actual command handlers are invoked
-	local function fuzzSingleCommand(a_Simulator, a_Command, a_PlayerName, a_Choices, a_NumChoices, a_CurrentIndex, a_Split)
-		if (a_CurrentIndex == 0) then
-			-- We've built the whole command, serialize the params into a string and execute it:
-			a_Simulator.logger:info("Scenario: fuzzing command \"%s\".", a_Command .. " " .. table.concat(a_Split, " "))
-			a_Simulator:executePlayerCommand(a_PlayerName, a_Command .. " " .. table.concat(a_Split, " "))
-			-- Process all queued callbacks:
-			a_Simulator:processAllQueuedCallbackRequests()
-			return
-		end
-
-		-- Try all choices on position <a_CurrentIndex> and recurse:
-		for ch = 1, a_NumChoices do
-			a_Split[a_CurrentIndex] = a_Choices[ch]
-			fuzzSingleCommand(a_Simulator, a_Command, a_PlayerName, a_Choices, a_NumChoices, a_CurrentIndex - 1, a_Split)
-		end
-	end
-
 	-- Start the fuzzing:
 	for len = a_MinLen, a_MaxLen do
 		fuzzSingleCommand(a_Simulator, a_Command, a_PlayerName, a_Choices, #a_Choices, len, {})
 	end  -- for len - number of chosen params
+end
+
+
+
+
+
+--- Recursively fuzzes a single console command
+-- To be used only inside FuzzConsoleCommand!
+-- a_CurrentIndex is the index into the a_Split array specifying the index that this recursion level should modify
+-- a_Split is the command params split array
+-- The recursion is called "backwards", the last param is chosen first and then the previous param is recursed
+-- When a_CurrentIndex is zero, the actual command handlers are invoked
+local function fuzzSingleConsoleCommand(a_Simulator, a_Command, a_Choices, a_NumChoices, a_CurrentIndex, a_Split)
+	if (a_CurrentIndex == 0) then
+		-- We've built the whole command, serialize the params into a string and execute it:
+		a_Simulator.logger:info("Scenario: fuzzing console command \"%s\".", a_Command .. " " .. table.concat(a_Split, " "))
+		a_Simulator:executeConsoleCommand(a_Command .. " " .. table.concat(a_Split, " "))
+		-- Process all queued callbacks:
+		a_Simulator:processAllQueuedCallbackRequests()
+		return
+	end
+
+	-- Try all choices on position <a_CurrentIndex> and recurse:
+	for ch = 1, a_NumChoices do
+		a_Split[a_CurrentIndex] = a_Choices[ch]
+		fuzzSingleConsoleCommand(a_Simulator, a_Command, a_Choices, a_NumChoices, a_CurrentIndex - 1, a_Split)
+	end
 end
 
 
@@ -206,31 +238,9 @@ end
 -- a_MinLen is the minimum length of the fuzzed command parameter array
 -- a_MaxLen is the maximum length of the fuzzed command parameter array
 local function fuzzConsoleCommand(a_Simulator, a_Command, a_Choices, a_MinLen, a_MaxLen)
-	-- Recursively fuzzes a single console command
-	-- a_CurrentIndex is the index into the a_Split array specifying the index that this recursion level should modify
-	-- a_Split is the command params split array
-	-- The recursion is called "backwards", the last param is chosen first and then the previous param is recursed
-	-- When a_CurrentIndex is zero, the actual command handlers are invoked
-	local function fuzzSingleCommand(a_Simulator, a_Command, a_Choices, a_NumChoices, a_CurrentIndex, a_Split)
-		if (a_CurrentIndex == 0) then
-			-- We've built the whole command, serialize the params into a string and execute it:
-			a_Simulator.logger:info("Scenario: fuzzing console command \"%s\".", a_Command .. " " .. table.concat(a_Split, " "))
-			a_Simulator:executeConsoleCommand(a_Command .. " " .. table.concat(a_Split, " "))
-			-- Process all queued callbacks:
-			a_Simulator:processAllQueuedCallbackRequests()
-			return
-		end
-
-		-- Try all choices on position <a_CurrentIndex> and recurse:
-		for ch = 1, a_NumChoices do
-			a_Split[a_CurrentIndex] = a_Choices[ch]
-			fuzzSingleCommand(a_Simulator, a_Command, a_Choices, a_NumChoices, a_CurrentIndex - 1, a_Split)
-		end
-	end
-
 	-- Start the fuzzing:
 	for len = a_MinLen, a_MaxLen do
-		fuzzSingleCommand(a_Simulator, a_Command, a_Choices, #a_Choices, len, {})
+		fuzzSingleConsoleCommand(a_Simulator, a_Command, a_Choices, #a_Choices, len, {})
 	end  -- for len - number of chosen params
 end
 

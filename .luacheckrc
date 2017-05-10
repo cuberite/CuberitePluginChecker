@@ -21,7 +21,6 @@ exclude_files =
 ignore =
 {
 	"143",  -- Accessing undefined field of a table
-	"432",  -- Shadowing an upvalue argument.
 	"511",  -- Unreachable code.
 	"631",  -- Line too long.
 }

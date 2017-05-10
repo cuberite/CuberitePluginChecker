@@ -1198,16 +1198,16 @@ function Simulator:prefillApi(a_ApiDesc)
 		return false;
 	end
 
-	local function fillApi(a_ApiDesc, a_SymbolName, a_Sandbox)
-		assert(type(a_ApiDesc) == "table")
+	local function fillApi(a_FAApiDesc, a_SymbolName, a_Sandbox)
+		assert(type(a_FAApiDesc) == "table")
 		assert(type(a_SymbolName) == "string")
 		assert(type(a_Sandbox) == "table")
-		for functionName, functionDesc in pairs(a_ApiDesc.Functions) do
+		for functionName, functionDesc in pairs(a_FAApiDesc.Functions) do
 			if (matchesAnyPattern(a_SymbolName .. ":" .. functionName)) then
 				a_Sandbox[functionName] = self:createClassFunction(functionDesc, functionName, a_SymbolName)
 			end
 		end
-		for constantName, constantDesc in pairs(a_ApiDesc.Constants) do
+		for constantName, constantDesc in pairs(a_FAApiDesc.Constants) do
 			if (constantDesc.Value and matchesAnyPattern(a_SymbolName .. "." .. constantName)) then
 				a_Sandbox[constantName] = self:createClassConstant(constantDesc, constantName, a_SymbolName);
 			end
