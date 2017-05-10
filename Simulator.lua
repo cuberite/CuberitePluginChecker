@@ -498,7 +498,7 @@ function Simulator:createApiEndpoint(a_ClassApi, a_SymbolName, a_ClassName)
 
 	-- If not found, try to create it in the class parents:
 	for _, className in ipairs(a_ClassApi.Inherits or {}) do
-		local res = self.sandbox[className][a_SymbolName]
+		res = self.sandbox[className][a_SymbolName]
 		if (res) then
 			return res
 		end
@@ -1441,7 +1441,7 @@ function Simulator:redirectPath(a_Path)
 			-- No redirection match
 			return a_Path
 		end
-		local match = self.redirects[a_Path:sub(1, idx)]  -- check the path up to the current slash for redirects:
+		match = self.redirects[a_Path:sub(1, idx)]  -- check the path up to the current slash for redirects:
 		if (match) then
 			local res = self.options.scenarioPath .. match .. a_Path.sub(idx + 1)
 			self.logger:trace(string.format("Redirecting \"%s\" to \"%s\".", a_Path, res))
