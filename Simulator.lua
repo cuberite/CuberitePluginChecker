@@ -28,7 +28,10 @@ The callback request is a table containing the following members:
 
 
 --- Compatibility with both Lua 5.1 and LuaJit
+-- (generates a LuaCheck 143 warning - Accessing undefined field of a table)
+-- luacheck: push ignore 143
 local unpack = unpack or table.unpack
+-- luacheck: pop
 
 
 

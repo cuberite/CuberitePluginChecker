@@ -20,6 +20,5 @@ exclude_files =
 -- Ignore variables, warning codes
 ignore =
 {
-	"143",  -- Accessing undefined field of a table
 	"631",  -- Line too long.
 }
