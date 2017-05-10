@@ -298,8 +298,8 @@ local function loadApiImplementations(a_Options, a_Api, a_Logger)
 	-- Load all files specified in options:
 	for _, fnam in ipairs(a_Options.apiImplementationFiles) do
 		a_Logger:debug("Loading API implementation file \"%s\".", fnam)
-		local f = assert(loadfile(fnam))
-		local impl = f()
+		local apifile = assert(loadfile(fnam))
+		local impl = apifile()
 		assert(type(impl) == "table", "API Implementation must return a dictionary-table")
 		for k, v in pairs(impl) do
 			if (type(v) == "function") then

@@ -353,7 +353,7 @@ function Simulator:classInheritsFrom(a_ChildName, a_ParentName)
 	-- Check the inheritance using the child class API:
 	local childClass = self.sandbox[a_ChildName]
 	if not(childClass) then
-		self.logger:warning("Attempting to check inheritance for non-existent class \"%s\".", a_ChildName)
+		self.logger:warning("Attempting to check inheritance for non-existent class \"%s\".\n%s", a_ChildName, debug.traceback())
 		return false
 	end
 	local childApi = childClass.simulatorInternal_ClassApi or {}
@@ -1165,7 +1165,7 @@ function Simulator:injectApi(a_ApiDesc)
 
 		-- Failed to create the endpoint, chain to previous __index or raise an error:
 		if not(prevIndex) then
-			self.logger:warning("Attempting to use an unknown Global value \"%s\", nil will be returned", a_SymbolName)
+			self.logger:warning("Attempting to use an unknown Global value \"%s\", nil will be returned.\n%s", a_SymbolName, debug.traceback())
 			return nil
 		end
 		assert(type(prevIndex) == "function")  -- We don't support table-based __index yet (but can be done)
