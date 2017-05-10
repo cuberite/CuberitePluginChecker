@@ -46,7 +46,7 @@ return
 					ParamValues = { a_Simulator:getPlayerByName(playerName) },
 					Notes = string.format("cRoot:DoWithPlayerByUUID() for player %s", playerName),
 				})
-				return true
+				return not(not(res)) -- Convert to bool
 			end
 		end
 		return false  -- player not found

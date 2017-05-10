@@ -999,14 +999,10 @@ function Simulator:findClassFunctionSignatureFromParams(a_FnDesc, a_Params, a_Cl
 	-- Check the signatures that have the same number of params:
 	local msgs = {}
 	for _, signature in ipairs(a_FnDesc) do
-		local numSelfParams, className
-		if (signature.IsGlobal) then
-			numSelfParams = 0
-		else
-			numSelfParams = 1
+		local className
+		if not(signature.IsGlobal) then
 			className = a_ClassName
 		end
-		local numSignatureParams = #(signature.Params) + numSelfParams
 		local doesMatch, msg = self:checkClassFunctionSignature(signature, a_Params, numParamsGiven, className)
 		if (doesMatch) then
 			return signature

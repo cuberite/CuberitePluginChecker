@@ -21,7 +21,6 @@ exclude_files =
 ignore =
 {
 	"143",  -- Accessing undefined field of a table
-	"211",  -- Unused local variable.
 	"421",  -- Shadowing a local variable.
 	"432",  -- Shadowing an upvalue argument.
 	"511",  -- Unreachable code.
