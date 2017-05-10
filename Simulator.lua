@@ -1448,7 +1448,6 @@ function Simulator:redirectPath(a_Path)
 			return res
 		end
 	end
-	assert(false, "Should never get here, the above is an infinite loop with return points")
 end
 
 
