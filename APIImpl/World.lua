@@ -181,7 +181,7 @@ return
 	end,
 
 
-	["cWorld:DoWithPlayerByUUID(UUID, function)"] = function(a_Simulator, a_Self, a_Uuid, a_Callback)
+	["cWorld:DoWithPlayerByUUID(cUUID, function)"] = function(a_Simulator, a_Self, a_Uuid, a_Callback)
 		local worldName = rawget(getmetatable(a_Self), "simulatorInternal_Name")
 		if not(worldName) then
 			a_Simulator.logger:debug("cWorld:DoWithPlayerByUUID() cannot execute the callback, because the cWorld has no name.")
