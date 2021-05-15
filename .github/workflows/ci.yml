@@ -1,0 +1,43 @@
+# This is the GitHub Actions configuration file to enable CI tests
+# It installs Lua, LuaRocks and LuaFileSystem, lsqlite3, luasocket and luasec on the CI worker, then downloads the Gallery plugin and the AutoAPI descriptions
+# Finally it runs the Checker on the Gallery plugin
+
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: cuberite/CuberitePluginChecker
+          fetch-depth: 0
+
+      # Sets up lua
+      - name: Install Lua
+        run: |
+          sudo apt install lua5.1 luarocks libsqlite3-dev
+          sudo luarocks install luafilesystem
+          sudo luarocks install lsqlite3
+          sudo luarocks install luasocket
+          sudo luarocks install luacheck
+
+      # Sets up the environment
+      - name: Set up environment
+        run: |
+          git clone --depth=1 https://github.com/cuberite/gallery ~/Gallery
+          wget -O ~/InfoReg.lua https://raw.githubusercontent.com/cuberite/cuberite/master/Server/Plugins/InfoReg.lua
+          mkdir ~/AutoAPI
+          wget -O ~/AutoAPI.zip 'https://ci.appveyor.com/api/projects/cuberite/cuberite/artifacts/AutoAPI.zip?job=Windows-x64&pr=false&branch=master'
+          unzip ~/AutoAPI.zip -d ~/AutoAPI
+          wget -O ~/ManualAPI.zip 'https://ci.appveyor.com/api/projects/cuberite/cuberite/artifacts/ManualAPI.zip?job=Windows-x64&pr=false&branch=master'
+          unzip ~/ManualAPI.zip -d ~
+
+      # Runs the test
+      - name: Run tests
+        run: |
+          lua CuberitePluginChecker.lua -p ~/Gallery -a ~/AutoAPI -e ~/ManualAPI.lua -i APIImpl/All.lua -s tests/Gallery/FuzzCommands.lua
+          luacheck -q . --codes
