@@ -390,8 +390,9 @@ local function sandboxFsCreateFile(a_Table)
 
 	-- Return the action implementation:
 	return function(a_Simulator)
-		a_Simulator.logger:trace("Scenario: Creating file %s", a_Table.fileName)
-		local f = assert(io.open(a_Table.fileName, "wb"))
+		local fileName = a_Simulator.options.scenarioPath .. a_Table.fileName
+		a_Simulator.logger:trace("Scenario: Creating file %s", fileName)
+		local f = assert(io.open(fileName, "wb"))
 		if (a_Table.contents) then
 			f:write(a_Table.contents)
 		end
@@ -415,8 +416,10 @@ local function sandboxFsCopyFile(a_Table)
 
 	-- Return the action implementation:
 	return function(a_Simulator)
-		a_Simulator.logger:trace("Scenario: Copying file %s to %s", a_Table.srcFileName, a_Table.dstFileName)
-		assert(utils.copyFile(a_Table.srcFileName, a_Table.dstFileName))
+		local srcFileName = a_Simulator.options.scenarioPath .. a_Table.srcFileName
+		local dstFileName = a_Simulator.options.scenarioPath .. a_Table.dstFileName
+		a_Simulator.logger:trace("Scenario: Copying file %s to %s", srcFileName, dstFileName)
+		assert(utils.copyFile(srcFileName, dstFileName))
 	end
 end
 
@@ -436,7 +439,9 @@ local function sandboxFsRenameFile(a_Table)
 
 	-- Return the action implementation:
 	return function(a_Simulator)
-		a_Simulator.logger:trace("Scenario: Renaming file %s to %s", a_Table.oldFileName, a_Table.newFileName)
+		local oldFileName = a_Simulator.options.scenarioPath .. a_Table.oldFileName
+		local newFileName = a_Simulator.options.scenarioPath .. a_Table.newFileName
+		a_Simulator.logger:trace("Scenario: Renaming file %s to %s", oldFileName, newFileName)
 		assert(os.rename(a_Table.oldFileName, a_Table.newFileName))
 	end
 end
@@ -454,8 +459,9 @@ local function sandboxFsDeleteFile(a_Table)
 
 	-- Return the action implementation:
 	return function(a_Simulator)
-		a_Simulator.logger.trace("Scenario: Deleting file %s", a_Table.fileName)
-		assert(os.remove(a_Table.fileName))
+		local fileName = a_Simulator.options.scenarioPath .. a_Table.fileName
+		a_Simulator.logger.trace("Scenario: Deleting file %s", fileName)
+		assert(os.remove(fileName))
 	end
 end
 
@@ -472,8 +478,9 @@ local function sandboxFsCreateFolder(a_Table)
 
 	-- Return the implementation:
 	return function(a_Simulator)
-		a_Simulator.logger.trace("Scenario: Creating folder %s", a_Table.path)
-		assert(utils.createFolderRecursive(a_Table.path), string.format("Cannot create folder %s", a_Table.path))
+		local path = a_Simulator.options.scenarioPath .. a_Table.path
+		a_Simulator.logger.trace("Scenario: Creating folder %s", path)
+		assert(utils.createFolderRecursive(path), string.format("Cannot create folder %s", path))
 	end
 end
 
@@ -493,6 +500,8 @@ local function sandboxFsRenameFolder(a_Table)
 
 	-- Return the implementation:
 	return function(a_Simulator)
+		local oldPath = a_Simulator.options.scenarioPath .. a_Table.oldPath
+		local newPath = a_Simulator.options.scenarioPath .. a_Table.newPath
 		a_Simulator.logger:trace("Scenario: Renaming folder %s to %s", a_Table.oldPath, a_Table.newPath)
 		assert(os.rename(a_Table.oldPath, a_Table.newPath))
 	end
@@ -511,9 +520,10 @@ local function sandboxFsDeleteFolder(a_Table)
 
 	-- Return the action implementation:
 	return function(a_Simulator)
-		a_Simulator.logger.trace("Scenario: Deleting folder %s", a_Table.path)
-		assert(utils.deleteFolderContents(a_Table.path))
-		assert(os.remove(a_Table.path))
+		local path = a_Simulator.options.scenarioPath .. a_Table.path
+		a_Simulator.logger.trace("Scenario: Deleting folder %s", path)
+		assert(utils.deleteFolderContents(path))
+		assert(os.remove(path))
 	end
 end
 
