@@ -134,7 +134,7 @@ return
 					ParamValues = { a_Simulator:getPlayerByName(playerName) },
 					Notes = string.format("cWorld:DoWithEntityByID() for player %s", playerName),
 				})
-				return true
+				return not(not(res)) -- Convert to bool
 			end
 		end
 		return false  -- player not found
@@ -175,7 +175,7 @@ return
 				ParamValues = { a_Simulator:getPlayerByName(a_PlayerName) },
 				Notes = string.format("cWorld:DoWithPlayer() for player %s", a_PlayerName),
 			})
-			return true
+			return not(not(res))  -- Convert to bool
 		end
 		return false  -- player not found
 	end,
@@ -195,7 +195,7 @@ return
 					ParamValues = { a_Simulator:getPlayerByName(playerName) },
 					Notes = string.format("cWorld:DoWithPlayerByUUID() for player %s", playerName),
 				})
-				return true
+				return not(not(res))  -- Convert to bool
 			end
 		end
 		return false  -- player not found
@@ -293,7 +293,7 @@ return
 		-- If there is an exact match, use that:
 		local exactMatch = a_Simulator.players[a_PlayerName]
 		if (exactMatch and (exactMatch.worldName == worldName)) then
-			local res = a_Simulator:processCallbackRequest({
+			a_Simulator:processCallbackRequest({
 				Function = a_Callback,
 				ParamValues = { a_Simulator:getPlayerByName(a_PlayerName) },
 				Notes = string.format("cWorld:FindAndDoWithPlayer() for player %s", a_PlayerName),
@@ -304,7 +304,7 @@ return
 		-- If no exact match, use the first player in the world:
 		for playerName, player in pairs(a_Simulator.players) do
 			if (player.worldName == worldName) then
-				local res = a_Simulator:processCallbackRequest({
+				a_Simulator:processCallbackRequest({
 					Function = a_Callback,
 					ParamValues = { a_Simulator:getPlayerByName(playerName) },
 					Notes = string.format("cWorld:FindAndDoWithPlayer() for player %s", playerName),

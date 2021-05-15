@@ -28,7 +28,10 @@ The callback request is a table containing the following members:
 
 
 --- Compatibility with both Lua 5.1 and LuaJit
+-- (generates a LuaCheck 143 warning - Accessing undefined field of a table)
+-- luacheck: push ignore 143
 local unpack = unpack or table.unpack
+-- luacheck: pop
 
 
 
@@ -498,7 +501,7 @@ function Simulator:createApiEndpoint(a_ClassApi, a_SymbolName, a_ClassName)
 
 	-- If not found, try to create it in the class parents:
 	for _, className in ipairs(a_ClassApi.Inherits or {}) do
-		local res = self.sandbox[className][a_SymbolName]
+		res = self.sandbox[className][a_SymbolName]
 		if (res) then
 			return res
 		end
@@ -999,14 +1002,10 @@ function Simulator:findClassFunctionSignatureFromParams(a_FnDesc, a_Params, a_Cl
 	-- Check the signatures that have the same number of params:
 	local msgs = {}
 	for _, signature in ipairs(a_FnDesc) do
-		local numSelfParams, className
-		if (signature.IsGlobal) then
-			numSelfParams = 0
-		else
-			numSelfParams = 1
+		local className
+		if not(signature.IsGlobal) then
 			className = a_ClassName
 		end
-		local numSignatureParams = #(signature.Params) + numSelfParams
 		local doesMatch, msg = self:checkClassFunctionSignature(signature, a_Params, numParamsGiven, className)
 		if (doesMatch) then
 			return signature
@@ -1047,7 +1046,7 @@ function Simulator:fuzzCommandHandlers()
 
 	-- Add the fuzzing request for the next command handler into the queue:
 	local test = self.currentFuzzedCommandTest
-	local cmd = splitCommandString(self.commandsToFuzz[1])
+	local cmd = self:splitCommandString(self.commandsToFuzz[1])
 	local desc = self.registeredCommandHandlers[cmd[1]]
 	if (test == 1) then
 		self:addCommandCallbackRequest(desc.callback, cmd)
@@ -1202,16 +1201,16 @@ function Simulator:prefillApi(a_ApiDesc)
 		return false;
 	end
 
-	local function fillApi(a_ApiDesc, a_SymbolName, a_Sandbox)
-		assert(type(a_ApiDesc) == "table")
+	local function fillApi(a_FAApiDesc, a_SymbolName, a_Sandbox)
+		assert(type(a_FAApiDesc) == "table")
 		assert(type(a_SymbolName) == "string")
 		assert(type(a_Sandbox) == "table")
-		for functionName, functionDesc in pairs(a_ApiDesc.Functions) do
+		for functionName, functionDesc in pairs(a_FAApiDesc.Functions) do
 			if (matchesAnyPattern(a_SymbolName .. ":" .. functionName)) then
 				a_Sandbox[functionName] = self:createClassFunction(functionDesc, functionName, a_SymbolName)
 			end
 		end
-		for constantName, constantDesc in pairs(a_ApiDesc.Constants) do
+		for constantName, constantDesc in pairs(a_FAApiDesc.Constants) do
 			if (constantDesc.Value and matchesAnyPattern(a_SymbolName .. "." .. constantName)) then
 				a_Sandbox[constantName] = self:createClassConstant(constantDesc, constantName, a_SymbolName);
 			end
@@ -1445,14 +1444,13 @@ function Simulator:redirectPath(a_Path)
 			-- No redirection match
 			return a_Path
 		end
-		local match = self.redirects[a_Path:sub(1, idx)]  -- check the path up to the current slash for redirects:
+		match = self.redirects[a_Path:sub(1, idx)]  -- check the path up to the current slash for redirects:
 		if (match) then
 			local res = self.options.scenarioPath .. match .. a_Path.sub(idx + 1)
 			self.logger:trace(string.format("Redirecting \"%s\" to \"%s\".", a_Path, res))
 			return res
 		end
 	end
-	assert(false, "Should never get here, the above is an infinite loop with return points")
 end
 
 

@@ -54,27 +54,27 @@ return
 	end,
 
 	["<static> cFile:DeleteFile(string)"] = function(a_Simulator, a_ThisClass, a_Path)
-		if not(cFile:IsFile(a_Path)) then
+		a_Path = a_Simulator:redirectPath(a_Path)
+		if not(utils.isFile(a_Path)) then
 			return false
 		end
-		a_Path = a_Simulator:redirectPath(a_Path)
 		return (os.remove(a_Path) ~= nil)
 	end,
 
 	["<static> cFile:DeleteFolder(string)"] = function(a_Simulator, a_ThisClass, a_Path)
-		if not(cFile:IsFolder(a_Path)) then
+		a_Path = a_Simulator:redirectPath(a_Path)
+		if not(utils.isFolder(a_Path)) then
 			return false
 		end
-		a_Path = a_Simulator:redirectPath(a_Path)
 		return (os.remove(a_Path) ~= nil)
 	end,
 
 	["<static> cFile:DeleteFolderContents(string)"] = function(a_Simulator, a_ThisClass, a_Path)
-		if not(cFile:IsFolder(a_Path)) then
+		if not(utils.isFolder(a_Path)) then
 			return false
 		end
 		a_Path = a_Simulator:redirectPath(a_Path)
-		return deleteFolderContents(a_Path)
+		return utils.deleteFolderContents(a_Path)
 	end,
 
 	["<static> cFile:Exists(string)"] = function(a_Simulator, a_ThisClass, a_Path)
@@ -111,14 +111,12 @@ return
 
 	["<static> cFile:IsFile(string)"] = function(a_Simulator, a_ThisClass, a_FileName)
 		a_FileName = a_Simulator:redirectPath(a_FileName)
-		local mode = lfs.attributes(a_FileName, "mode")
-		return (mode == "file")
+		return utils.isFile(a_FileName)
 	end,
 
 	["<static> cFile:IsFolder(string)"] = function(a_Simulator, a_ThisClass, a_Path)
 		a_Path = a_Simulator:redirectPath(a_Path)
-		local mode = lfs.attributes(a_Path, "mode")
-		return (mode == "directory")
+		return utils.isFolder(a_Path)
 	end,
 
 	["<static> cFile:ReadWholeFile(string)"] = function(a_Simulator, a_ThisClass, a_Path)

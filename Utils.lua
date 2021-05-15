@@ -6,6 +6,12 @@
 
 
 
+local lfs = require("lfs")
+
+
+
+
+
 utils =
 {
 	--- Copies the file contents
@@ -56,6 +62,21 @@ utils =
 			os.remove(fullName)
 		end
 	end,
+
+
+	-- Returns true if the specified filename represents a file in the FS
+	isFile = function(a_FileName)
+		local mode = lfs.attributes(a_FileName, "mode")
+		return (mode == "file")
+	end,
+
+
+	-- Returns true if the specified path represents a folder in the FS
+	isFolder = function(a_Path)
+		local mode = lfs.attributes(a_Path, "mode")
+		return (mode == "directory")
+	end,
+
 
 	--- Returns a pretty-printed function signature for display to the user
 	-- a_Signature is a single APIDesc signature of the function
