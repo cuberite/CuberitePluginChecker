@@ -37,9 +37,9 @@ To sum up, before running you need these:
 
 To run the Checker, execute it in your Lua interpreter, while in the Checker's folder:
 ```
-lua CuberitePluginChecker.lua -a <path/to/AutoAPI> -e <path/to/ManualAPI> -p <path/to/your/plugin> -s <ScenarioFile> [options]
+lua CuberitePluginChecker.lua -a <path/to/AutoAPI> -e <path/to/ManualAPI> -p <path/to/your/plugin> -s <ScenarioFile> -i <path/to/mock/api/implementations> [options]
 ```
-The `path/to/AutoAPI` should point to the folder containing the AutoAPI files (such as `_all.lua`). The `path/to/ManualAPI` should point directly to the `ManualAPI.lua` file. The `path/to/your/plugin` should point to the folder where your plugin files are.
+The `path/to/AutoAPI` should point to the folder containing the AutoAPI files (such as `_all.lua`). The `path/to/ManualAPI` should point directly to the `ManualAPI.lua` file. The `path/to/your/plugin` should point to the folder where your plugin files are. The `<path/to/mock/api/implementations>` should point to the file which contains the mock code for certain classes which are required to test plugins. This is usually the `APIImpl/All.lua` file.
 Options further specify the behaviour of the Checker:
 - `-g` uses a GarbageCollecting check for callbacks. This is the preferred check method
 - `-c` uses a Clearing check for callbacks.
