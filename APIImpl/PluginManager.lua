@@ -84,7 +84,7 @@ local function ForEachPlugin(a_Simulator, a_Self, a_Callback)
 		ParamValues = { a_Self:GetCurrentPlugin() },
 		Notes = "cPluginManager:ForEachPlugin() callback",
 	})
-	return not(res == true)  -- If the callback signalized an abort, return false
+	return (res ~= true)  -- If the callback signalized an abort, return false
 end
 
 

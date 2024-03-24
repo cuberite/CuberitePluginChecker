@@ -11,12 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-        with:
-          repository: cuberite/CuberitePluginChecker
-          fetch-depth: 0
+      - uses: actions/checkout@v4
 
-      # Sets up lua
       - name: Install Lua
         run: |
           sudo apt install lua5.1 luarocks libsqlite3-dev
@@ -25,7 +21,6 @@ jobs:
           sudo luarocks install luasocket
           sudo luarocks install luacheck
 
-      # Sets up the environment
       - name: Set up environment
         run: |
           git clone --depth=1 https://github.com/cuberite/gallery ~/Gallery
@@ -36,7 +31,6 @@ jobs:
           wget -O ~/ManualAPI.zip 'https://ci.appveyor.com/api/projects/cuberite/cuberite/artifacts/ManualAPI.zip?job=Windows-x64&pr=false&branch=master'
           unzip ~/ManualAPI.zip -d ~
 
-      # Runs the test
       - name: Run tests
         run: |
           lua CuberitePluginChecker.lua -p ~/Gallery -a ~/AutoAPI -e ~/ManualAPI.lua -i APIImpl/All.lua -s tests/Gallery/FuzzCommands.lua
