@@ -21,10 +21,10 @@ Clearing means that after each callback the Checker will remove all API function
 The Checker requires a bit of a setup in order to run. It needs the API descriptions from Cuberite, which come from two separate sources - the AutoAPI (symbols exported automatically through a script during Cuberite build process); and the ManualAPI (symbols exported manually and documented in the APIDump built-in Cuberite plugin). Because the API evolves all the time, it is recommended to grab the latest version, rather than storing a fixed version somewhere.
 
 ## AutoAPI
-During Cuberite build, the build process generates the API descriptions for all automatically-exported API symbols. This is output into the `src/Bindings/docs` folder, and this entire folder is needed by the Checker. You can also download it from [the build server](https://builds.cuberite.org/job/Cuberite%20Windows%20x64%20Master/lastSuccessfulBuild/artifact/AutoAPI.zip) which is updated several times a day.
+During Cuberite build, the build process generates the API descriptions for all automatically-exported API symbols. This is output into the `src/Bindings/docs` folder, and this entire folder is needed by the Checker. You can also download it from [the build server](https://ci.appveyor.com/api/projects/cuberite/cuberite/artifacts/AutoAPI.zip?job=Windows-x64&pr=false&branch=master) which is updated several times a day.
 
 ## ManualAPI
-If you install the ManualApiDump plugin (https://github.com/madmaxoft/ManualApiDump) into your Cuberite, executing the `manualapi` console command will generate a `ManualAPI.lua` file next to the server executable. This file contains the descriptions for all manually-exported API symbols (Note that the APIDump plugin needs to be present for this to work). Again, you can also download it from [the build server](https://builds.cuberite.org/job/Cuberite%20Windows%20x64%20Master/lastSuccessfulBuild/artifact/ManualAPI.zip) which is updated several times a day.
+If you install the ManualApiDump plugin (https://github.com/madmaxoft/ManualApiDump) into your Cuberite, executing the `manualapi` console command will generate a `ManualAPI.lua` file next to the server executable. This file contains the descriptions for all manually-exported API symbols (Note that the APIDump plugin needs to be present for this to work). Again, you can also download it from [the build server](https://ci.appveyor.com/api/projects/cuberite/cuberite/artifacts/ManualAPI.zip?job=Windows-x64&pr=false&branch=master) which is updated several times a day.
 
 # Running
 To sum up, before running you need these:
@@ -37,9 +37,9 @@ To sum up, before running you need these:
 
 To run the Checker, execute it in your Lua interpreter, while in the Checker's folder:
 ```
-lua CuberitePluginChecker.lua -a <path/to/AutoAPI> -e <path/to/ManualAPI> -p <path/to/your/plugin> -s <ScenarioFile> [options]
+lua CuberitePluginChecker.lua -a <path/to/AutoAPI> -e <path/to/ManualAPI> -p <path/to/your/plugin> -s <ScenarioFile> -i <path/to/mock/api/implementations> [options]
 ```
-The `path/to/AutoAPI` should point to the folder containing the AutoAPI files (such as `_all.lua`). The `path/to/ManualAPI` should point directly to the `ManualAPI.lua` file. The `path/to/your/plugin` should point to the folder where your plugin files are.
+The `path/to/AutoAPI` should point to the folder containing the AutoAPI files (such as `_all.lua`). The `path/to/ManualAPI` should point directly to the `ManualAPI.lua` file. The `path/to/your/plugin` should point to the folder where your plugin files are. The `<path/to/mock/api/implementations>` should point to the file which contains the mock code for certain classes which are required to test plugins. This is usually the `APIImpl/All.lua` file.
 Options further specify the behaviour of the Checker:
 - `-g` uses a GarbageCollecting check for callbacks. This is the preferred check method
 - `-c` uses a Clearing check for callbacks.
