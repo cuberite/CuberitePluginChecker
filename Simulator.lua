@@ -1624,6 +1624,7 @@ local function createSimulator(a_Options, a_Logger)
 			-- Default Lua globals:
 			assert = assert,
 			collectgarbage = collectgarbage,
+			coroutine = coroutine,
 			dofile = function (a_FileName) return res:dofile(res:redirectPath(a_FileName)) end,
 			error = error,
 			getfenv = getfenv,
