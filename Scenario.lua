@@ -10,19 +10,21 @@ that has an "execute" member that provides the function that is to be called. It
 the Simulator instance.
 
 Actions:
-	- loadPluginFiles   -- Loads all the plugin files and executes the globals
-	- initializePlugin  -- Calls the Initialize function. If not loaded, loads the plugin files first.
-	- world             -- Creates a new world
-	- playerConnect     -- Simulates a new player connecting to the server
-	- playerCommand     -- Simulates a player executing a command
-	- fuzzAllCommands   -- Simulates a player executing each command with a wide range of parameters (fuzzing)
-	- fsCreateFile      -- Creates a file, possibly with content
-	- fsCopyFile        -- Copies a file
-	- fsRenameFile      -- Renames a file
-	- fsDeleteFile      -- Deletes a file
-	- fsCreateFolder    -- Creates a new folder (recursive)
-	- fsRenameFolder    -- Renames an existing folder
-	- fsDeleteFolder    -- Deletes a folder (optionally recursive
+	- redirect            -- Adds redirection for files and folders.
+	- redirectPluginFiles -- Redirects files inside the plugin folder.
+	- loadPluginFiles     -- Loads all the plugin files and executes the globals
+	- initializePlugin    -- Calls the Initialize function. If not loaded, loads the plugin files first.
+	- world               -- Creates a new world
+	- playerConnect       -- Simulates a new player connecting to the server
+	- playerCommand       -- Simulates a player executing a command
+	- fuzzAllCommands     -- Simulates a player executing each command with a wide range of parameters (fuzzing)
+	- fsCreateFile        -- Creates a file, possibly with content
+	- fsCopyFile          -- Copies a file
+	- fsRenameFile        -- Renames a file
+	- fsDeleteFile        -- Deletes a file
+	- fsCreateFolder      -- Creates a new folder (recursive)
+	- fsRenameFolder      -- Renames an existing folder
+	- fsDeleteFolder      -- Deletes a folder (optionally recursive
 
 Example scenario file:
 scenario
@@ -57,6 +59,18 @@ local function sandboxRedirect(a_Table)
 	-- Return the action implementation:
 	return function(a_Simulator)
 		a_Simulator:addRedirects(a_Table)
+	end
+end
+
+
+
+
+
+--- Sandbox handler of the redirectPluginFiles keyword.
+-- Returns an action that adds the redirection inside the simulator.
+local function sandboxRedirectPluginFiles(a_Table)
+	return function (a_Simulator)
+		a_Simulator:addRedirectPluginFiles(a_Table)
 	end
 end
 
@@ -529,6 +543,7 @@ local scenarioSandbox =
 {
 	scenario               = nil,  -- Will be explicitly modified for each file being loaded
 	redirect               = sandboxRedirect,
+	redirectPluginFiles    = sandboxRedirectPluginFiles,
 	world                  = sandboxWorld,
 	connectPlayer          = sandboxConnectPlayer,
 	playerCommand          = sandboxPlayerCommand,
