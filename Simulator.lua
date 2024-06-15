@@ -130,6 +130,25 @@ end
 
 
 
+--- Adds the specified file / folder redirection.
+-- Only redirects files inside the plugin folder.
+function Simulator:addRedirectPluginFiles(a_Redirects)
+	assert(self)
+	assert(type(a_Redirects) == "table")
+
+	-- Add the redirects.
+	for orig, new in pairs(a_Redirects) do
+		table.insert(self.redirectPluginFiles, {
+			original = self.options.pluginPath .. "/" .. orig,
+			new = self.options.scenarioPath .. "/" .. new
+		})
+	end
+end
+
+
+
+
+
 --- Called by the simulator after calling the callback, when the ClearObjects is specified in the options
 -- a_Params is an array-table of the params that were given to the callback
 -- a_Returns is an array-table of the return values that the callback returned
@@ -1330,6 +1349,14 @@ function Simulator:paramTypesMatch(a_ParamType, a_SignatureType)
 		if (self.enums[a_SignatureType]) then
 			return true
 		end
+
+		-- The param doesn't match up.
+		return false
+	end
+
+	-- If the signature didn't match and it isn't a class which could inherit the signature return "incompatible":
+	if ((a_ParamType == "string") or (a_ParamType == "function")) then
+		return false
 	end
 
 	-- If both types are classes and the param is a descendant of signature, return "compatible":
@@ -1426,6 +1453,14 @@ function Simulator:redirectPath(a_Path)
 	assert(type(a_Path) == "string")
 
 	a_Path = self:collapseRelativePath(a_Path)
+
+	-- Check for files to redirect from inside the plugin folder.
+	for idx, redirect in ipairs(self.redirectPluginFiles) do
+		if (a_Path == redirect.original) then
+			self.logger:trace(string.format("Redirecting \"%s\" to \"%s\".", a_Path, redirect.new))
+			return redirect.new;
+		end
+	end
 
 	-- If there is a matching entry in the redirects, use it:
 	local match = self.redirects[a_Path]
@@ -1699,6 +1734,9 @@ local function createSimulator(a_Options, a_Logger)
 
 		-- A dictionary of file / folder redirections. Maps the original path to the new path.
 		redirects = {},
+
+		-- An array containing redirects specifically from inside the plugins folder.
+		redirectPluginFiles = {},
 
 		-- State manipulated through scenarios:
 		worlds = {},

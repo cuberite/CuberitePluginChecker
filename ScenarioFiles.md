@@ -51,6 +51,24 @@ Takes a dictionary table which maps old paths to new paths as its parameter. Not
 }
 ```
 
+## redirectPluginFiles
+Adds a redirection for files inside the plugin folder. All Cuberite APIs that take a file or folder path check if the file needs to be redirected. This is useful if you want to use a different configuration file in your scenario. It can also be used to insert mocks in the code. The following table should make it clear how it works.
+
+Key provided in dictionary | Value provided in dictionary | Path provided by plugin | Path actually used
+---------------------------|------------------------------|-------------------------|-------------------
+config.cfg                 | config.cfg             | Plugins/[myplugin]/config.cfg | [scenarioPath]/config.cfg
+Classes/Storage.lua        | mocks/Storage.lua      | Plugins/[myplugin]/Classes/Storage.lua | [scenarioPath]/mocks/Storage.lua
+
+Takes a dictionary table which maps the old paths to the new paths.
+
+```lua
+redirectPluginFiles
+{
+	-- Redirect the 'config.cfg' file from the plugin folder to the scenario folder
+	["config.cfg"] = "config.cfg"
+}
+```
+
 ## world
 Adds a new world. Usually used before plugin initialization to set up the worlds, but can also be used later. It triggers the `HOOK_WORLD_STARTED` hook properly. If a world of the specified name already exists, the Checker aborts with an error.
 
