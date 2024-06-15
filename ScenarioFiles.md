@@ -56,15 +56,16 @@ Adds a redirection for files inside the plugin folder. All Cuberite APIs that ta
 
 Key provided in dictionary | Value provided in dictionary | Path provided by plugin | Path actually used
 ---------------------------|------------------------------|-------------------------|-------------------
-config.cfg                 | tests/config.cfg             | Plugins/[myplugin]/config.cfg | Plugins/[myplugin]/tests/config.cfg
-Classes/Storage.lua        | tests/Storage.mock.lua      | Plugins/[myplugin]/Classes/Storage.lua | Plugins/[myplugin]/tests/Storage.mock.lua
+config.cfg                 | config.cfg             | Plugins/[myplugin]/config.cfg | [scenarioPath]/config.cfg
+Classes/Storage.lua        | mocks/Storage.lua      | Plugins/[myplugin]/Classes/Storage.lua | [scenarioPath]/mocks/Storage.lua
 
 Takes a dictionary table which maps the old paths to the new paths.
 
 ```lua
 redirectPluginFiles
 {
-	["config.cfg"] = "tests/config.cfg"
+	-- Redirect the 'config.cfg' file from the plugin folder to the scenario folder
+	["config.cfg"] = "config.cfg"
 }
 ```
 

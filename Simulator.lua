@@ -138,7 +138,10 @@ function Simulator:addRedirectPluginFiles(a_Redirects)
 
 	-- Add the redirects.
 	for orig, new in pairs(a_Redirects) do
-		table.insert(self.redirectPluginFiles, { original = self.options.pluginPath .. "/" .. orig, new = new })
+		table.insert(self.redirectPluginFiles, {
+			original = self.options.pluginPath .. "/" .. orig,
+			new = self.options.scenarioPath .. "/" .. new
+		})
 	end
 end
 
@@ -1454,9 +1457,8 @@ function Simulator:redirectPath(a_Path)
 	-- Check for files to redirect from inside the plugin folder.
 	for idx, redirect in ipairs(self.redirectPluginFiles) do
 		if (a_Path == redirect.original) then
-			local res = self.options.pluginPath .. "/" .. redirect.new
-			self.logger:trace(string.format("Redirecting \"%s\" to \"%s\".", a_Path, res))
-			return res;
+			self.logger:trace(string.format("Redirecting \"%s\" to \"%s\".", a_Path, redirect.new))
+			return redirect.new;
 		end
 	end
 
